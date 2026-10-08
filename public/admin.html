@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NFC System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <div class="flex justify-between items-center bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <div>
+                <h1 class="text-xl font-bold text-white">Dashboard Admin NFC</h1>
+                <p class="text-xs text-slate-400">Kelola stok dan pantau pesanan masuk secara real-time.</p>
+            </div>
+            <a href="/" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold">Ke Beranda</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
+                <h2 class="text-sm font-bold text-slate-300 uppercase">Kelola Stok Unit</h2>
+                <div class="flex gap-2">
+                    <input type="number" id="stockInput" class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm" placeholder="Jumlah Stok...">
+                    <button onclick="updateStock()" class="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs">Update</button>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
+                <h2 class="text-sm font-bold text-slate-300 uppercase">Aksi Cepat</h2>
+                <button onclick="resetOrders()" class="w-full py-2.5 bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/30 font-bold rounded-xl text-xs">Reset Semua Daftar Pesanan</button>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-sm font-bold text-slate-300 uppercase">Daftar Pesanan Masuk</h2>
+            <div id="orderList" class="space-y-3">
+                <p class="text-xs text-slate-500">Memuat data pesanan...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadAdminData() {
+            try {
+                const res = await fetch('/api/store-status');
+                const data = await res.json();
+                document.getElementById('stockInput').value = data.stock;
+
+                const listEl = document.getElementById('orderList');
+                if (data.orders.length === 0) {
+                    listEl.innerHTML = '<p class="text-xs text-slate-500">Belum ada pesanan masuk.</p>';
+                    return;
+                }
+
+                listEl.innerHTML = data.orders.map(o => `
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
+                        <div class="flex justify-between font-bold text-blue-400">
+                            <span>${o.orderId}</span>
+                            <span class="text-emerald-400">Rp ${o.totalPrice.toLocaleString('id-ID')}</span>
+                        </div>
+                        <p><b>Pemesan:</b> ${o.name} (${o.whatsapp})</p>
+                        <p><b>Usaha:</b> ${o.businessName}</p>
+                        <p><b>Paket:</b> ${o.packageType} | <b>Jarak:</b> ${o.distanceKm} KM (Ongkir: Rp ${o.shippingFee.toLocaleString('id-ID')})</p>
+                        <p><b>Maps/Profil:</b> <a href="${o.businessProfileLink}" target="_blank" class="text-blue-400 underline">Buka Link</a></p>
+                        <p><b>Sharelock:</b> <a href="${o.deliverySharelock}" target="_blank" class="text-blue-400 underline">Buka Titik</a></p>
+                        ${o.paymentProof ? `<p><b>Bukti Transfer:</b> <a href="${o.paymentProof}" target="_blank" class="text-pink-400 underline font-bold">Lihat Foto Struk</a></p>` : ''}
+                    </div>
+                `).join('');
+            } catch (err) {}
+        }
+
+        async function updateStock() {
+            const newStock = document.getElementById('stockInput').value;
+            const res = await fetch('/api/update-stock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ newStock })
+            });
+            const data = await res.json();
+            alert(data.message);
+            loadAdminData();
+        }
+
+        async function resetOrders() {
+            if (!confirm('Yakin ingin mereset semua riwayat pesanan?')) return;
+            const res = await fetch('/api/reset-orders', { method: 'POST' });
+            const data = await res.json();
+            alert(data.message);
+            loadAdminData();
+        }
+
+        loadAdminData();
+    </script>
+</body>
+</html>
