@@ -29,7 +29,7 @@
             <p id="closedDesc" class="text-xs text-slate-300 leading-relaxed">Saat ini layanan pemesanan NFC Google Review sedang ditutup atau stok habis.</p>
         </div>
         <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
-            <a id="adminWaLink" href="https://wa.me/6282188888888?text=Halo%20Admin,%20saya%20ingin%20tanya%20pemesanan%20NFC" target="_blank" class="inline-flex justify-center items-center gap-2 w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition">
+            <a id="adminWaLink" href="#" target="_blank" class="inline-flex justify-center items-center gap-2 w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition cursor-pointer">
                 <i class="fa-brands fa-whatsapp text-lg"></i>
                 <span>Hubungi Admin WhatsApp</span>
             </a>
@@ -167,6 +167,16 @@
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </form>
+
+                <!-- PUSAT BANTUAN & HUBUNGI ADMIN -->
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 mt-4 text-center">
+                    <p class="text-xs font-semibold text-slate-300">Butuh Bantuan, Tanya Stok, atau Pengajuan Refund?</p>
+                    <p class="text-[10px] text-slate-400">Hubungi tim admin kami secara langsung melalui WhatsApp.</p>
+                    <a href="#" id="helpCenterWaBtn" target="_blank" class="inline-flex justify-center items-center gap-2 w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold rounded-xl text-xs transition border border-emerald-500/20 cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-base"></i>
+                        <span>Pusat Bantuan & Hubungi Admin</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Step 2: QRIS Payment -->
@@ -231,6 +241,9 @@
     </main>
 
     <script>
+        // NOMOR WHATSAPP ADMIN (Sudah diset ke nomor Anda)
+        const ADMIN_PHONE = "6289504749648"; 
+
         let selectedQty = 1;
         let isPromoApplied = false;
 
@@ -240,6 +253,13 @@
         function checkStoreStatus() {
             const stock = parseInt(localStorage.getItem('nfc_stock')) ?? 1000;
             const manualClose = localStorage.getItem('nfc_manual_close') === 'true';
+
+            // Set link tombol bantuan / tanya stok di halaman utama
+            const helpWaText = encodeURIComponent("Halo Admin, saya ingin bertanya seputar layanan / produk NFC Google Review, atau membutuhkan bantuan terkait pesanan saya.");
+            const helpBtn = document.getElementById('helpCenterWaBtn');
+            if (helpBtn) {
+                helpBtn.href = `https://wa.me/${ADMIN_PHONE}?text=${helpWaText}`;
+            }
 
             if (stock <= 0 || manualClose) {
                 document.getElementById('mainContainer').classList.add('hidden');
@@ -255,6 +275,9 @@
                     titleEl.innerText = "Toko Sedang Tutup";
                     descEl.innerText = "Admin sedang istirahat atau sibuk. Silakan coba beberapa saat lagi.";
                 }
+
+                const waText = encodeURIComponent("Halo Admin, saya ingin bertanya mengenai ketersediaan stok perangkat NFC Google Review di Makassar.");
+                document.getElementById('adminWaLink').href = `https://wa.me/${ADMIN_PHONE}?text=${waText}`;
             } else {
                 document.getElementById('soldOutContainer').classList.add('hidden');
                 document.getElementById('mainContainer').classList.remove('hidden');
@@ -280,7 +303,6 @@
             if (!code) return;
 
             msg.classList.remove('hidden');
-            // Contoh validasi promo sederhana atau kode rahasia
             if (code === "MAKASSAR20" || code === "DISKON20" || code === "REVIEW20") {
                 isPromoApplied = true;
                 msg.className = "text-xs text-emerald-400 mt-1 font-semibold";
@@ -347,7 +369,6 @@
             btn.disabled = true;
             btn.innerText = 'Mengirim Pesanan...';
 
-            // Buat ID Pesanan Unik
             const orderId = 'NFC-' + Math.floor(100000 + Math.random() * 900000);
             let km = parseFloat(document.getElementById('distanceInput').value) || 3;
             let pricePerPcs = isPromoApplied ? 80000 : 100000;
@@ -355,45 +376,67 @@
             let shippingFee = km <= 5 ? 5000 : (km <= 12 ? 10000 : 15000);
             let totalPrice = subtotal + shippingFee;
 
+            const name = document.getElementById('name').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const businessName = document.getElementById('businessName').value;
+            const businessProfileLink = document.getElementById('businessProfileLink').value;
+            const deliverySharelock = document.getElementById('deliverySharelock').value;
+            const addressDetail = document.getElementById('addressDetail').value;
+            const bookingDate = document.getElementById('bookingDate').value;
+
             const orderData = {
-                orderId: orderId,
-                date: new Date().toLocaleString('id-ID'),
-                name: document.getElementById('name').value,
-                whatsapp: document.getElementById('whatsapp').value,
-                businessName: document.getElementById('businessName').value,
-                businessProfileLink: document.getElementById('businessProfileLink').value,
-                deliverySharelock: document.getElementById('deliverySharelock').value,
-                addressDetail: document.getElementById('addressDetail').value,
-                bookingDate: document.getElementById('bookingDate').value,
-                packageType: selectedQty,
-                distanceKm: km,
-                totalPrice: totalPrice,
+                orderId, date: new Date().toLocaleString('id-ID'),
+                name, whatsapp, businessName, businessProfileLink,
+                deliverySharelock, addressDetail, bookingDate,
+                packageType: selectedQty, distanceKm: km, totalPrice,
                 processStatus: 'Menunggu Konfirmasi Kurir'
             };
 
-            // Simpan ke daftar pesanan nfc_orders
             let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
             orders.push(orderData);
             localStorage.setItem('nfc_orders', JSON.stringify(orders));
 
-            // Kurangi stok otomatis sesuai jumlah paket yang dibeli
             currentStock -= selectedQty;
             localStorage.setItem('nfc_stock', currentStock);
-
-            // Jika stok habis, otomatis ubah status jadi closed
             if (currentStock <= 0) {
                 localStorage.setItem('nfc_stock', 0);
                 localStorage.setItem('nfc_status', 'closed');
             }
 
+            // Format Pesan WhatsApp Otomatis
+            const waMessage = encodeURIComponent(
+                `Halo Admin, saya baru saja melakukan booking kartu NFC Google Review.\n\n` +
+                `*ID Pesanan:* ${orderId}\n` +
+                `*Nama Pemesan:* ${name}\n` +
+                `*No WhatsApp:* ${whatsapp}\n` +
+                `*Nama Usaha/Toko:* ${businessName}\n` +
+                `*Link Maps Usaha:* ${businessProfileLink}\n` +
+                `*Sharelok Pengantaran:* ${deliverySharelock}\n` +
+                `*Patokan Alamat:* ${addressDetail}\n` +
+                `*Tanggal Booking:* ${bookingDate}\n` +
+                `*Paket:* ${selectedQty} Pcs\n` +
+                `*Total Pembayaran:* Rp ${totalPrice.toLocaleString('id-ID')}\n\n` +
+                `Berikut bukti transfer sudah saya unggah di web. Mohon konfirmasi dan proses pengantarannya ya Kak. Terima kasih!`
+            );
+
             setTimeout(() => {
                 document.getElementById('orderIdDisplay').innerText = orderId;
                 document.getElementById('step2').classList.add('hidden');
                 document.getElementById('step3').classList.remove('hidden');
+
+                const successContainer = document.querySelector('#step3');
+                if (!document.getElementById('waDirectBtn')) {
+                    const waBtn = document.createElement('a');
+                    waBtn.id = 'waDirectBtn';
+                    waBtn.href = `https://wa.me/${ADMIN_PHONE}?text=${waMessage}`;
+                    waBtn.target = '_blank';
+                    waBtn.className = 'inline-flex justify-center items-center gap-2 w-full py-3.5 mt-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg';
+                    waBtn.innerHTML = '<i class="fa-brands fa-whatsapp text-lg"></i><span>Kirim Detail Pesanan ke WhatsApp Admin</span>';
+                    successContainer.appendChild(waBtn);
+                }
             }, 800);
         }
 
-        // Jalankan pengecekan status saat halaman dimuat
         checkStoreStatus();
     </script>
 </body>
