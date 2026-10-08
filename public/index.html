@@ -18,25 +18,25 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-center items-center p-3 md:p-6">
 
-    <div id="soldOutContainer" class="hidden max-w-md w-full bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden text-center space-y-6">
-        <div class="h-2 google-gradient-bar"></div>
-        <div class="p-6 space-y-6">
-            <div class="inline-flex p-4 bg-red-500/10 text-red-400 rounded-full border border-red-500/20">
-                <i class="fa-solid fa-box-open text-4xl"></i>
-            </div>
-            <div class="space-y-2">
-                <h1 class="text-2xl font-bold text-white">Mohon Maaf, Stok Habis</h1>
-                <p class="text-xs text-slate-300 leading-relaxed">Saat ini stok perangkat NFC Google Review sedang tidak ready. Silakan hubungi admin.</p>
-            </div>
-            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
-                <a id="adminWaLink" href="#" target="_blank" class="inline-flex justify-center items-center gap-2 w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition">
-                    <i class="fa-brands fa-whatsapp text-lg"></i>
-                    <span>Hubungi Admin WhatsApp</span>
-                </a>
-            </div>
+    <!-- TAMPILAN KETIKA TOKO TUTUP / STOK HABIS -->
+    <div id="soldOutContainer" class="hidden max-w-md w-full bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden text-center space-y-6 p-6">
+        <div class="h-2 google-gradient-bar -mx-6 -mt-6 mb-2"></div>
+        <div class="inline-flex p-4 bg-red-500/10 text-red-400 rounded-full border border-red-500/20">
+            <i class="fa-solid fa-box-open text-4xl"></i>
+        </div>
+        <div class="space-y-2">
+            <h1 id="closedTitle" class="text-2xl font-bold text-white">Mohon Maaf, Toko Sedang Tutup</h1>
+            <p id="closedDesc" class="text-xs text-slate-300 leading-relaxed">Saat ini layanan pemesanan NFC Google Review sedang ditutup atau stok habis.</p>
+        </div>
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+            <a id="adminWaLink" href="https://wa.me/6282188888888?text=Halo%20Admin,%20saya%20ingin%20tanya%20pemesanan%20NFC" target="_blank" class="inline-flex justify-center items-center gap-2 w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Hubungi Admin WhatsApp</span>
+            </a>
         </div>
     </div>
 
+    <!-- FORM UTAMA PEMESANAN -->
     <main id="mainContainer" class="max-w-xl w-full bg-slate-900 rounded-3xl shadow-2xl border border-slate-800/80 overflow-hidden">
         <div class="h-2.5 google-gradient-bar"></div>
 
@@ -97,15 +97,15 @@
                     <div class="space-y-2 pt-2 border-t border-slate-800">
                         <label class="block text-xs font-semibold text-slate-300 uppercase">Pilih Paket Unit NFC</label>
                         <div class="grid grid-cols-3 gap-3">
-                            <button type="button" onclick="selectPackage(1)" id="pkgBtn1" class="pkg-btn border-2 border-blue-500 bg-blue-500/10 p-3 rounded-2xl text-center transition">
+                            <button type="button" onclick="selectPackage(1)" id="pkgBtn1" class="pkg-btn border-2 border-blue-500 bg-blue-500/10 p-3 rounded-2xl text-center transition cursor-pointer">
                                 <p class="font-bold text-sm text-white">Paket 1</p>
                                 <p class="text-xs text-blue-400">1 Pcs</p>
                             </button>
-                            <button type="button" onclick="selectPackage(2)" id="pkgBtn2" class="pkg-btn border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center transition">
+                            <button type="button" onclick="selectPackage(2)" id="pkgBtn2" class="pkg-btn border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center transition cursor-pointer">
                                 <p class="font-bold text-sm text-white">Paket 2</p>
                                 <p class="text-xs text-slate-400">2 Pcs</p>
                             </button>
-                            <button type="button" onclick="selectPackage(3)" id="pkgBtn3" class="pkg-btn border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center transition">
+                            <button type="button" onclick="selectPackage(3)" id="pkgBtn3" class="pkg-btn border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center transition cursor-pointer">
                                 <p class="font-bold text-sm text-white">Paket 3</p>
                                 <p class="text-xs text-slate-400">3 Pcs</p>
                             </button>
@@ -125,7 +125,7 @@
                         <label class="block text-xs font-semibold text-slate-300 uppercase">Kode Promo Rahasia</label>
                         <div class="flex gap-2">
                             <input type="text" id="promoInput" placeholder="Masukkan Kode..." class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm uppercase focus:outline-none focus:border-blue-500">
-                            <button type="button" onclick="applyPromo()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition">Klaim</button>
+                            <button type="button" onclick="applyPromo()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition cursor-pointer">Klaim</button>
                         </div>
                         <p id="promoMsg" class="text-xs hidden mt-1"></p>
 
@@ -162,7 +162,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-bold rounded-2xl shadow-xl transition flex justify-center items-center gap-2">
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-bold rounded-2xl shadow-xl transition flex justify-center items-center gap-2 cursor-pointer">
                         <span>Lanjut ke Pembayaran</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -236,16 +236,29 @@
 
         document.getElementById('bookingDate').valueAsDate = new Date();
 
-        async function checkStoreStatus() {
-            try {
-                const res = await fetch('/api/store-status');
-                const data = await res.json();
-                if (!data.isOpen || data.stock <= 0) {
-                    document.getElementById('mainContainer').classList.add('hidden');
-                    document.getElementById('soldOutContainer').classList.remove('hidden');
-                    document.getElementById('adminWaLink').href = `https://wa.me/${data.adminWA}?text=Halo%20Admin,%20saya%20ingin%20tanya%20stok%20NFC`;
+        // CEK STATUS TOKO DARI LOCALSTORAGE SECARA REAL-TIME
+        function checkStoreStatus() {
+            const stock = parseInt(localStorage.getItem('nfc_stock')) ?? 1000;
+            const manualClose = localStorage.getItem('nfc_manual_close') === 'true';
+
+            if (stock <= 0 || manualClose) {
+                document.getElementById('mainContainer').classList.add('hidden');
+                document.getElementById('soldOutContainer').classList.remove('hidden');
+                
+                const titleEl = document.getElementById('closedTitle');
+                const descEl = document.getElementById('closedDesc');
+
+                if (stock <= 0) {
+                    titleEl.innerText = "Mohon Maaf, Stok Habis";
+                    descEl.innerText = "Saat ini stok perangkat NFC Google Review sedang kosong. Silakan hubungi admin.";
+                } else {
+                    titleEl.innerText = "Toko Sedang Tutup";
+                    descEl.innerText = "Admin sedang istirahat atau sibuk. Silakan coba beberapa saat lagi.";
                 }
-            } catch (err) {}
+            } else {
+                document.getElementById('soldOutContainer').classList.add('hidden');
+                document.getElementById('mainContainer').classList.remove('hidden');
+            }
         }
 
         function selectPackage(qty) {
@@ -253,28 +266,22 @@
             for (let i = 1; i <= 3; i++) {
                 const btn = document.getElementById(`pkgBtn${i}`);
                 if (i === qty) {
-                    btn.className = "pkg-btn border-2 border-blue-500 bg-blue-500/10 p-3 rounded-2xl text-center transition";
+                    btn.className = "pkg-btn border-2 border-blue-500 bg-blue-500/10 p-3 rounded-2xl text-center transition cursor-pointer";
                 } else {
-                    btn.className = "pkg-btn border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center transition";
+                    btn.className = "pkg-btn border border-slate-800 bg-slate-950 p-3 rounded-2xl text-center transition cursor-pointer";
                 }
             }
             updateTotal();
         }
 
-        async function applyPromo() {
-            const code = document.getElementById('promoInput').value;
+        function applyPromo() {
+            const code = document.getElementById('promoInput').value.trim().toUpperCase();
             const msg = document.getElementById('promoMsg');
             if (!code) return;
 
-            const res = await fetch('/api/check-promo', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code })
-            });
-            const result = await res.json();
-
             msg.classList.remove('hidden');
-            if (result.valid) {
+            // Contoh validasi promo sederhana atau kode rahasia
+            if (code === "MAKASSAR20" || code === "DISKON20" || code === "REVIEW20") {
                 isPromoApplied = true;
                 msg.className = "text-xs text-emerald-400 mt-1 font-semibold";
                 msg.innerText = "🎉 Diskon Rp 20.000 / Pcs Berhasil Digunakan!";
@@ -321,10 +328,18 @@
             document.getElementById('step1').classList.remove('hidden');
         }
 
-        async function submitOrder() {
+        // SIMPAN PESANAN KE LOCALSTORAGE & KURANGI STOK OTOMATIS
+        function submitOrder() {
             const proofInput = document.getElementById('paymentProof');
             if (proofInput.files.length === 0) {
                 alert('Mohon unggah foto bukti transfer terlebih dahulu!');
+                return;
+            }
+
+            let currentStock = parseInt(localStorage.getItem('nfc_stock')) ?? 1000;
+            if (currentStock < selectedQty) {
+                alert('Mohon maaf, stok tidak mencukupi untuk jumlah paket yang dipilih!');
+                checkStoreStatus();
                 return;
             }
 
@@ -332,39 +347,53 @@
             btn.disabled = true;
             btn.innerText = 'Mengirim Pesanan...';
 
-            const formData = new FormData();
-            formData.append('name', document.getElementById('name').value);
-            formData.append('whatsapp', document.getElementById('whatsapp').value);
-            formData.append('businessName', document.getElementById('businessName').value);
-            formData.append('businessProfileLink', document.getElementById('businessProfileLink').value);
-            formData.append('deliverySharelock', document.getElementById('deliverySharelock').value);
-            formData.append('addressDetail', document.getElementById('addressDetail').value);
-            formData.append('bookingDate', document.getElementById('bookingDate').value);
-            formData.append('packageType', selectedQty);
-            formData.append('distanceKm', document.getElementById('distanceInput').value);
-            if (isPromoApplied) formData.append('appliedPromo', document.getElementById('promoInput').value);
-            formData.append('paymentProof', proofInput.files[0]);
+            // Buat ID Pesanan Unik
+            const orderId = 'NFC-' + Math.floor(100000 + Math.random() * 900000);
+            let km = parseFloat(document.getElementById('distanceInput').value) || 3;
+            let pricePerPcs = isPromoApplied ? 80000 : 100000;
+            let subtotal = pricePerPcs * selectedQty;
+            let shippingFee = km <= 5 ? 5000 : (km <= 12 ? 10000 : 15000);
+            let totalPrice = subtotal + shippingFee;
 
-            try {
-                const res = await fetch('/api/order', { method: 'POST', body: formData });
-                const result = await res.json();
+            const orderData = {
+                orderId: orderId,
+                date: new Date().toLocaleString('id-ID'),
+                name: document.getElementById('name').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                businessName: document.getElementById('businessName').value,
+                businessProfileLink: document.getElementById('businessProfileLink').value,
+                deliverySharelock: document.getElementById('deliverySharelock').value,
+                addressDetail: document.getElementById('addressDetail').value,
+                bookingDate: document.getElementById('bookingDate').value,
+                packageType: selectedQty,
+                distanceKm: km,
+                totalPrice: totalPrice,
+                processStatus: 'Menunggu Konfirmasi Kurir'
+            };
 
-                if (result.success) {
-                    document.getElementById('orderIdDisplay').innerText = result.orderId;
-                    document.getElementById('step2').classList.add('hidden');
-                    document.getElementById('step3').classList.remove('hidden');
-                } else {
-                    alert(result.message);
-                    btn.disabled = false;
-                    btn.innerText = 'Konfirmasi & Bayar';
-                }
-            } catch (err) {
-                alert('Terjadi kesalahan koneksi. Silakan coba lagi.');
-                btn.disabled = false;
-                btn.innerText = 'Konfirmasi & Bayar';
+            // Simpan ke daftar pesanan nfc_orders
+            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
+            orders.push(orderData);
+            localStorage.setItem('nfc_orders', JSON.stringify(orders));
+
+            // Kurangi stok otomatis sesuai jumlah paket yang dibeli
+            currentStock -= selectedQty;
+            localStorage.setItem('nfc_stock', currentStock);
+
+            // Jika stok habis, otomatis ubah status jadi closed
+            if (currentStock <= 0) {
+                localStorage.setItem('nfc_stock', 0);
+                localStorage.setItem('nfc_status', 'closed');
             }
+
+            setTimeout(() => {
+                document.getElementById('orderIdDisplay').innerText = orderId;
+                document.getElementById('step2').classList.add('hidden');
+                document.getElementById('step3').classList.remove('hidden');
+            }, 800);
         }
 
+        // Jalankan pengecekan status saat halaman dimuat
         checkStoreStatus();
     </script>
 </body>
