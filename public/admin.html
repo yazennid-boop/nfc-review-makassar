@@ -3,91 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - NFC System</title>
+    <title>Panel Admin - NFC Google Review Makassar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .google-gradient-bar {
+            background: linear-gradient(90deg, #4285F4 0%, #EA4335 25%, #FBBC05 50%, #34A853 100%);
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8">
-    <div class="max-w-4xl mx-auto space-y-6">
-        <div class="flex justify-between items-center bg-slate-900 p-6 rounded-2xl border border-slate-800">
-            <div>
-                <h1 class="text-xl font-bold text-white">Dashboard Admin NFC</h1>
-                <p class="text-xs text-slate-400">Kelola stok dan pantau pesanan masuk secara real-time.</p>
-            </div>
-            <a href="/" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold">Ke Beranda</a>
-        </div>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-3 md:p-6 flex flex-col items-center">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <h2 class="text-sm font-bold text-slate-300 uppercase">Kelola Stok Unit</h2>
-                <div class="flex gap-2">
-                    <input type="number" id="stockInput" class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm" placeholder="Jumlah Stok...">
-                    <button onclick="updateStock()" class="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs">Update</button>
+    <main class="max-w-4xl w-full bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden mb-8">
+        <div class="h-2.5 google-gradient-bar"></div>
+
+        <div class="p-6 md:p-8 space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-white">Panel Kontrol & Admin</h1>
+                    <p class="text-xs text-slate-400">Kelola stok, status operasional toko, dan rekap data pesanan pelanggan.</p>
+                </div>
+                <a href="/" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Ke Halaman Utama</span>
+                </a>
+            </div>
+
+            <!-- STATUS OPERASIONAL & STOK -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Status Toko -->
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                    <h2 class="text-sm font-bold text-slate-300 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-store text-blue-400"></i> Status Operasional Toko
+                    </h2>
+                    <div id="statusBadge" class="p-3 rounded-xl text-center font-bold text-sm">Memuat status...</div>
+                    <button type="button" id="toggleStoreBtn" onclick="toggleStoreManual()" class="w-full py-3 rounded-xl text-xs font-bold transition shadow-md cursor-pointer"></button>
+                    <p class="text-[10px] text-slate-400">*Web otomatis tertutup jika stok 0 atau jika ditutup manual.</p>
+                </div>
+
+                <!-- Manajemen Stok -->
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                    <h2 class="text-sm font-bold text-slate-300 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-boxes-stacked text-emerald-400"></i> Sisa Stok Perangkat NFC
+                    </h2>
+                    <div class="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800">
+                        <span class="text-xs text-slate-400">Stok Saat Ini:</span>
+                        <span id="displayStock" class="text-xl font-extrabold text-emerald-400">0 Pcs</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="number" id="inputStock" placeholder="Atur stok (cth: 1500)" min="0" max="100000" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs focus:outline-none focus:border-blue-500">
+                        <button type="button" onclick="saveStock()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow transition shrink-0 cursor-pointer">Simpan</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <h2 class="text-sm font-bold text-slate-300 uppercase">Aksi Cepat</h2>
-                <button onclick="resetOrders()" class="w-full py-2.5 bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/30 font-bold rounded-xl text-xs">Reset Semua Daftar Pesanan</button>
-            </div>
-        </div>
+            <!-- TABEL REKAP DATA PESANAN / PELANGGAN -->
+            <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-300 uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-clipboard-list text-amber-400"></i> Rekap Data Pesanan Masuk
+                        </h2>
+                        <p class="text-[10px] text-slate-400">Data ini masuk otomatis dari form booking pelanggan.</p>
+                    </div>
+                    <button type="button" onclick="clearOrders()" class="px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 rounded-xl text-[11px] font-semibold transition cursor-pointer">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Hapus Semua Riwayat
+                    </button>
+                </div>
 
-        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
-            <h2 class="text-sm font-bold text-slate-300 uppercase">Daftar Pesanan Masuk</h2>
-            <div id="orderList" class="space-y-3">
-                <p class="text-xs text-slate-500">Memuat data pesanan...</p>
+                <div class="overflow-x-auto rounded-xl border border-slate-800">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900 text-[11px] text-slate-400 uppercase border-b border-slate-800">
+                                <th class="p-3">ID / Waktu</th>
+                                <th class="p-3">Pemesan & Toko</th>
+                                <th class="p-3">Paket & Total</th>
+                                <th class="p-3">Link Sharelok & Maps</th>
+                                <th class="p-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody" class="divide-y divide-slate-800/60 text-xs">
+                            <tr>
+                                <td colspan="5" class="p-4 text-center text-slate-500">Belum ada data pesanan masuk.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
         </div>
-    </div>
+    </main>
 
     <script>
-        async function loadAdminData() {
-            try {
-                const res = await fetch('/api/store-status');
-                const data = await res.json();
-                document.getElementById('stockInput').value = data.stock;
+        let currentStock = parseInt(localStorage.getItem('nfc_stock')) || 1000;
+        let isManualClosed = localStorage.getItem('nfc_manual_close') === 'true';
 
-                const listEl = document.getElementById('orderList');
-                if (data.orders.length === 0) {
-                    listEl.innerHTML = '<p class="text-xs text-slate-500">Belum ada pesanan masuk.</p>';
-                    return;
+        function loadAdminData() {
+            // Tampilkan Stok
+            document.getElementById('displayStock').innerText = `${currentStock.toLocaleString('id-ID')} Pcs`;
+
+            // Status Toko & UI Badge
+            const badge = document.getElementById('statusBadge');
+            const toggleBtn = document.getElementById('toggleStoreBtn');
+
+            if (currentStock <= 0 || isManualClosed) {
+                if (currentStock <= 0) {
+                    badge.innerText = "🔴 TUTUP OTOMATIS (Stok Habis)";
+                    badge.className = "p-3 rounded-xl text-center font-bold text-sm bg-red-500/10 text-red-400 border border-red-500/20";
+                } else {
+                    badge.innerText = "🔴 DITUTUP MANUAL (Sedang Istirahat/Sibuk)";
+                    badge.className = "p-3 rounded-xl text-center font-bold text-sm bg-amber-500/10 text-amber-400 border border-amber-500/20";
                 }
+                toggleBtn.innerText = "Buka Kembali Toko";
+                toggleBtn.className = "w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow-md cursor-pointer";
+                localStorage.setItem('nfc_status', 'closed');
+            } else {
+                badge.innerText = "🟢 TOKO BUKA & AKTIF";
+                badge.className = "p-3 rounded-xl text-center font-bold text-sm bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                toggleBtn.innerText = "Tutup Toko Manual";
+                toggleBtn.className = "w-full py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold transition shadow-md cursor-pointer";
+                localStorage.setItem('nfc_status', 'open');
+            }
 
-                listEl.innerHTML = data.orders.map(o => `
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
-                        <div class="flex justify-between font-bold text-blue-400">
-                            <span>${o.orderId}</span>
-                            <span class="text-emerald-400">Rp ${o.totalPrice.toLocaleString('id-ID')}</span>
-                        </div>
-                        <p><b>Pemesan:</b> ${o.name} (${o.whatsapp})</p>
-                        <p><b>Usaha:</b> ${o.businessName}</p>
-                        <p><b>Paket:</b> ${o.packageType} | <b>Jarak:</b> ${o.distanceKm} KM (Ongkir: Rp ${o.shippingFee.toLocaleString('id-ID')})</p>
-                        <p><b>Maps/Profil:</b> <a href="${o.businessProfileLink}" target="_blank" class="text-blue-400 underline">Buka Link</a></p>
-                        <p><b>Sharelock:</b> <a href="${o.deliverySharelock}" target="_blank" class="text-blue-400 underline">Buka Titik</a></p>
-                        ${o.paymentProof ? `<p><b>Bukti Transfer:</b> <a href="${o.paymentProof}" target="_blank" class="text-pink-400 underline font-bold">Lihat Foto Struk</a></p>` : ''}
-                    </div>
-                `).join('');
-            } catch (err) {}
-        }
+            // Load Data Tabel Pesanan
+            const tbody = document.getElementById('ordersTableBody');
+            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
 
-        async function updateStock() {
-            const newStock = document.getElementById('stockInput').value;
-            const res = await fetch('/api/update-stock', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ newStock })
+            if (orders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">Belum ada data pesanan masuk.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            orders.reverse().forEach(order => {
+                html += `
+                    <tr class="hover:bg-slate-900/50 transition">
+                        <td class="p-3">
+                            <span class="font-mono font-bold text-blue-400">${order.orderId}</span>
+                            <p class="text-[10px] text-slate-400">${order.date || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-bold text-white">${order.name}</span>
+                            <p class="text-[11px] text-slate-300"><i class="fa-solid fa-store mr-1 text-slate-400"></i>${order.businessName}</p>
+                            <p class="text-[10px] text-slate-400"><i class="fa-brands fa-whatsapp mr-1 text-emerald-400"></i>${order.whatsapp}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="text-slate-300">Paket ${order.packageType} Pcs</span>
+                            <p class="font-bold text-emerald-400">Rp ${order.totalPrice.toLocaleString('id-ID')}</p>
+                        </td>
+                        <td class="p-3 space-y-1">
+                            <a href="${order.deliverySharelock}" target="_blank" class="inline-flex items-center gap-1 text-blue-400 hover:underline">
+                                <i class="fa-solid fa-map-location-dot"></i> <span>Sharelok</span>
+                            </a><br>
+                            <a href="${order.businessProfileLink}" target="_blank" class="inline-flex items-center gap-1 text-purple-400 hover:underline">
+                                <i class="fa-solid fa-globe"></i> <span>Maps Usaha</span>
+                            </a>
+                            <p class="text-[10px] text-slate-400 mt-1"><b>Patokan:</b> ${order.addressDetail}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="px-2.5 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full text-[10px] font-bold">
+                                ${order.processStatus}
+                            </span>
+                        </td>
+                    </tr>
+                `;
             });
-            const data = await res.json();
-            alert(data.message);
+            tbody.innerHTML = html;
+        }
+
+        function toggleStoreManual() {
+            if (currentStock <= 0 && isManualClosed) {
+                alert("Stok masih 0! Tambah stok terlebih dahulu untuk membuka toko.");
+                return;
+            }
+            isManualClosed = !isManualClosed;
+            localStorage.setItem('nfc_manual_close', isManualClosed);
             loadAdminData();
         }
 
-        async function resetOrders() {
-            if (!confirm('Yakin ingin mereset semua riwayat pesanan?')) return;
-            const res = await fetch('/api/reset-orders', { method: 'POST' });
-            const data = await res.json();
-            alert(data.message);
+        function saveStock() {
+            const val = parseInt(document.getElementById('inputStock').value);
+            if (isNaN(val) || val < 0) {
+                alert("Masukkan jumlah stok yang valid!");
+                return;
+            }
+            currentStock = val;
+            if (currentStock > 0 && isManualClosed) {
+                isManualClosed = false; // Buka otomatis jika sebelumnya tertutup manual lalu stok diisi
+                localStorage.setItem('nfc_manual_close', isManualClosed);
+            }
+            localStorage.setItem('nfc_stock', currentStock);
+            document.getElementById('inputStock').value = '';
             loadAdminData();
+            alert(`Stok berhasil diperbarui menjadi ${currentStock.toLocaleString('id-ID')} Pcs!`);
+        }
+
+        function clearOrders() {
+            if (confirm("Yakin ingin menghapus seluruh riwayat data pesanan pelanggan?")) {
+                localStorage.removeItem('nfc_orders');
+                loadAdminData();
+                alert("Riwayat pesanan berhasil dibersihkan.");
+            }
         }
 
         loadAdminData();
