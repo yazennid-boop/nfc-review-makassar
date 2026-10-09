@@ -29,7 +29,6 @@
             animation: borderShimmer 6s infinite;
         }
 
-        /* EFEK SHIMMER KHUSUS KARTU TIKTOK */
         @keyframes tiktokBorderShimmer {
             0% { border-color: rgba(236, 72, 153, 0.4); box-shadow: 0 0 15px rgba(236, 72, 153, 0.2); }
             50% { border-color: rgba(6, 182, 212, 0.8); box-shadow: 0 0 25px rgba(6, 182, 212, 0.5); }
@@ -54,6 +53,24 @@
             width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
             animation: btnSweep 3s infinite;
+        }
+
+        @keyframes boxShimmerSweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .treadmill-shimmer-box {
+            position: relative;
+            overflow: hidden;
+        }
+        .treadmill-shimmer-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(66, 133, 244, 0.12), transparent);
+            animation: boxShimmerSweep 4s infinite;
+            pointer-events: none;
         }
 
         @keyframes ambientGlow {
@@ -86,6 +103,18 @@
         @keyframes marquee {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
+        }
+        @keyframes treadmill {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .treadmill-track {
+            display: flex;
+            width: max-content;
+            animation: treadmill 22s linear infinite;
+        }
+        .treadmill-track:hover {
+            animation-play-state: paused;
         }
     </style>
 </head>
@@ -143,7 +172,7 @@
                     </div>
                 </div>
 
-                <!-- KARTU SOSIAL MEDIA TIKTOK DENGAN EFEK SHIMMER BERKILAU -->
+                <!-- KARTU SOSIAL MEDIA TIKTOK -->
                 <a href="https://tiktok.com/@id.card_aff" target="_blank" class="block p-4 rounded-2xl bg-gradient-to-r from-pink-950/40 via-slate-900 to-cyan-950/40 border-2 tiktok-shimmer-box hover:scale-[1.01] transition duration-300 text-left relative overflow-hidden group shadow-xl">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
@@ -189,6 +218,21 @@
                 </div>
 
                 <div id="storeStatusBanner" class="hidden p-3 rounded-2xl text-xs font-bold border text-center"></div>
+            </div>
+
+            <!-- LIVE TREADMILL / MARQUEE PESANAN MASUK DENGAN EFEK SHIMMER -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 overflow-hidden shadow-inner relative treadmill-shimmer-box">
+                <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-800 text-[11px]">
+                    <span class="font-bold text-amber-400 uppercase flex items-center gap-1.5">
+                        <i class="fa-solid fa-bolt text-amber-400 animate-pulse"></i> Live Treadmill Status Pesanan Real-Time
+                    </span>
+                    <span class="text-slate-400 text-[10px]">Makassar</span>
+                </div>
+                <div class="overflow-hidden whitespace-nowrap relative">
+                    <div id="treadmillContainer" class="treadmill-track text-xs text-slate-300 space-x-6">
+                        <!-- Konten treadmill dirender dinamis via JavaScript tanpa jeda -->
+                    </div>
+                </div>
             </div>
 
             <!-- FORM PEMESANAN -->
@@ -405,11 +449,46 @@
             }
         }
 
+        function renderTreadmill() {
+            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
+            let container = document.getElementById('treadmillContainer');
+
+            if (orders.length === 0) {
+                container.innerHTML = `<span class="text-slate-400 px-4">🚀 Belum ada pesanan hari ini. Jadilah yang pertama memesan kartu NFC Google Review!</span>`;
+                return;
+            }
+
+            let itemsHtml = '';
+            let loopOrders = [...orders, ...orders, ...orders];
+
+            loopOrders.forEach(order => {
+                let statusColor = "text-amber-400 bg-amber-500/10 border-amber-500/30";
+                if (order.processStatus === 'Selesai & Dikirim') {
+                    statusColor = "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
+                } else if (order.processStatus === 'Sedang Dikirim Kurir') {
+                    statusColor = "text-blue-400 bg-blue-500/10 border-blue-500/30";
+                }
+
+                itemsHtml += `
+                    <div class="inline-flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 shrink-0">
+                        <span class="font-mono font-bold text-white">${order.orderId}</span>
+                        <span class="text-slate-400">•</span>
+                        <span class="text-slate-200 font-semibold">${order.businessName} (${order.name})</span>
+                        <span class="text-slate-400">•</span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${statusColor}">${order.processStatus}</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = itemsHtml;
+        }
+
         window.onload = function() {
             checkStoreStatus();
             let today = new Date().toISOString().split('T')[0];
             document.getElementById('bookingDate').value = today;
             calculateTotal();
+            renderTreadmill();
         }
 
         function setPackagePreset(qty) {
