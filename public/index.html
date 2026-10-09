@@ -102,10 +102,7 @@
         .treadmill-track:hover { animation-play-state: paused; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-3 md:p-6 selection:bg-blue-500 selection:text-white relative overflow-x-hidden">
-
-    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none animate-ambient"></div>
-    <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none animate-ambient" style="animation-delay: 3.5s;"></div>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-3 md:p-6 selection:bg-blue-500 selection:text-white">
 
     <div class="w-full max-w-xl flex justify-between items-center mb-2 relative z-20">
         <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20bertanya%20mengenai%20bantuan%20transaksi,%20pemesanan,%20atau%20informasi%20refund." target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-blue-400 border border-blue-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-lg">
@@ -201,6 +198,7 @@
                 <div id="storeStatusBanner" class="hidden p-3 rounded-2xl text-xs font-bold border text-center"></div>
             </div>
 
+            <!-- LIVE TREADMILL / MARQUEE PESANAN MASUK DENGAN EFEK SHIMMER -->
             <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 overflow-hidden shadow-inner relative treadmill-shimmer-box">
                 <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-800 text-[11px]">
                     <span class="font-bold text-amber-400 uppercase flex items-center gap-1.5">
@@ -235,7 +233,7 @@
                         <span class="font-bold text-slate-300 uppercase">Atur Jumlah Kustom (Pcs):</span>
                         <div class="flex items-center gap-2">
                             <button type="button" onclick="adjustQty(-1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition flex items-center justify-center cursor-pointer"><i class="fa-solid fa-minus"></i></button>
-                            <input type="number" id="customQtyInput" value="1" min="1" max="1000" oninput="onCustomQtyChange()" class="w-16 text-center py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold text-xs">
+                            <input type="number" id="customQtyInput" value="1" min="1" max="100" oninput="onCustomQtyChange()" class="w-14 text-center py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold text-xs">
                             <button type="button" onclick="adjustQty(1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition flex items-center justify-center cursor-pointer"><i class="fa-solid fa-plus"></i></button>
                         </div>
                     </div>
@@ -264,7 +262,7 @@
                         <p class="font-bold text-white flex items-center gap-1"><i class="fa-solid fa-lightbulb text-amber-400"></i> Panduan Pengambilan Tautan Google Maps:</p>
                         <ol class="list-decimal pl-4 space-y-1 text-slate-300">
                             <li><b>Tautan Google Maps Usaha:</b> Buka aplikasi Google Maps -> cari lokasi tempat usaha Anda -> pilih menu Bagikan -> Salin Tautan.</li>
-                            <li><b>Tautan Titik Pengantaran (Sharelok):</b> Tahan pada titik lokasi spesifik di peta Google Maps hingga muncul pin merah, lalu salin tautan lokasinya.</li>
+                            <li><b>Tautan Titik Pengantaran (Sharelok):</b> Tahan pada titik lokasi spesifik di peta Google Maps hingga muncul pin merah, lalu salin koordinat atau tautan lokasinya.</li>
                         </ol>
                     </div>
                     
@@ -397,14 +395,14 @@
         function checkStoreStatus() {
             let stock = parseInt(localStorage.getItem('nfc_stock'));
             if (isNaN(stock)) {
-                stock = 3; // Default fleksibel awal
+                stock = 15;
                 localStorage.setItem('nfc_stock', stock);
             }
             let manualClose = localStorage.getItem('nfc_manual_close') === 'true';
             let banner = document.getElementById('storeStatusBanner');
             let badge = document.getElementById('liveStockBadge');
 
-            badge.innerText = `Sisa ${stock.toLocaleString('id-ID')} Pcs Ready`;
+            badge.innerText = `Sisa ${stock} Pcs Ready`;
 
             if (stock <= 0 || manualClose) {
                 banner.classList.remove('hidden');
@@ -478,7 +476,7 @@
         function adjustQty(amount) {
             selectedQty += amount;
             if (selectedQty < 1) selectedQty = 1;
-            if (selectedQty > 1000) selectedQty = 1000;
+            if (selectedQty > 100) selectedQty = 100;
             document.getElementById('customQtyInput').value = selectedQty;
             
             document.querySelectorAll('.pkg-btn').forEach(btn => {
@@ -555,7 +553,7 @@
                 return;
             }
 
-            let currentStock = parseInt(localStorage.getItem('nfc_stock')) || 3;
+            let currentStock = parseInt(localStorage.getItem('nfc_stock')) ?? 15;
             if (currentStock < selectedQty) {
                 alert('Mohon maaf, ketersediaan stok perangkat tidak mencukupi.');
                 return;
@@ -593,7 +591,11 @@
             localStorage.setItem('last_order_id', orderId);
 
             currentStock -= selectedQty;
-            localStorage.setItem('nfc_stock', currentStock < 0 ? 0 : currentStock);
+            localStorage.setItem('nfc_stock', currentStock);
+            if (currentStock <= 0) {
+                localStorage.setItem('nfc_stock', 0);
+                localStorage.setItem('nfc_status', 'closed');
+            }
 
             let waMessage = encodeURIComponent(
                 `Halo Admin, saya telah melakukan pemesanan kartu NFC Google Review.\n\n` +

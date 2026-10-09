@@ -1,0 +1,641 @@
+# 1. index.html exact restore
+index_code = '''<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline'; img-src 'self' data: https:;">
+    <title>NFC Google Review Makassar - Solusi Praktis Ulasan Bisnis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes googleShimmer {
+            0% { background-position: 0% 50%; filter: brightness(1); }
+            50% { background-position: 100% 50%; filter: brightness(1.4) drop-shadow(0 0 10px rgba(66, 133, 244, 0.7)); }
+            100% { background-position: 0% 50%; filter: brightness(1); }
+        }
+        .google-gradient-bar {
+            background: linear-gradient(90deg, #4285F4, #EA4335, #FBBC05, #34A853, #4285F4);
+            background-size: 300% 300%;
+            animation: googleShimmer 4s ease infinite;
+        }
+
+        @keyframes borderShimmer {
+            0% { border-color: rgba(66, 133, 244, 0.4); box-shadow: 0 0 10px rgba(66, 133, 244, 0.1); }
+            33% { border-color: rgba(234, 67, 53, 0.6); box-shadow: 0 0 18px rgba(234, 67, 53, 0.25); }
+            66% { border-color: rgba(251, 188, 5, 0.6); box-shadow: 0 0 18px rgba(251, 188, 5, 0.25); }
+            100% { border-color: rgba(52, 168, 83, 0.4); box-shadow: 0 0 10px rgba(52, 168, 83, 0.1); }
+        }
+        .shimmer-card-border { animation: borderShimmer 6s infinite; }
+
+        @keyframes tiktokBorderShimmer {
+            0% { border-color: rgba(236, 72, 153, 0.4); box-shadow: 0 0 15px rgba(236, 72, 153, 0.2); }
+            50% { border-color: rgba(6, 182, 212, 0.8); box-shadow: 0 0 25px rgba(6, 182, 212, 0.5); }
+            100% { border-color: rgba(236, 72, 153, 0.4); box-shadow: 0 0 15px rgba(236, 72, 153, 0.2); }
+        }
+        .tiktok-shimmer-box { animation: tiktokBorderShimmer 4s infinite ease-in-out; }
+
+        @keyframes btnSweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .shimmer-btn { position: relative; overflow: hidden; }
+        .shimmer-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            animation: btnSweep 3s infinite;
+        }
+
+        @keyframes boxShimmerSweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .treadmill-shimmer-box { position: relative; overflow: hidden; }
+        .treadmill-shimmer-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(66, 133, 244, 0.12), transparent);
+            animation: boxShimmerSweep 4s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes ambientGlow {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.08); }
+        }
+        .animate-ambient { animation: ambientGlow 7s ease-in-out infinite; }
+
+        @keyframes starPop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.25); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes starShimmer {
+            0%, 100% { filter: drop-shadow(0 0 4px rgba(251, 188, 5, 0.4)); }
+            50% { filter: drop-shadow(0 0 14px rgba(251, 188, 5, 0.95)); }
+        }
+        .star-1 { animation: starPop 0.5s ease forwards 0.1s, starShimmer 2s ease-in-out infinite 0.5s; opacity: 0; }
+        .star-2 { animation: starPop 0.5s ease forwards 0.2s, starShimmer 2s ease-in-out infinite 0.7s; opacity: 0; }
+        .star-3 { animation: starPop 0.5s ease forwards 0.3s, starShimmer 2s ease-in-out infinite 0.9s; opacity: 0; }
+        .star-4 { animation: starPop 0.5s ease forwards 0.4s, starShimmer 2s ease-in-out infinite 1.1s; opacity: 0; }
+        .star-5 { animation: starPop 0.5s ease forwards 0.5s, starShimmer 2s ease-in-out infinite 1.3s; opacity: 0; }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.94);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        @keyframes treadmill {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .treadmill-track { display: flex; width: max-content; animation: treadmill 22s linear infinite; }
+        .treadmill-track:hover { animation-play-state: paused; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-3 md:p-6 selection:bg-blue-500 selection:text-white">
+
+    <div class="w-full max-w-xl flex justify-between items-center mb-2 relative z-20">
+        <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20bertanya%20mengenai%20bantuan%20transaksi,%20pemesanan,%20atau%20informasi%20refund." target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-blue-400 border border-blue-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-lg">
+            <i class="fa-solid fa-headset text-emerald-400"></i> <span>Bantuan & Refund Admin</span>
+        </a>
+        <div class="flex items-center gap-2">
+            <a href="status.html" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-indigo-400 border border-indigo-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
+                <i class="fa-solid fa-magnifying-glass"></i> <span>Lacak Pesanan</span>
+            </a>
+            <a href="https://tiktok.com/@id.card_aff" target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-pink-400 border border-pink-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
+                <i class="fa-brands fa-tiktok"></i> <span>@id.card_aff</span>
+            </a>
+        </div>
+    </div>
+
+    <main class="max-w-xl w-full glass-card rounded-3xl overflow-hidden space-y-6 relative z-10 my-2">
+        <div class="bg-gradient-to-r from-amber-500/20 via-blue-600/25 to-emerald-500/20 border-b border-white/10 py-2 overflow-hidden whitespace-nowrap relative">
+            <div class="inline-block animate-[marquee_26s_linear_infinite] text-[11px] font-bold tracking-wider text-amber-300 uppercase space-x-8">
+                <span>⭐ Solusi Praktis Ulasan Google Maps</span>
+                <span>•</span>
+                <span>🚀 Layanan Pengantaran Langsung Area Kota Makassar</span>
+                <span>•</span>
+                <span>💎 Kunjungi TikTok Resmi Kami: @id.card_aff</span>
+                <span>•</span>
+                <span>🔥 Hubungi Admin untuk Info & Konsultasi</span>
+            </div>
+        </div>
+
+        <div class="h-2.5 google-gradient-bar"></div>
+
+        <div class="p-6 md:p-8 space-y-6 pt-2">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[11px] font-bold tracking-wider uppercase shadow-inner">
+                    <i class="fa-solid fa-location-dot text-rose-500"></i> Layanan Khusus Kota Makassar & Sekitarnya
+                </div>
+
+                <div class="relative w-full h-56 md:h-64 bg-slate-950 rounded-2xl border-2 shimmer-card-border overflow-hidden shadow-2xl group flex items-center justify-center">
+                    <img src="nfc-card.jpg" alt="Kartu NFC Google Review" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex items-end p-4">
+                        <div class="text-left w-full flex justify-between items-end">
+                            <div>
+                                <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Teknologi Tap-In NFC</span>
+                                <p class="text-xs font-bold text-white mt-1">Alat Bantu Ulasan Digital</p>
+                            </div>
+                            <span id="liveStockBadge" class="text-[10px] bg-blue-600/90 text-white px-2.5 py-1 rounded-md font-mono font-bold shadow-lg">Sisa Stok Ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="https://tiktok.com/@id.card_aff" target="_blank" class="block p-4 rounded-2xl bg-gradient-to-r from-pink-950/40 via-slate-900 to-cyan-950/40 border-2 tiktok-shimmer-box hover:scale-[1.01] transition duration-300 text-left relative overflow-hidden group shadow-xl">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-pink-600 to-cyan-500 text-white flex items-center justify-center text-xl shadow-lg shrink-0 group-hover:rotate-12 transition">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs font-extrabold text-white">Media Sosial : TikTok</span>
+                                    <span class="px-1.5 py-0.5 bg-pink-500/20 text-pink-400 border border-pink-500/30 rounded text-[9px] font-bold">Resmi</span>
+                                </div>
+                                <p class="text-[11px] text-pink-300 font-mono font-bold mt-0.5">@id.card_aff</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-xl text-[10px] shadow transition">
+                                <span>Follow Akun</span> <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-300 mt-2.5 border-t border-white/10 pt-2 flex items-center justify-between">
+                        <span>💡 Temukan video review & kode promo unik di sini!</span>
+                        <span class="text-cyan-400 font-bold underline">Klik untuk Kunjungi</span>
+                    </p>
+                </a>
+
+                <div class="flex justify-center items-center gap-1.5 text-amber-400 text-2xl py-1">
+                    <i class="fa-solid fa-star star-1"></i>
+                    <i class="fa-solid fa-star star-2"></i>
+                    <i class="fa-solid fa-star star-3"></i>
+                    <i class="fa-solid fa-star star-4"></i>
+                    <i class="fa-solid fa-star star-5"></i>
+                </div>
+                
+                <div class="space-y-3">
+                    <h1 class="text-xl md:text-2xl font-extrabold text-white tracking-tight leading-snug">
+                        Permudah Pelanggan Memberikan Ulasan Google Maps Cukup dengan Satu Sentuhan Kartu
+                    </h1>
+                    <p class="text-xs md:text-sm text-slate-300 leading-relaxed px-1">
+                        Kartu NFC praktis untuk mengarahkan pengunjung toko atau tempat usaha Anda langsung ke halaman ulasan Google Maps tanpa perlu mengetik atau mencari link secara manual.
+                    </p>
+                </div>
+
+                <div id="storeStatusBanner" class="hidden p-3 rounded-2xl text-xs font-bold border text-center"></div>
+            </div>
+
+            <!-- LIVE TREADMILL / MARQUEE PESANAN MASUK DENGAN EFEK SHIMMER -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 overflow-hidden shadow-inner relative treadmill-shimmer-box">
+                <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-800 text-[11px]">
+                    <span class="font-bold text-amber-400 uppercase flex items-center gap-1.5">
+                        <i class="fa-solid fa-bolt text-amber-400 animate-pulse"></i> Live Treadmill Status Pesanan Real-Time
+                    </span>
+                    <span class="text-slate-400 text-[10px]">Makassar</span>
+                </div>
+                <div class="overflow-hidden whitespace-nowrap relative">
+                    <div id="treadmillContainer" class="treadmill-track text-xs text-slate-300 space-x-6"></div>
+                </div>
+            </div>
+
+            <div id="step1" class="space-y-4">
+                <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-3 shadow-inner">
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Pilih Jumlah Paket & Kuantitas Kartu NFC</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="setPackagePreset(1)" id="pkgBtn1" class="pkg-btn p-2.5 rounded-xl border border-blue-500 bg-blue-500/15 text-center transition cursor-pointer hover:border-blue-400 shadow">
+                            <span class="block text-xs font-bold text-white">1 Pcs</span>
+                            <span class="text-[10px] text-blue-400 font-medium">Rp 100rb</span>
+                        </button>
+                        <button type="button" onclick="setPackagePreset(3)" id="pkgBtn3" class="pkg-btn p-2.5 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700">
+                            <span class="block text-xs font-bold text-white">3 Pcs</span>
+                            <span class="text-[10px] text-slate-400 font-medium">Rp 300rb</span>
+                        </button>
+                        <button type="button" onclick="setPackagePreset(5)" id="pkgBtn5" class="pkg-btn p-2.5 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700">
+                            <span class="block text-xs font-bold text-white">5 Pcs</span>
+                            <span class="text-[10px] text-slate-400 font-medium">Rp 500rb</span>
+                        </button>
+                    </div>
+
+                    <div class="pt-2 flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
+                        <span class="font-bold text-slate-300 uppercase">Atur Jumlah Kustom (Pcs):</span>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="adjustQty(-1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition flex items-center justify-center cursor-pointer"><i class="fa-solid fa-minus"></i></button>
+                            <input type="number" id="customQtyInput" value="1" min="1" max="100" oninput="onCustomQtyChange()" class="w-14 text-center py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold text-xs">
+                            <button type="button" onclick="adjustQty(1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition flex items-center justify-center cursor-pointer"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-2">
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Masukkan Kode Promo / Voucher Resmi</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="promoInput" placeholder="Masukkan kode promo jika ada..." class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white uppercase placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono">
+                        <button type="button" onclick="applyPromo()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition cursor-pointer shrink-0 shadow-md">Gunakan</button>
+                    </div>
+                    <p id="promoMsg" class="text-[11px] font-semibold hidden"></p>
+                </div>
+
+                <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wide flex items-center gap-2">
+                            <i class="fa-solid fa-store text-emerald-400"></i> Informasi Usaha & Pengantaran
+                        </h2>
+                        <button type="button" onclick="toggleTutorial()" class="text-[11px] text-blue-400 hover:underline flex items-center gap-1 cursor-pointer font-medium">
+                            <i class="fa-solid fa-circle-question"></i> <span>Panduan Mengisi Link?</span>
+                        </button>
+                    </div>
+
+                    <div id="tutorialBox" class="hidden bg-blue-950/50 border border-blue-500/30 p-3.5 rounded-xl text-[11px] text-slate-300 space-y-2">
+                        <p class="font-bold text-white flex items-center gap-1"><i class="fa-solid fa-lightbulb text-amber-400"></i> Panduan Pengambilan Tautan Google Maps:</p>
+                        <ol class="list-decimal pl-4 space-y-1 text-slate-300">
+                            <li><b>Tautan Google Maps Usaha:</b> Buka aplikasi Google Maps -> cari lokasi tempat usaha Anda -> pilih menu Bagikan -> Salin Tautan.</li>
+                            <li><b>Tautan Titik Pengantaran (Sharelok):</b> Tahan pada titik lokasi spesifik di peta Google Maps hingga muncul pin merah, lalu salin koordinat atau tautan lokasinya.</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="space-y-3 text-xs pt-1">
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium">Nama Lengkap Pemesan</label>
+                            <input type="text" id="name" required placeholder="Masukkan nama lengkap pemesan" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium">Nomor WhatsApp Aktif</label>
+                            <input type="tel" id="whatsapp" required placeholder="Masukkan nomor WhatsApp yang dapat dihubungi" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium">Nama Resmi Usaha / Toko</label>
+                            <input type="text" id="businessName" required placeholder="Masukkan nama tempat usaha atau toko" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium">Tautan Profil Google Maps Usaha</label>
+                            <input type="url" id="businessProfileLink" required placeholder="Tempel tautan profil Google Maps tempat usaha" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500 font-mono text-[11px]">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium">Tautan Titik Pengantaran (Sharelok)</label>
+                            <input type="url" id="deliverySharelock" required placeholder="Tempel tautan koordinat titik pengantaran kurir" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500 font-mono text-[11px]">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium">Detail Patokan Alamat / Catatan Kurir</label>
+                            <textarea id="addressDetail" rows="2" placeholder="Masukkan rincian patokan bangunan, warna cat, atau instruksi khusus kurir" class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium">Estimasi Jarak Pengantaran dalam Kota Makassar (KM)</label>
+                            <input type="number" id="distanceInput" value="3" min="1" max="30" oninput="calculateTotal()" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                            <span class="text-[10px] text-slate-400 mt-1 block">*Tarif Kurir Makassar: ≤5km = Rp 5rb | 6-12km = Rp 10rb | >12km = Rp 15rb</span>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium">Tanggal Order</label>
+                            <input type="date" id="bookingDate" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500 font-mono">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs">
+                    <div class="flex justify-between text-slate-400">
+                        <span>Harga Kartu NFC (<span id="summaryQty">1</span> Pcs):</span>
+                        <span id="summarySubtotal" class="font-bold text-white">Rp 100.000</span>
+                    </div>
+                    <div class="flex justify-between text-slate-400">
+                        <span>Tarif Kurir Resmi Makassar:</span>
+                        <span id="summaryShipping" class="font-bold text-white">Rp 5.000</span>
+                    </div>
+                    <div class="border-t border-slate-800 pt-2 flex justify-between text-sm font-extrabold text-emerald-400">
+                        <span>Total Pembayaran:</span>
+                        <span id="summaryTotal">Rp 105.000</span>
+                    </div>
+                </div>
+
+                <button type="button" id="proceedToPayBtn" onclick="goToPayment()" class="w-full py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-blue-500/25 cursor-pointer uppercase tracking-wider shimmer-btn">
+                    Lanjut ke Pembayaran QRIS
+                </button>
+            </div>
+
+            <div id="step2" class="hidden space-y-4">
+                <div class="bg-slate-950/90 p-5 rounded-2xl border border-slate-800 text-center space-y-3">
+                    <h2 class="text-sm font-bold text-white">Selesaikan Pembayaran QRIS</h2>
+                    <p class="text-xs text-slate-400">Pindai kode QRIS di bawah melalui aplikasi mobile banking atau dompet digital apa pun.</p>
+                    <div class="bg-white p-3.5 rounded-2xl inline-block shadow-2xl">
+                        <img src="qris.jpg" alt="QRIS Pembayaran Resmi" class="w-48 h-48 mx-auto object-contain rounded-lg">
+                    </div>
+                    <p class="text-[11px] text-amber-400 font-semibold">Total Transfer: <span id="qrisTotalDisplay" class="text-white font-extrabold text-sm">Rp 105.000</span></p>
+                </div>
+
+                <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs">
+                    <label class="block font-bold text-slate-300 uppercase">Unggah Bukti Transfer Resmi</label>
+                    <input type="file" id="paymentProof" accept="image/*" class="w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer">
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="button" onclick="backToStep1()" class="w-1/3 py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs transition cursor-pointer">Kembali</button>
+                    <button type="button" id="confirmPayBtn" onclick="submitOrder()" class="w-2/3 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg cursor-pointer shimmer-btn">Konfirmasi & Kirim Pesanan</button>
+                </div>
+            </div>
+
+            <div id="step3" class="hidden bg-slate-950/90 p-6 rounded-2xl border border-slate-800 text-center space-y-4">
+                <div class="w-14 h-14 mx-auto rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/30 text-2xl shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h2 class="text-lg font-bold text-white">Pesanan Berhasil Disimpan!</h2>
+                <p class="text-xs text-slate-300">ID Pesanan Anda: <code id="orderIdDisplay" class="text-blue-400 font-mono font-bold">NFC-XXXXXX</code></p>
+                <p class="text-[11px] text-slate-400">Silakan lanjutkan pengiriman detail pesanan melalui WhatsApp admin agar segera diverifikasi dan dikirim oleh kurir.</p>
+                <a href="status.html" class="block w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-blue-400 font-bold rounded-xl text-xs transition border border-blue-500/30">Cek Status Pesanan Anda</a>
+            </div>
+
+            <div class="border-t border-slate-800 pt-5 space-y-4 text-xs">
+                <h3 class="font-bold text-white uppercase tracking-wider text-center flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-circle-question text-blue-400"></i> Tanya Jawab & Panduan Produk (Q&A)
+                </h3>
+                <div class="space-y-3">
+                    <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                        <p class="font-bold text-amber-300">❓ Apa sih manfaat & keuntungan membeli kartu NFC ini?</p>
+                        <p class="text-slate-300 text-[11px] leading-relaxed">Kartu ini memudahkan pelanggan di toko/cafe Anda untuk memberikan ulasan Google Maps secara instan tanpa perlu repot mencari link atau mengetik nama toko secara manual. Meningkatkan reputasi dan visibilitas bisnis lokal Anda secara cepat.</p>
+                    </div>
+                    <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                        <p class="font-bold text-amber-300">❓ Bagaimana cara kerja & cara pakai produknya?</p>
+                        <p class="text-slate-300 text-[11px] leading-relaxed">Sangat mudah! Pelanggan cukup mendekatkan (*tap*) smartphone mereka yang memiliki fitur NFC ke kartu fisik tersebut, atau cukup melakukan *scan* pada QR code cadangan yang tertera. Otomatis halaman ulasan Google Maps toko Anda akan terbuka di HP pelanggan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full py-4 text-center text-[11px] text-slate-500 tracking-wider relative z-10 space-y-1">
+        <p>&copy; 2026 NFC Google Review Makassar. All Rights Reserved.</p>
+        <p><a href="https://tiktok.com/@id.card_aff" target="_blank" class="text-pink-400 hover:underline"><i class="fa-brands fa-tiktok"></i> Media Sosial : TikTok @id.card_aff</a></p>
+    </footer>
+
+    <script>
+        const ADMIN_PHONE = "6289504749648";
+        let selectedQty = 1;
+        let isPromoApplied = false;
+
+        function sanitize(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function toggleTutorial() {
+            let box = document.getElementById('tutorialBox');
+            box.classList.toggle('hidden');
+        }
+
+        function checkStoreStatus() {
+            let stock = parseInt(localStorage.getItem('nfc_stock'));
+            if (isNaN(stock)) {
+                stock = 15;
+                localStorage.setItem('nfc_stock', stock);
+            }
+            let manualClose = localStorage.getItem('nfc_manual_close') === 'true';
+            let banner = document.getElementById('storeStatusBanner');
+            let badge = document.getElementById('liveStockBadge');
+
+            badge.innerText = `Sisa ${stock} Pcs Ready`;
+
+            if (stock <= 0 || manualClose) {
+                banner.classList.remove('hidden');
+                if (stock <= 0) {
+                    banner.innerText = "MOHON MAAF, STOK PERANGKAT NFC SAAT INI HABIS";
+                    banner.className = "p-3 rounded-2xl text-xs font-bold border bg-red-500/10 text-red-400 border-red-500/30 text-center";
+                } else {
+                    banner.innerText = "LAYANAN PEMESANAN DITUTUP SEMENTARA";
+                    banner.className = "p-3 rounded-2xl text-xs font-bold border bg-amber-500/10 text-amber-400 border-amber-500/30 text-center";
+                }
+                document.getElementById('proceedToPayBtn').disabled = true;
+                document.getElementById('proceedToPayBtn').classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function renderTreadmill() {
+            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
+            let container = document.getElementById('treadmillContainer');
+
+            if (orders.length === 0) {
+                container.innerHTML = `<span class="text-slate-400 px-4">🚀 Belum ada pesanan hari ini. Jadilah yang pertama memesan kartu NFC Google Review!</span>`;
+                return;
+            }
+
+            let itemsHtml = '';
+            let loopOrders = [...orders, ...orders, ...orders];
+
+            loopOrders.forEach(order => {
+                let statusColor = "text-amber-400 bg-amber-500/10 border-amber-500/30";
+                if (order.processStatus === 'Selesai & Dikirim') {
+                    statusColor = "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
+                } else if (order.processStatus === 'Sedang Dikirim Kurir') {
+                    statusColor = "text-blue-400 bg-blue-500/10 border-blue-500/30";
+                }
+
+                itemsHtml += `
+                    <div class="inline-flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 shrink-0">
+                        <span class="font-mono font-bold text-white">${order.orderId}</span>
+                        <span class="text-slate-400">•</span>
+                        <span class="text-slate-200 font-semibold">${order.businessName} (${order.name})</span>
+                        <span class="text-slate-400">•</span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${statusColor}">${order.processStatus}</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = itemsHtml;
+        }
+
+        window.onload = function() {
+            checkStoreStatus();
+            let today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingDate').value = today;
+            calculateTotal();
+            renderTreadmill();
+        }
+
+        function setPackagePreset(qty) {
+            selectedQty = qty;
+            document.getElementById('customQtyInput').value = qty;
+            document.querySelectorAll('.pkg-btn').forEach(btn => {
+                btn.className = "pkg-btn p-2.5 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700";
+            });
+            let activeBtn = document.getElementById(`pkgBtn${qty}`);
+            if (activeBtn) {
+                activeBtn.className = "pkg-btn p-2.5 rounded-xl border border-blue-500 bg-blue-500/15 text-center transition cursor-pointer hover:border-blue-400 shadow";
+            }
+            calculateTotal();
+        }
+
+        function adjustQty(amount) {
+            selectedQty += amount;
+            if (selectedQty < 1) selectedQty = 1;
+            if (selectedQty > 100) selectedQty = 100;
+            document.getElementById('customQtyInput').value = selectedQty;
+            
+            document.querySelectorAll('.pkg-btn').forEach(btn => {
+                btn.className = "pkg-btn p-2.5 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700";
+            });
+            calculateTotal();
+        }
+
+        function onCustomQtyChange() {
+            let val = parseInt(document.getElementById('customQtyInput').value);
+            if (isNaN(val) || val < 1) val = 1;
+            selectedQty = val;
+            calculateTotal();
+        }
+
+        function applyPromo() {
+            let code = document.getElementById('promoInput').value.trim().toUpperCase();
+            let msg = document.getElementById('promoMsg');
+            msg.classList.remove('hidden');
+
+            const validPromoCodes = ["MAKASSARNFC", "MAKASSAR20", "YAZEN7", "TIKTOKGAUL", "IDCARDAFF", "MAKAREVIEW"];
+
+            if (validPromoCodes.includes(code)) {
+                isPromoApplied = true;
+                msg.innerText = "🎉 Berhasil! Kode unik TikTok valid. Diskon spesial diaktifkan.";
+                msg.className = "text-[11px] font-semibold text-emerald-400";
+            } else {
+                isPromoApplied = false;
+                msg.innerText = "❌ Kode tidak valid. Cek video terbaru di TikTok @id.card_aff untuk temukan kodenya!";
+                msg.className = "text-[11px] font-semibold text-red-400";
+            }
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let km = parseFloat(document.getElementById('distanceInput').value) || 3;
+            let pricePerPcs = isPromoApplied ? 80000 : 100000;
+            let subtotal = pricePerPcs * selectedQty;
+            let shippingFee = km <= 5 ? 5000 : (km <= 12 ? 10000 : 15000);
+            let total = subtotal + shippingFee;
+
+            document.getElementById('summaryQty').innerText = selectedQty;
+            document.getElementById('summarySubtotal').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+            document.getElementById('summaryShipping').innerText = 'Rp ' + shippingFee.toLocaleString('id-ID');
+            document.getElementById('summaryTotal').innerText = 'Rp ' + total.toLocaleString('id-ID');
+            document.getElementById('qrisTotalDisplay').innerText = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        function goToPayment() {
+            let name = document.getElementById('name').value.trim();
+            let whatsapp = document.getElementById('whatsapp').value.trim();
+            let businessName = document.getElementById('businessName').value.trim();
+            let maps = document.getElementById('businessProfileLink').value.trim();
+            let sharelok = document.getElementById('deliverySharelock').value.trim();
+
+            if (!name || !whatsapp || !businessName || !maps || !sharelok) {
+                alert('Mohon lengkapi seluruh data informasi usaha dan pengantaran dengan benar.');
+                return;
+            }
+
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+        }
+
+        function backToStep1() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+        }
+
+        function submitOrder() {
+            let proofInput = document.getElementById('paymentProof');
+            if (proofInput.files.length === 0) {
+                alert('Mohon unggah berkas bukti transfer pembayaran.');
+                return;
+            }
+
+            let currentStock = parseInt(localStorage.getItem('nfc_stock')) ?? 15;
+            if (currentStock < selectedQty) {
+                alert('Mohon maaf, ketersediaan stok perangkat tidak mencukupi.');
+                return;
+            }
+
+            let orderId = 'NFC-' + Math.floor(100000 + Math.random() * 900000);
+            let km = parseFloat(document.getElementById('distanceInput').value) || 3;
+            let pricePerPcs = isPromoApplied ? 80000 : 100000;
+            let subtotal = pricePerPcs * selectedQty;
+            let shippingFee = km <= 5 ? 5000 : (km <= 12 ? 10000 : 15000);
+            let totalPrice = subtotal + shippingFee;
+
+            let name = sanitize(document.getElementById('name').value);
+            let whatsapp = sanitize(document.getElementById('whatsapp').value);
+            let businessName = sanitize(document.getElementById('businessName').value);
+            let businessProfileLink = sanitize(document.getElementById('businessProfileLink').value);
+            let deliverySharelock = sanitize(document.getElementById('deliverySharelock').value);
+            let addressDetail = sanitize(document.getElementById('addressDetail').value);
+            let bookingDate = sanitize(document.getElementById('bookingDate').value);
+
+            let now = new Date();
+            let formattedTimestamp = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ', ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+            let orderData = {
+                orderId, date: formattedTimestamp,
+                name, whatsapp, businessName, businessProfileLink,
+                deliverySharelock, addressDetail, bookingDate,
+                packageType: selectedQty, distanceKm: km, totalPrice,
+                processStatus: 'Menunggu Konfirmasi'
+            };
+
+            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
+            orders.push(orderData);
+            localStorage.setItem('nfc_orders', JSON.stringify(orders));
+            localStorage.setItem('last_order_id', orderId);
+
+            currentStock -= selectedQty;
+            localStorage.setItem('nfc_stock', currentStock);
+            if (currentStock <= 0) {
+                localStorage.setItem('nfc_stock', 0);
+                localStorage.setItem('nfc_status', 'closed');
+            }
+
+            let waMessage = encodeURIComponent(
+                `Halo Admin, saya telah melakukan pemesanan kartu NFC Google Review.\\n\\n` +
+                `*ID Pesanan:* ${orderId}\\n` +
+                `*Waktu Pesan:* ${formattedTimestamp}\\n` +
+                `*Nama Pemesan:* ${name}\\n` +
+                `*No WhatsApp:* ${whatsapp}\\n` +
+                `*Nama Usaha:* ${businessName}\\n` +
+                `*Maps Usaha:* ${businessProfileLink}\\n` +
+                `*Sharelok:* ${deliverySharelock}\\n` +
+                `*Patokan Alamat:* ${addressDetail}\\n` +
+                `*Tanggal Order:* ${bookingDate}\\n` +
+                `*Paket:* ${selectedQty} Pcs\\n` +
+                `*Total Pembayaran:* Rp ${totalPrice.toLocaleString('id-ID')}\\n\\n` +
+                `Bukti transfer telah diunggah. Mohon verifikasi dan proses pengirimannya. Terima kasih.`
+            );
+
+            setTimeout(() => {
+                document.getElementById('orderIdDisplay').innerText = orderId;
+                document.getElementById('step2').classList.add('hidden');
+                document.getElementById('step3').classList.remove('hidden');
+
+                let successContainer = document.querySelector('#step3');
+                if (!document.getElementById('waDirectBtn')) {
+                    let waBtn = document.createElement('a');
+                    waBtn.id = 'waDirectBtn';
+                    waBtn.href = `https://wa.me/${ADMIN_PHONE}?text=${waMessage}`;
+                    waBtn.target = '_blank';
+                    waBtn.className = 'inline-flex justify-center items-center gap-2 w-full py-3.5 mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg shimmer-btn';
+                    waBtn.innerHTML = '<i class="fa-brands fa-whatsapp text-lg"></i><span>Kirim Detail ke WhatsApp Admin</span>';
+                    successContainer.appendChild(waBtn);
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html>'''
+
+with open('public/index.html', 'w', encoding='utf-8') as f:
+    f.write(index_code)
+
+print("Exact customer index layout restored successfully!")
