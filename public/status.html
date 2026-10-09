@@ -3,100 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lacak Status Pesanan - NFC Google Review</title>
+    <title>Lacak Status Pesanan - NFC Google Review Makassar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .google-gradient-bar {
             background: linear-gradient(90deg, #4285F4 0%, #EA4335 25%, #FBBC05 50%, #34A853 100%);
         }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        .animate-float { animation: float 3s ease-in-out infinite; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-center items-center p-3 md:p-6">
 
-    <main class="max-w-xl w-full bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden">
+    <main class="max-w-xl w-full bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden space-y-6">
         <div class="h-2.5 google-gradient-bar"></div>
 
         <div class="p-6 md:p-8 space-y-6">
-            <div class="text-center space-y-2">
+            <!-- HEADER -->
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <a href="index.html" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Ke Beranda</span>
+                </a>
+                <a href="admin.html" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-gauge"></i>
+                    <span>Admin Panel</span>
+                </a>
+            </div>
+
+            <!-- PENCARIAN ID -->
+            <div class="text-center space-y-3">
+                <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-tr from-blue-500 to-emerald-400 p-0.5 shadow-lg shadow-blue-500/20 flex items-center justify-center animate-float">
+                    <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
+                        <i class="fa-solid fa-magnifying-glass text-blue-400 text-lg"></i>
+                    </div>
+                </div>
                 <h1 class="text-2xl font-bold text-white">Lacak Status Pesanan</h1>
-                <p class="text-xs text-slate-400">Masukkan ID Pesanan (contoh: NFC-123456) atau Nomor WhatsApp Anda.</p>
+                <p class="text-xs text-slate-400">Masukkan ID Pesanan Anda (contoh: <code class="text-blue-400 font-mono">NFC-XXXXXX</code>).</p>
             </div>
 
             <div class="flex gap-2">
-                <input type="text" id="searchQuery" placeholder="Cari ID Order / No WhatsApp..." class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                <button type="button" onclick="trackOrder()" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition">Cari</button>
+                <input type="text" id="searchIdInput" placeholder="Masukkan ID Pesanan..." class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono">
+                <button onclick="searchOrder()" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow transition shrink-0 cursor-pointer">
+                    Cari
+                </button>
             </div>
 
-            <div id="resultContainer" class="hidden space-y-4 pt-4 border-t border-slate-800">
-                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-                    <div class="flex justify-between text-xs">
-                        <span class="text-slate-400">ID Pesanan:</span>
-                        <span id="resId" class="font-mono font-bold text-blue-400">-</span>
+            <!-- HASIL PENCARIAN -->
+            <div id="resultContainer" class="hidden bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 border-b border-slate-800 pb-3">
+                    <div>
+                        <span id="resId" class="text-xs font-mono font-bold text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-md border border-blue-500/20">NFC-000000</span>
+                        <h2 id="resBusiness" class="text-lg font-extrabold text-white mt-2">-</h2>
                     </div>
-                    <div class="flex justify-between text-xs">
+                    <span id="resStatus" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        Menunggu Konfirmasi Kurir
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div class="space-y-0.5">
                         <span class="text-slate-400">Nama Pemesan:</span>
-                        <span id="resName" class="font-semibold text-white">-</span>
+                        <p id="resCustomer" class="font-bold text-white">-</p>
                     </div>
-                    <div class="flex justify-between text-xs">
-                        <span class="text-slate-400">Nama Usaha:</span>
-                        <span id="resBusiness" class="font-semibold text-white">-</span>
+                    <div class="space-y-0.5">
+                        <span class="text-slate-400">Nomor WhatsApp:</span>
+                        <p id="resWhatsapp" class="font-bold text-emerald-400">-</p>
                     </div>
-                    <div class="flex justify-between text-xs">
-                        <span class="text-slate-400">Paket:</span>
-                        <span id="resPackage" class="font-semibold text-white">-</span>
+                    <div class="space-y-0.5">
+                        <span class="text-slate-400">Jumlah Paket:</span>
+                        <p id="resQty" class="font-bold text-white">-</p>
                     </div>
-                    <div class="flex justify-between text-xs">
+                    <div class="space-y-0.5">
                         <span class="text-slate-400">Total Pembayaran:</span>
-                        <span id="resTotal" class="font-semibold text-emerald-400">-</span>
+                        <p id="resTotal" class="font-bold text-emerald-400">-</p>
                     </div>
-                    <div class="flex justify-between text-xs pt-2 border-t border-slate-800">
-                        <span class="text-slate-400">Status Proses:</span>
-                        <span id="resStatus" class="font-bold text-amber-400">-</span>
-                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <a id="resWaBtn" href="#" target="_blank" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Konfirmasi via WhatsApp Admin</span>
+                    </a>
                 </div>
             </div>
 
-            <div id="errorMsg" class="hidden text-center text-xs text-red-400 font-semibold py-2"></div>
-
-            <div class="pt-4 text-center">
-                <a href="/" class="text-xs text-blue-400 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Form Pemesanan</a>
+            <!-- TIDAK DITEMUKAN -->
+            <div id="notFoundContainer" class="hidden bg-slate-950 p-6 rounded-2xl border border-slate-800 text-center space-y-2">
+                <i class="fa-solid fa-circle-exclamation text-2xl text-red-400"></i>
+                <h3 class="text-sm font-bold text-white">Pesanan Tidak Ditemukan</h3>
+                <p class="text-xs text-slate-400">Periksa kembali ID Pesanan yang Anda masukkan.</p>
             </div>
         </div>
     </main>
 
     <script>
-        async function trackOrder() {
-            const query = document.getElementById('searchQuery').value.trim();
-            const resultContainer = document.getElementById('resultContainer');
-            const errorMsg = document.getElementById('errorMsg');
+        const ADMIN_PHONE = "6289504749648";
 
-            if (!query) return alert('Masukkan ID Pesanan atau Nomor WhatsApp!');
+        function searchOrder() {
+            const query = document.getElementById('searchIdInput').value.trim();
+            if (!query) {
+                alert('Masukkan ID Pesanan terlebih dahulu!');
+                return;
+            }
+            displayOrder(query);
+        }
 
-            try {
-                const res = await fetch('/api/track-order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query })
-                });
-                const data = await res.json();
+        function displayOrder(orderId) {
+            const orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
+            const found = orders.find(o => o.orderId.toLowerCase() === orderId.toLowerCase());
 
-                if (data.success) {
-                    errorMsg.classList.add('hidden');
-                    resultContainer.classList.remove('hidden');
-                    document.getElementById('resId').innerText = data.order.orderId;
-                    document.getElementById('resName').innerText = data.order.name;
-                    document.getElementById('resBusiness').innerText = data.order.businessName;
-                    document.getElementById('resPackage').innerText = data.order.packageType;
-                    document.getElementById('resTotal').innerText = `Rp ${data.order.totalPrice.toLocaleString('id-ID')}`;
-                    document.getElementById('resStatus').innerText = data.order.processStatus;
-                } else {
-                    resultContainer.classList.add('hidden');
-                    errorMsg.classList.remove('hidden');
-                    errorMsg.innerText = data.message;
-                }
-            } catch (err) {
-                alert('Gagal melacak pesanan. Periksa koneksi server.');
+            const resContainer = document.getElementById('resultContainer');
+            const notFoundContainer = document.getElementById('notFoundContainer');
+
+            if (found) {
+                document.getElementById('resId').innerText = found.orderId;
+                document.getElementById('resBusiness').innerText = found.businessName || '-';
+                document.getElementById('resCustomer').innerText = found.name || '-';
+                document.getElementById('resWhatsapp').innerText = found.whatsapp || '-';
+                document.getElementById('resQty').innerText = (found.packageType || 1) + ' Pcs';
+                document.getElementById('resTotal').innerText = 'Rp ' + (found.totalPrice || 0).toLocaleString('id-ID');
+                document.getElementById('resStatus').innerText = found.processStatus || 'Menunggu Konfirmasi';
+
+                const waText = encodeURIComponent(
+                    `Halo Admin, saya ingin mengonfirmasi status pesanan:\n\n` +
+                    `*ID Pesanan:* ${found.orderId}\n` +
+                    `*Nama Pemesan:* ${found.name}\n` +
+                    `*Nama Usaha:* ${found.businessName}\n` +
+                    `*Total:* Rp ${(found.totalPrice || 0).toLocaleString('id-ID')}\n\n` +
+                    `Mohon bantu dicek ya Kak. Terima kasih!`
+                );
+                document.getElementById('resWaBtn').href = `https://wa.me/${ADMIN_PHONE}?text=${waText}`;
+
+                resContainer.classList.remove('hidden');
+                notFoundContainer.classList.add('hidden');
+            } else {
+                resContainer.classList.add('hidden');
+                notFoundContainer.classList.remove('hidden');
+            }
+        }
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const idParam = urlParams.get('id') || localStorage.getItem('last_order_id');
+            if (idParam) {
+                document.getElementById('searchIdInput').value = idParam;
+                displayOrder(idParam);
             }
         }
     </script>

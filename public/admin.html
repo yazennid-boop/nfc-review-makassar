@@ -12,9 +12,33 @@
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-3 md:p-6 flex flex-col items-center">
+<body class="bg-slate-950 text-slate-100 min-h-screen p-3 md:p-6 flex flex-col items-center justify-center">
 
-    <main class="max-w-4xl w-full bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden mb-8">
+    <!-- MODAL LOGIN ADMIN -->
+    <div id="loginModal" class="max-w-md w-full bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden p-6 space-y-6">
+        <div class="h-2.5 google-gradient-bar -mx-6 -mt-6 mb-2"></div>
+        <div class="text-center space-y-2">
+            <div class="inline-flex p-4 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">
+                <i class="fa-solid fa-shield-halved text-3xl"></i>
+            </div>
+            <h1 class="text-xl font-bold text-white">Autentikasi Admin</h1>
+            <p class="text-xs text-slate-400">Masukkan password rahasia untuk mengakses panel kontrol.</p>
+        </div>
+        <form onsubmit="event.preventDefault(); verifyLogin();" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Password Admin</label>
+                <input type="password" id="passwordInput" required placeholder="Masukkan password..." class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500">
+            </div>
+            <p id="loginError" class="text-xs text-red-400 hidden font-semibold text-center">❌ Password salah! Coba lagi.</p>
+            <button type="submit" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition shadow-lg cursor-pointer">
+                Masuk Panel Admin
+            </button>
+            <a href="index.html" class="block text-center text-xs text-slate-400 hover:text-white pt-2">← Kembali ke Beranda</a>
+        </form>
+    </div>
+
+    <!-- UTAMA PANEL ADMIN (TERSEMBUNYI SEBELUM LOGIN) -->
+    <main id="adminMainContent" class="hidden max-w-4xl w-full bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden mb-8">
         <div class="h-2.5 google-gradient-bar"></div>
 
         <div class="p-6 md:p-8 space-y-6">
@@ -23,10 +47,16 @@
                     <h1 class="text-2xl font-bold text-white">Panel Kontrol & Admin</h1>
                     <p class="text-xs text-slate-400">Kelola stok, status operasional toko, dan rekap data pesanan pelanggan.</p>
                 </div>
-                <a href="/" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold transition flex items-center gap-2">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    <span>Ke Halaman Utama</span>
-                </a>
+                <div class="flex gap-2">
+                    <a href="status.html" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold transition flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Cek Status</span>
+                    </a>
+                    <button type="button" onclick="logoutAdmin()" class="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 rounded-xl text-xs font-semibold transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Keluar</span>
+                    </button>
+                </div>
             </div>
 
             <!-- STATUS OPERASIONAL & STOK -->
@@ -95,14 +125,46 @@
     </main>
 
     <script>
+        const CORRECT_PASSWORD = "Yazen Project";
+
+        function verifyLogin() {
+            const inputVal = document.getElementById('passwordInput').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (inputVal === CORRECT_PASSWORD) {
+                localStorage.setItem('nfc_admin_logged', 'true');
+                showAdminDashboard();
+            } else {
+                errorEl.classList.remove('hidden');
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        function showAdminDashboard() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('adminMainContent').classList.remove('hidden');
+            document.body.classList.remove('justify-center');
+            loadAdminData();
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('nfc_admin_logged');
+            location.reload();
+        }
+
+        // Cek apakah sudah login sebelumnya di sesi ini
+        window.onload = function() {
+            if (localStorage.getItem('nfc_admin_logged') === 'true') {
+                showAdminDashboard();
+            }
+        }
+
         let currentStock = parseInt(localStorage.getItem('nfc_stock')) || 1000;
         let isManualClosed = localStorage.getItem('nfc_manual_close') === 'true';
 
         function loadAdminData() {
-            // Tampilkan Stok
             document.getElementById('displayStock').innerText = `${currentStock.toLocaleString('id-ID')} Pcs`;
 
-            // Status Toko & UI Badge
             const badge = document.getElementById('statusBadge');
             const toggleBtn = document.getElementById('toggleStoreBtn');
 
@@ -125,7 +187,6 @@
                 localStorage.setItem('nfc_status', 'open');
             }
 
-            // Load Data Tabel Pesanan
             const tbody = document.getElementById('ordersTableBody');
             let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
 
@@ -189,7 +250,7 @@
             }
             currentStock = val;
             if (currentStock > 0 && isManualClosed) {
-                isManualClosed = false; // Buka otomatis jika sebelumnya tertutup manual lalu stok diisi
+                isManualClosed = false;
                 localStorage.setItem('nfc_manual_close', isManualClosed);
             }
             localStorage.setItem('nfc_stock', currentStock);
@@ -205,8 +266,6 @@
                 alert("Riwayat pesanan berhasil dibersihkan.");
             }
         }
-
-        loadAdminData();
     </script>
 </body>
 </html>
