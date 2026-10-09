@@ -125,8 +125,7 @@
     </footer>
 
     <script>
-        // SHA-256 dari "Yasir Sigma"
-        const ADMIN_SHA256 = "63d76e93836d933e49635bc57c96328a6fcf74a3f124cfae4f2fa9a695e197d1";
+        const CORRECT_PASSWORD = "Yasir Sigma";
         let lastOrderCount = 0;
 
         function togglePasswordVisibility() {
@@ -139,13 +138,6 @@
                 passInput.type = 'password';
                 eyeIcon.className = 'fa-solid fa-eye';
             }
-        }
-
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
         function playCashRegisterSound() {
@@ -179,19 +171,16 @@
             }
         }
 
-        async function handleLogin() {
-            // .trim() otomatis menghapus spasi ekstra yang tidak sengaja terketik di depan/belakang
+        function handleLogin() {
             let pass = document.getElementById('adminPassword').value.trim();
-            let hash = await sha256(pass);
             let errDiv = document.getElementById('loginError');
 
-            if (hash === ADMIN_SHA256) {
+            if (pass === CORRECT_PASSWORD) {
                 localStorage.setItem('nfc_admin_secure_token', 'token_' + Date.now() + '_' + Math.random());
-                localStorage.removeItem('nfc_admin_lockout');
                 showDashboard();
             } else {
                 errDiv.classList.remove('hidden');
-                errDiv.innerText = "Password salah! Pastikan mengetik Yasir Sigma dengan benar tanpa spasi berlebih.";
+                errDiv.innerText = "Password salah! Gunakan: Yasir Sigma";
             }
         }
 
