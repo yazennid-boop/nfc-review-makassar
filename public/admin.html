@@ -23,10 +23,7 @@
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
-        .shimmer-btn {
-            position: relative;
-            overflow: hidden;
-        }
+        .shimmer-btn { position: relative; overflow: hidden; }
         .shimmer-btn::after {
             content: '';
             position: absolute;
@@ -40,10 +37,7 @@
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
-        .admin-shimmer-box {
-            position: relative;
-            overflow: hidden;
-        }
+        .admin-shimmer-box { position: relative; overflow: hidden; }
         .admin-shimmer-box::after {
             content: '';
             position: absolute;
@@ -64,7 +58,6 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-3 md:p-6 selection:bg-blue-500 selection:text-white">
 
-    <!-- LOGIN SCREEN -->
     <div id="loginScreen" class="max-w-md w-full glass-card rounded-3xl overflow-hidden shadow-2xl relative z-10 my-auto admin-shimmer-box">
         <div class="h-2.5 google-gradient-bar"></div>
         <div class="p-6 md:p-8 space-y-6">
@@ -94,7 +87,6 @@
         </div>
     </div>
 
-    <!-- DASHBOARD PANEL -->
     <div id="dashboardPanel" class="hidden max-w-5xl w-full glass-card rounded-3xl overflow-hidden shadow-2xl relative z-10 my-4 admin-shimmer-box">
         <div class="h-2.5 google-gradient-bar"></div>
         
@@ -162,11 +154,9 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- COPYRIGHT FOOTER -->
     <footer class="w-full py-4 text-center text-[11px] text-slate-500 tracking-wider relative z-10">
         &copy; 2026 NFC Google Review Makassar. All Rights Reserved.
     </footer>
@@ -196,7 +186,6 @@
                 osc1.frequency.setValueAtTime(1318.51, audioCtx.currentTime);
                 gain1.gain.setValueAtTime(0.3, audioCtx.currentTime);
                 gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-                
                 osc1.connect(gain1);
                 gain1.connect(audioCtx.destination);
                 osc1.start();
@@ -208,7 +197,6 @@
                 osc2.frequency.setValueAtTime(2093.00, audioCtx.currentTime + 0.15);
                 gain2.gain.setValueAtTime(0.4, audioCtx.currentTime + 0.15);
                 gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
-
                 osc2.connect(gain2);
                 gain2.connect(audioCtx.destination);
                 osc2.start(audioCtx.currentTime + 0.15);
