@@ -7,7 +7,6 @@
     <title>NFC Google Review Makassar - Solusi Praktis Ulasan Bisnis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Supabase JS Client Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @keyframes googleShimmer {
@@ -155,7 +154,7 @@
                                 <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Teknologi Tap-In NFC</span>
                                 <p class="text-xs font-bold text-white mt-1">Alat Bantu Ulasan Digital</p>
                             </div>
-                            <span id="liveStockBadge" class="text-[10px] bg-blue-600/90 text-white px-2.5 py-1 rounded-md font-mono font-bold shadow-lg">Sisa 15 Unit</span>
+                            <span id="liveStockBadge" class="text-[10px] bg-blue-600/90 text-white px-2.5 py-1 rounded-md font-mono font-bold shadow-lg">Sisa 15 Pcs Ready</span>
                         </div>
                     </div>
                 </div>
@@ -391,9 +390,10 @@
         async function loadCloudData() {
             try {
                 const { data: stockData } = await supabaseClient.from('settings').select('value').eq('key', 'stock').single();
-                if (stockData) {
-                    currentStock = parseInt(stockData.value) || 15;
-                    document.getElementById('liveStockBadge').innerText = `Sisa ${currentStock} Unit`;
+                if (stockData && stockData.value !== undefined) {
+                    currentStock = parseInt(stockData.value);
+                    if (isNaN(currentStock)) currentStock = 15;
+                    document.getElementById('liveStockBadge').innerText = `Sisa ${currentStock} Pcs Ready`;
                 }
 
                 const { data: orders } = await supabaseClient.from('orders').select('*').order('date', { ascending: false });
@@ -428,6 +428,7 @@
                 container.innerHTML = itemsHtml;
             } catch (err) {
                 console.error("Cloud error:", err);
+                document.getElementById('liveStockBadge').innerText = `Sisa 15 Pcs Ready`;
             }
         }
 
