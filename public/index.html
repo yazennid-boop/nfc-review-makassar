@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline'; img-src 'self' data: https:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline'; connect-src 'self' https://rbxkasjljehbejkehslr.supabase.co https://*.supabase.co; img-src 'self' data: https:;">
     <title>NFC Google Review Makassar - Solusi Praktis Ulasan Bisnis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -185,7 +185,6 @@
                     </p>
                 </a>
 
-                <!-- ANIMASI BINTANG EMAS -->
                 <div class="flex justify-center items-center gap-1.5 text-amber-400 text-2xl py-1">
                     <i class="fa-solid fa-star star-1"></i>
                     <i class="fa-solid fa-star star-2"></i>
@@ -204,7 +203,6 @@
                 </div>
             </div>
 
-            <!-- LIVE TREADMILL / MARQUEE PESANAN CLOUD -->
             <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 overflow-hidden shadow-inner relative treadmill-shimmer-box">
                 <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-800 text-[11px]">
                     <span class="font-bold text-amber-400 uppercase flex items-center gap-1.5">
@@ -369,7 +367,7 @@
 
     <script>
         const SUPABASE_URL = "https://rbxkasjljehbejkehslr.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieGthc2psamVoYmVqa2Voc2xyIiwicm9sZSI6InJub24iLCJpYXQiOjE3OTE1NDQxMDMsImV4cCI6MjEwNzEyMDEwM30.HlAFJArWgzbvFjorcPgMVCrSBjXJdijsfUOMHHkfyRQ";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieGthc2psamVoYmVqa2Voc2xyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NDQxMDMsImV4cCI6MjEwNzEyMDEwM30.HlAFJArWgzbvFjorcPgMVCrSBjXJdijsfUOMHHkfyRQ";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const ADMIN_PHONE = "6289504749648";
 
@@ -389,17 +387,28 @@
 
         async function loadCloudData() {
             try {
-                const { data: stockData } = await supabaseClient.from('settings').select('value').eq('key', 'stock').single();
-                if (stockData && stockData.value !== undefined) {
+                const { data: stockData, error: stockErr } = await supabaseClient
+                    .from('settings')
+                    .select('value')
+                    .eq('key', 'stock')
+                    .maybeSingle();
+
+                if (!stockErr && stockData && stockData.value !== undefined) {
                     currentStock = parseInt(stockData.value);
                     if (isNaN(currentStock)) currentStock = 15;
-                    document.getElementById('liveStockBadge').innerText = `Sisa ${currentStock} Pcs Ready`;
+                } else {
+                    currentStock = 15;
                 }
+                document.getElementById('liveStockBadge').innerText = `Sisa ${currentStock} Pcs Ready`;
 
-                const { data: orders } = await supabaseClient.from('orders').select('*').order('date', { ascending: false });
+                const { data: orders, error: orderErr } = await supabaseClient
+                    .from('orders')
+                    .select('*')
+                    .order('orderId', { ascending: false });
+
                 let container = document.getElementById('treadmillContainer');
 
-                if (!orders || orders.length === 0) {
+                if (orderErr || !orders || orders.length === 0) {
                     container.innerHTML = `<span class="text-slate-400 px-4">🚀 Belum ada pesanan hari ini. Jadilah yang pertama memesan!</span>`;
                     return;
                 }
@@ -409,26 +418,28 @@
 
                 loopOrders.forEach(order => {
                     let statusColor = "text-amber-400 bg-amber-500/10 border-amber-500/30";
-                    if (order.processStatus === 'Selesai & Dikirim') {
+                    let status = order.processStatus || 'Menunggu Konfirmasi';
+                    if (status === 'Selesai & Dikirim') {
                         statusColor = "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
-                    } else if (order.processStatus === 'Sedang Dikirim Kurir') {
+                    } else if (status === 'Sedang Dikirim Kurir') {
                         statusColor = "text-blue-400 bg-blue-500/10 border-blue-500/30";
                     }
 
                     itemsHtml += `
                         <div class="inline-flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 shrink-0">
-                            <span class="font-mono font-bold text-white">${order.orderId}</span>
+                            <span class="font-mono font-bold text-white">${order.orderId || 'NFC-000'}</span>
                             <span class="text-slate-400">•</span>
-                            <span class="text-slate-200 font-semibold">${order.businessName} (${order.name})</span>
+                            <span class="text-slate-200 font-semibold">${order.businessName || 'Usaha'} (${order.name || 'Pelanggan'})</span>
                             <span class="text-slate-400">•</span>
-                            <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${statusColor}">${order.processStatus}</span>
+                            <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${statusColor}">${status}</span>
                         </div>
                     `;
                 });
                 container.innerHTML = itemsHtml;
             } catch (err) {
-                console.error("Cloud error:", err);
+                console.error("Cloud load error:", err);
                 document.getElementById('liveStockBadge').innerText = `Sisa 15 Pcs Ready`;
+                document.getElementById('treadmillContainer').innerHTML = `<span class="text-slate-400 px-4">🚀 Belum ada pesanan hari ini. Jadilah yang pertama memesan!</span>`;
             }
         }
 
@@ -561,9 +572,9 @@
                 deliverySharelock, 
                 addressDetail, 
                 bookingDate,
-                packageType: selectedQty, 
-                distanceKm: km, 
-                totalPrice,
+                packageType: selectedQty.toString(), 
+                distanceKm: km.toString(), 
+                totalPrice: totalPrice.toString(),
                 processStatus: 'Menunggu Konfirmasi'
             };
 
