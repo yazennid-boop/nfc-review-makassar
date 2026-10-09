@@ -110,14 +110,11 @@
 
     <div class="w-full max-w-xl flex justify-between items-center mb-2 relative z-20">
         <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20bertanya%20mengenai%20bantuan%20transaksi,%20pemesanan,%20atau%20informasi%20refund." target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-blue-400 border border-blue-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-lg">
-            <i class="fa-solid fa-headset text-emerald-400"></i> <span>Bantuan & Refund Admin</span>
+            <i class="fa-solid fa-headset text-emerald-400"></i> <span>Bantuan & Refund</span>
         </a>
         <div class="flex items-center gap-2">
             <a href="status.html" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-indigo-400 border border-indigo-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
-                <i class="fa-solid fa-magnifying-glass"></i> <span>Lacak</span>
-            </a>
-            <a href="admin.html" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-amber-400 border border-amber-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
-                <i class="fa-solid fa-lock"></i> <span>Admin</span>
+                <i class="fa-solid fa-magnifying-glass"></i> <span>Lacak Pesanan</span>
             </a>
             <a href="https://tiktok.com/@id.card_aff" target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-pink-400 border border-pink-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
                 <i class="fa-brands fa-tiktok"></i> <span>@id.card_aff</span>
@@ -154,7 +151,7 @@
                                 <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Teknologi Tap-In NFC</span>
                                 <p class="text-xs font-bold text-white mt-1">Alat Bantu Ulasan Digital</p>
                             </div>
-                            <span id="liveStockBadge" class="text-[10px] bg-blue-600/90 text-white px-2.5 py-1 rounded-md font-mono font-bold shadow-lg">Sisa 15 Pcs Ready</span>
+                            <span id="liveStockBadge" class="text-[10px] bg-blue-600/90 text-white px-2.5 py-1 rounded-md font-mono font-bold shadow-lg">Memuat Stok...</span>
                         </div>
                     </div>
                 </div>
@@ -239,7 +236,7 @@
                         <span class="font-bold text-slate-300 uppercase">Atur Jumlah Kustom (Pcs):</span>
                         <div class="flex items-center gap-2">
                             <button type="button" onclick="adjustQty(-1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition flex items-center justify-center cursor-pointer"><i class="fa-solid fa-minus"></i></button>
-                            <input type="number" id="customQtyInput" value="1" min="1" max="100" oninput="onCustomQtyChange()" class="w-14 text-center py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold text-xs">
+                            <input type="number" id="customQtyInput" value="1" min="1" max="10000" oninput="onCustomQtyChange()" class="w-16 text-center py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold text-xs">
                             <button type="button" onclick="adjustQty(1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition flex items-center justify-center cursor-pointer"><i class="fa-solid fa-plus"></i></button>
                         </div>
                     </div>
@@ -373,7 +370,7 @@
 
         let selectedQty = 1;
         let isPromoApplied = false;
-        let currentStock = 15;
+        let currentStock = 3; // Default fleksibel
 
         function sanitize(str) {
             if (!str) return '';
@@ -387,6 +384,19 @@
 
         async function loadCloudData() {
             try {
+                // Cek status toko (buka / tutup)
+                let shopOpen = true;
+                const { data: shopData } = await supabaseClient
+                    .from('settings')
+                    .select('value')
+                    .eq('key', 'shop_status')
+                    .maybeSingle();
+
+                if (shopData && shopData.value === 'tutup') {
+                    shopOpen = false;
+                }
+
+                // Ambil stok fleksibel dari database
                 const { data: stockData, error: stockErr } = await supabaseClient
                     .from('settings')
                     .select('value')
@@ -395,12 +405,36 @@
 
                 if (!stockErr && stockData && stockData.value !== undefined) {
                     currentStock = parseInt(stockData.value);
-                    if (isNaN(currentStock)) currentStock = 0;
+                    if (isNaN(currentStock)) currentStock = 3;
                 } else {
-                    currentStock = 15;
+                    currentStock = 3;
                 }
-                document.getElementById('liveStockBadge').innerText = `Sisa ${currentStock.toLocaleString('id-ID')} Pcs Ready`;
 
+                let badge = document.getElementById('liveStockBadge');
+                let submitBtn = document.querySelector("button[onclick='goToPayment()']");
+
+                if (!shopOpen) {
+                    badge.innerText = `🔴 TOKO TUTUP (Stok: ${currentStock})`;
+                    badge.className = "text-[10px] bg-red-600/90 text-white px-2.5 py-1 rounded-md font-mono font-bold shadow-lg";
+                    if (submitBtn) {
+                        submitBtn.innerText = "Mohon Maaf, Toko Sedang Tutup";
+                        submitBtn.disabled = true;
+                        submitBtn.className = "w-full py-4 bg-slate-800 text-slate-500 font-bold rounded-xl text-xs cursor-not-allowed uppercase tracking-wider";
+                    }
+                } else if (currentStock <= 0) {
+                    badge.innerText = `❌ STOK KOSONG (Habis)`;
+                    badge.className = "text-[10px] bg-rose-600/90 text-white px-2.5 py-1 rounded-md font-mono font-bold shadow-lg";
+                    if (submitBtn) {
+                        submitBtn.innerText = "Stok Kartu NFC Habis";
+                        submitBtn.disabled = true;
+                        submitBtn.className = "w-full py-4 bg-slate-800 text-slate-500 font-bold rounded-xl text-xs cursor-not-allowed uppercase tracking-wider";
+                    }
+                } else {
+                    badge.innerText = `Sisa ${currentStock.toLocaleString('id-ID')} Pcs Ready`;
+                    badge.className = "text-[10px] bg-blue-600/90 text-white px-2.5 py-1 rounded-md font-mono font-bold shadow-lg";
+                }
+
+                // Ambil data pesanan untuk treadmill
                 const { data: orders, error: orderErr } = await supabaseClient
                     .from('orders')
                     .select('*')
@@ -438,7 +472,7 @@
                 container.innerHTML = itemsHtml;
             } catch (err) {
                 console.error("Cloud load error:", err);
-                document.getElementById('liveStockBadge').innerText = `Sisa 15 Pcs Ready`;
+                document.getElementById('liveStockBadge').innerText = `Sisa 3 Pcs Ready`;
                 document.getElementById('treadmillContainer').innerHTML = `<span class="text-slate-400 px-4">🚀 Belum ada pesanan hari ini. Jadilah yang pertama memesan!</span>`;
             }
         }
@@ -466,7 +500,7 @@
         function adjustQty(amount) {
             selectedQty += amount;
             if (selectedQty < 1) selectedQty = 1;
-            if (selectedQty > 100) selectedQty = 100;
+            if (selectedQty > 10000) selectedQty = 10000;
             document.getElementById('customQtyInput').value = selectedQty;
             calculateTotal();
         }
@@ -563,17 +597,17 @@
             let formattedTimestamp = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ', ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
             let orderData = {
-                orderId, 
+                orderId,
                 date: formattedTimestamp,
-                name, 
-                whatsapp, 
-                businessName, 
+                name,
+                whatsapp,
+                businessName,
                 businessProfileLink,
-                deliverySharelock, 
-                addressDetail, 
+                deliverySharelock,
+                addressDetail,
                 bookingDate,
-                packageType: selectedQty.toString(), 
-                distanceKm: km.toString(), 
+                packageType: selectedQty.toString(),
+                distanceKm: km.toString(),
                 totalPrice: totalPrice.toString(),
                 processStatus: 'Menunggu Konfirmasi'
             };
