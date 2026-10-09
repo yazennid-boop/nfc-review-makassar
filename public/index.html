@@ -112,14 +112,9 @@
         <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20bertanya%20mengenai%20bantuan%20transaksi,%20pemesanan,%20atau%20informasi%20refund." target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-blue-400 border border-blue-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-lg">
             <i class="fa-solid fa-headset text-emerald-400"></i> <span>Bantuan & Refund Admin</span>
         </a>
-        <div class="flex items-center gap-1.5">
-            <a href="status.html" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-indigo-400 border border-indigo-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
-                <i class="fa-solid fa-magnifying-glass"></i> <span>Lacak</span>
-            </a>
-            <a href="https://tiktok.com/@id.card_aff" target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-pink-400 border border-pink-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
-                <i class="fa-brands fa-tiktok"></i> <span>@id.card_aff</span>
-            </a>
-        </div>
+        <a href="https://tiktok.com/@id.card_aff" target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-pink-400 border border-pink-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
+            <i class="fa-brands fa-tiktok"></i> <span>@id.card_aff</span>
+        </a>
     </div>
 
     <main class="max-w-xl w-full glass-card rounded-3xl overflow-hidden space-y-6 relative z-10 my-2">
@@ -237,7 +232,7 @@
                         <span class="font-bold text-slate-300 uppercase">Atur Jumlah Kustom (Pcs):</span>
                         <div class="flex items-center gap-2">
                             <button type="button" onclick="adjustQty(-1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition flex items-center justify-center cursor-pointer"><i class="fa-solid fa-minus"></i></button>
-                            <input type="number" id="customQtyInput" value="1" min="1" max="1000" oninput="onCustomQtyChange()" class="w-16 text-center py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold text-xs">
+                            <input type="number" id="customQtyInput" value="1" min="1" max="100" oninput="onCustomQtyChange()" class="w-14 text-center py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold text-xs">
                             <button type="button" onclick="adjustQty(1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition flex items-center justify-center cursor-pointer"><i class="fa-solid fa-plus"></i></button>
                         </div>
                     </div>
@@ -285,7 +280,7 @@
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-1 font-medium">Tautan Profil Google Maps Usaha</label>
-                            <input type="url" id="businessProfileLink" required placeholder="Tempel profil Google Maps tempat usaha" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500 font-mono text-[11px]">
+                            <input type="url" id="businessProfileLink" required placeholder="Tempel tautan profil Google Maps tempat usaha" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500 font-mono text-[11px]">
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-1 font-medium">Tautan Titik Pengantaran (Sharelok)</label>
@@ -406,7 +401,7 @@
         }
 
         async function checkStoreStatus() {
-            let stock = 10;
+            let stock = 15;
             let manualClose = false;
 
             if (supabaseClient) {
@@ -421,7 +416,7 @@
                 } catch(e) {}
             }
             
-            if (isNaN(stock)) stock = localStorage.getItem('nfc_stock') !== null ? parseInt(localStorage.getItem('nfc_stock')) : 10;
+            if (isNaN(stock)) stock = localStorage.getItem('nfc_stock') !== null ? parseInt(localStorage.getItem('nfc_stock')) : 15;
             if (localStorage.getItem('nfc_manual_close') === 'true') manualClose = true;
 
             let banner = document.getElementById('storeStatusBanner');
@@ -515,7 +510,7 @@
         function adjustQty(amount) {
             selectedQty += amount;
             if (selectedQty < 1) selectedQty = 1;
-            if (selectedQty > 1000) selectedQty = 1000;
+            if (selectedQty > 100) selectedQty = 100;
             document.getElementById('customQtyInput').value = selectedQty;
             document.querySelectorAll('.pkg-btn').forEach(btn => {
                 btn.className = "pkg-btn p-2.5 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700";
@@ -591,6 +586,16 @@
                 return;
             }
 
+            let currentStock = 15;
+            if (localStorage.getItem('nfc_stock') !== null) {
+                currentStock = parseInt(localStorage.getItem('nfc_stock')) || 0;
+            }
+
+            if (currentStock < selectedQty) {
+                alert('Mohon maaf, ketersediaan stok perangkat tidak mencukupi.');
+                return;
+            }
+
             let orderId = 'NFC-' + Math.floor(100000 + Math.random() * 900000);
             let km = parseFloat(document.getElementById('distanceInput').value) || 3;
             let pricePerPcs = isPromoApplied ? 80000 : 100000;
@@ -622,9 +627,16 @@
             localStorage.setItem('nfc_orders', JSON.stringify(orders));
             localStorage.setItem('last_order_id', orderId);
 
+            currentStock -= selectedQty;
+            localStorage.setItem('nfc_stock', currentStock < 0 ? 0 : currentStock);
+            if (currentStock <= 0) {
+                localStorage.setItem('nfc_manual_close', 'true');
+            }
+
             if (supabaseClient) {
                 try {
                     await supabaseClient.from('orders').insert([orderData]);
+                    await supabaseClient.from('settings').upsert({ key: 'stock', value: String(currentStock) });
                 } catch(e) {}
             }
 

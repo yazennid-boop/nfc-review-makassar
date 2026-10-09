@@ -60,10 +60,12 @@
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-3 md:p-6 selection:bg-blue-500 selection:text-white">
 
     <div class="w-full max-w-lg flex justify-between items-center mb-2 relative z-20">
-        <a href="index.html" class="px-3.5 py-2 bg-slate-900/90 hover:bg-slate-800 text-blue-400 border border-blue-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-lg">
-            <i class="fa-solid fa-arrow-left"></i> <span>Kembali</span>
+        <a href="index.html" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-blue-400 border border-blue-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-lg">
+            <i class="fa-solid fa-arrow-left"></i> <span>Kembali ke Beranda</span>
         </a>
-        <span class="text-xs font-extrabold text-white uppercase tracking-wider">Lacakan Pesanan</span>
+        <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20menanyakan%20status%20pesanan%20saya." target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-emerald-400 border border-emerald-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
+            <i class="fa-brands fa-whatsapp text-sm"></i> <span>Hubungi Admin</span>
+        </a>
     </div>
 
     <main class="max-w-lg w-full glass-card rounded-3xl overflow-hidden space-y-6 relative z-10 my-4 status-shimmer-box">
@@ -75,14 +77,14 @@
                     <i class="fa-solid fa-truck-fast"></i>
                 </div>
                 <h1 class="text-xl font-bold text-white">Pelacakan Status Pesanan</h1>
-                <p class="text-xs text-slate-400">Masukkan ID Pesanan atau Nomor WhatsApp Anda.</p>
+                <p class="text-xs text-slate-400">Masukkan ID Pesanan atau cari pesanan terakhir Anda.</p>
             </div>
 
             <div class="space-y-3 text-xs">
                 <div>
-                    <label class="block text-slate-400 mb-1 font-medium">ID Pesanan atau Nomor WhatsApp</label>
+                    <label class="block text-slate-400 mb-1 font-medium">ID Pesanan (Contoh: NFC-123456)</label>
                     <div class="flex gap-2">
-                        <input type="text" id="searchOrderIdInput" placeholder="Cth: NFC-123456 atau 0812..." class="w-full px-3.5 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white font-mono focus:outline-none focus:border-blue-500">
+                        <input type="text" id="searchOrderIdInput" placeholder="Masukkan ID Pesanan..." class="w-full px-3.5 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white uppercase font-mono focus:outline-none focus:border-blue-500">
                         <button type="button" onclick="searchOrder()" class="px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition cursor-pointer shrink-0 shimmer-btn">Cari</button>
                     </div>
                 </div>
@@ -117,27 +119,27 @@
         }
 
         async function searchOrder() {
-            let queryId = document.getElementById('searchOrderIdInput').value.trim();
+            let queryId = document.getElementById('searchOrderIdInput').value.trim().toUpperCase();
             let container = document.getElementById('orderResultContainer');
             container.classList.remove('hidden');
 
             if (!queryId) {
-                container.innerHTML = `<p class="text-rose-400 text-center text-xs">Mohon masukkan ID Pesanan atau Nomor WhatsApp.</p>`;
+                container.innerHTML = `<p class="text-red-400 text-center text-xs">Mohon masukkan ID Pesanan yang valid.</p>`;
                 return;
             }
 
             let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-            let found = orders.find(o => (o.orderId || o.id || '').toUpperCase() === queryId.toUpperCase() || (o.whatsapp || '') === queryId);
+            let found = orders.find(o => (o.orderId || o.id || '').toUpperCase() === queryId);
 
             if (!found && supabaseClient) {
                 try {
-                    let { data } = await supabaseClient.from('orders').select('*').or(`orderId.eq.${queryId},whatsapp.eq.${queryId}`);
+                    let { data } = await supabaseClient.from('orders').select('*').eq('orderId', queryId);
                     if (data && data.length > 0) found = data[0];
                 } catch(e) {}
             }
 
             if (!found) {
-                container.innerHTML = `<p class="text-amber-400 text-center text-xs">Pesanan dengan kata kunci <b>${queryId}</b> tidak ditemukan.</p>`;
+                container.innerHTML = `<p class="text-amber-400 text-center text-xs">Pesanan dengan ID <b>${queryId}</b> tidak ditemukan. Pastikan ID pesanan sudah benar.</p>`;
                 return;
             }
 
