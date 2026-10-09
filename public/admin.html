@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'unsafe-inline';">
     <title>Admin Dashboard - NFC Google Review Makassar</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @keyframes googleShimmer {
@@ -91,37 +92,49 @@
         <div class="h-2.5 google-gradient-bar"></div>
         
         <div class="p-6 md:p-8 space-y-6">
+            <!-- HEADER ADMIN SESUAI FOTO CLOUD -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-5">
-                <div>
-                    <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Secure Session Active</span>
-                    <h1 class="text-xl md:text-2xl font-extrabold text-white mt-1">Manajemen Pesanan NFC Makassar</h1>
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center text-xl shadow-lg shrink-0">
+                        <i class="fa-solid fa-gauge-high"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-extrabold text-white">Admin Dashboard Cloud</h1>
+                        <p class="text-[11px] text-blue-400 font-medium">Sinkronisasi Real-Time Supabase & Lokal</p>
+                    </div>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
-                    <button type="button" onclick="playCashRegisterSound()" class="px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
-                        <i class="fa-solid fa-volume-high"></i> <span>Uji Suara</span>
-                    </button>
-                    <button type="button" onclick="clearAllOrders()" class="px-3.5 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
-                        <i class="fa-solid fa-trash-can"></i> <span>Hapus Semua Riwayat</span>
-                    </button>
-                    <button type="button" onclick="handleLogout()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+                    <a href="index.html" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-house"></i> <span>Beranda</span>
+                    </a>
+                    <button type="button" onclick="handleLogout()" class="px-3.5 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/30 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
                         <i class="fa-solid fa-right-from-bracket"></i> <span>Keluar</span>
                     </button>
                 </div>
             </div>
 
+            <!-- KARTU STATISTIK & PENGATURAN STOK SESUAI FOTO -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-2">
-                    <label class="block font-bold text-slate-300 uppercase">Kelola Stok Perangkat NFC (Fleksibel)</label>
-                    <div class="flex gap-2">
-                        <input type="number" id="stockInput" min="0" max="100000" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono">
-                        <button type="button" onclick="updateStock()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition cursor-pointer shrink-0">Simpan</button>
+                <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 flex justify-between items-center shadow-inner">
+                    <div>
+                        <span class="text-slate-400 font-semibold block uppercase tracking-wider text-[11px]">Total Pesanan Masuk</span>
+                        <span id="totalOrdersNum" class="text-3xl font-extrabold font-mono text-white mt-1 block">0</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-bag-shopping"></i>
                     </div>
                 </div>
-                <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
-                    <span class="font-bold text-slate-300 uppercase">Status Operasional Toko</span>
-                    <div class="flex items-center justify-between mt-2">
-                        <span id="storeStatusLabel" class="font-bold text-emerald-400">Buka (Menerima Pesanan)</span>
-                        <button type="button" id="toggleStoreBtn" onclick="toggleStoreStatus()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition cursor-pointer">Tutup Toko</button>
+
+                <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 space-y-2 shadow-inner">
+                    <div class="flex justify-between items-center">
+                        <label class="font-bold text-slate-300 uppercase tracking-wider text-[11px]">Kelola Stok Fisik NFC</label>
+                        <button type="button" onclick="clearAllOrders()" class="text-[11px] text-rose-400 hover:underline font-semibold cursor-pointer">
+                            <i class="fa-solid fa-trash-can"></i> Hapus Semua Riwayat
+                        </button>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="number" id="stockInput" min="0" max="100000" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono text-sm font-bold">
+                        <button type="button" onclick="updateStock()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition cursor-pointer shrink-0 shadow-md">Simpan</button>
                     </div>
                 </div>
             </div>
@@ -129,20 +142,19 @@
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
                     <h2 class="text-sm font-bold text-white uppercase tracking-wide flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-blue-400"></i> Daftar Pesanan Masuk Pelanggan
+                        <i class="fa-solid fa-list-check text-blue-400"></i> Daftar Pesanan Pelanggan
                     </h2>
-                    <span id="orderCountBadge" class="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-mono font-bold">0 Pesanan</span>
                 </div>
 
                 <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50">
                     <table class="w-full text-left text-xs">
                         <thead class="bg-slate-900 text-slate-400 uppercase font-bold border-b border-slate-800">
                             <tr>
-                                <th class="p-3.5">ID & Waktu Pesan</th>
-                                <th class="p-3.5">Pemesan & Toko</th>
-                                <th class="p-3.5">Patokan Alamat & Kurir</th>
-                                <th class="p-3.5">Detail Paket</th>
-                                <th class="p-3.5">Status Pesanan</th>
+                                <th class="p-3.5">ID / Tanggal</th>
+                                <th class="p-3.5">Pelanggan & Toko</th>
+                                <th class="p-3.5">Alamat & Sharelok</th>
+                                <th class="p-3.5">Paket & Total</th>
+                                <th class="p-3.5">Status Pengiriman</th>
                                 <th class="p-3.5 text-center">Aksi Konfirmasi</th>
                             </tr>
                         </thead>
@@ -163,7 +175,14 @@
 
     <script>
         const CORRECT_PASSWORD = "Yasir Sigma";
-        let lastOrderCount = 0;
+        const SUPABASE_URL = "https://your-supabase-project.supabase.co"; 
+        const SUPABASE_ANON_KEY = "your-supabase-anon-key";
+        let supabaseClient = null;
+        try {
+            if (typeof supabase !== 'undefined' && SUPABASE_URL.startsWith('http')) {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch(e) {}
 
         function togglePasswordVisibility() {
             let passInput = document.getElementById('adminPassword');
@@ -174,35 +193,6 @@
             } else {
                 passInput.type = 'password';
                 eyeIcon.className = 'fa-solid fa-eye';
-            }
-        }
-
-        function playCashRegisterSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc1 = audioCtx.createOscillator();
-                const gain1 = audioCtx.createGain();
-                osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(1318.51, audioCtx.currentTime);
-                gain1.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-                osc1.connect(gain1);
-                gain1.connect(audioCtx.destination);
-                osc1.start();
-                osc1.stop(audioCtx.currentTime + 0.4);
-
-                const osc2 = audioCtx.createOscillator();
-                const gain2 = audioCtx.createGain();
-                osc2.type = 'triangle';
-                osc2.frequency.setValueAtTime(2093.00, audioCtx.currentTime + 0.15);
-                gain2.gain.setValueAtTime(0.4, audioCtx.currentTime + 0.15);
-                gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
-                osc2.connect(gain2);
-                gain2.connect(audioCtx.destination);
-                osc2.start(audioCtx.currentTime + 0.15);
-                osc2.stop(audioCtx.currentTime + 0.8);
-            } catch (e) {
-                console.log("Audio dibatasi browser.");
             }
         }
 
@@ -230,126 +220,138 @@
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('dashboardPanel').classList.remove('hidden');
             loadAdminData();
-            setInterval(checkForNewOrders, 4000);
         }
 
-        function loadAdminData() {
-            let stock = localStorage.getItem('nfc_stock');
-            if (stock === null) {
-                stock = 3;
-                localStorage.setItem('nfc_stock', stock);
+        async function loadAdminData() {
+            let stock = 10;
+            if (supabaseClient) {
+                try {
+                    let { data } = await supabaseClient.from('settings').select('*');
+                    if (data) {
+                        data.forEach(item => {
+                            if (item.key === 'stock') stock = parseInt(item.value) || 0;
+                        });
+                    }
+                } catch(e) {}
             }
+            if (isNaN(stock)) stock = localStorage.getItem('nfc_stock') !== null ? parseInt(localStorage.getItem('nfc_stock')) : 10;
+
             document.getElementById('stockInput').value = stock;
-
-            let manualClose = localStorage.getItem('nfc_manual_close') === 'true';
-            let statusLabel = document.getElementById('storeStatusLabel');
-            let toggleBtn = document.getElementById('toggleStoreBtn');
-
-            if (manualClose) {
-                statusLabel.innerText = "Tutup (Manual)";
-                statusLabel.className = "font-bold text-red-400";
-                toggleBtn.innerText = "Buka Toko";
-            } else {
-                statusLabel.innerText = "Buka (Menerima Pesanan)";
-                statusLabel.className = "font-bold text-emerald-400";
-                toggleBtn.innerText = "Tutup Toko";
-            }
             renderOrders();
         }
 
-        function updateStock() {
+        async function updateStock() {
             let val = parseInt(document.getElementById('stockInput').value);
             if (isNaN(val) || val < 0) val = 0;
+            
             localStorage.setItem('nfc_stock', val);
-            alert('Stok perangkat berhasil diperbarui menjadi ' + val.toLocaleString('id-ID') + ' Pcs.');
-        }
-
-        function toggleStoreStatus() {
-            let manualClose = localStorage.getItem('nfc_manual_close') === 'true';
-            localStorage.setItem('nfc_manual_close', !manualClose);
+            if (supabaseClient) {
+                try {
+                    await supabaseClient.from('settings').upsert({ key: 'stock', value: String(val) });
+                } catch(e) {}
+            }
+            alert('Stok fisik perangkat NFC berhasil diperbarui menjadi ' + val.toLocaleString('id-ID') + ' Pcs.');
             loadAdminData();
         }
 
-        function renderOrders() {
-            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
+        async function renderOrders() {
+            let orders = [];
+            if (supabaseClient) {
+                try {
+                    let { data } = await supabaseClient.from('orders').select('*');
+                    if (data) orders = data;
+                } catch(e) {}
+            }
+            if (orders.length === 0) {
+                orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
+            }
+
             let tbody = document.getElementById('ordersTableBody');
-            document.getElementById('orderCountBadge').innerText = orders.length + " Pesanan";
+            document.getElementById('totalOrdersNum').innerText = orders.length;
 
             if (orders.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">Belum ada pesanan masuk.</td></tr>`;
-                lastOrderCount = 0;
                 return;
             }
 
-            lastOrderCount = orders.length;
             tbody.innerHTML = '';
             orders.slice().reverse().forEach((order) => {
-                let actualIndex = orders.findIndex(o => o.orderId === order.orderId);
+                let actualId = order.orderId || order.id;
+                let statusText = order.processStatus || order.status || 'Menunggu Konfirmasi';
                 let tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-800/40 transition";
                 tr.innerHTML = `
                     <td class="p-3.5 font-mono">
-                        <span class="text-white font-bold">${order.orderId}</span><br>
-                        <span class="text-[10px] text-amber-400"><i class="fa-regular fa-clock"></i> ${order.date}</span><br>
-                        <span class="text-[10px] text-slate-400">Order: ${order.bookingDate || '-'}</span>
+                        <span class="text-white font-bold">${actualId}</span><br>
+                        <span class="text-[10px] text-amber-400"><i class="fa-regular fa-clock"></i> ${order.date || '-'}</span>
                     </td>
                     <td class="p-3.5">
                         <span class="text-white font-bold">${order.name}</span> (${order.whatsapp})<br>
-                        <span class="text-blue-400 font-medium">${order.businessName}</span><br>
-                        <a href="${order.businessProfileLink}" target="_blank" class="text-[10px] text-slate-400 hover:underline">🔗 Maps Usaha</a>
+                        <span class="text-blue-400 font-medium">${order.businessName || order.business}</span><br>
+                        <a href="${order.businessProfileLink || '#'}" target="_blank" class="text-[10px] text-slate-400 hover:underline">🔗 Maps Usaha</a>
                     </td>
                     <td class="p-3.5">
                         <p class="text-slate-200 font-medium bg-slate-950 p-2 rounded-lg border border-slate-800 text-[11px] mb-1">
                             📍 ${order.addressDetail || 'Tidak ada catatan patokan.'}
                         </p>
-                        <a href="${order.deliverySharelock}" target="_blank" class="text-[10px] text-blue-400 font-bold hover:underline">📍 Buka Tautan Titik Sharelok</a>
+                        <a href="${order.deliverySharelock || '#'}" target="_blank" class="text-[10px] text-blue-400 font-bold hover:underline">📍 Buka Tautan Titik Sharelok</a>
                     </td>
                     <td class="p-3.5">
-                        ${order.packageType} Pcs<br>
-                        <span class="text-emerald-400 font-bold">Rp ${order.totalPrice.toLocaleString('id-ID')}</span>
+                        ${order.packageType || order.qty} Pcs<br>
+                        <span class="text-emerald-400 font-bold">Rp ${(order.totalPrice || order.total || 0).toLocaleString('id-ID')}</span>
                     </td>
                     <td class="p-3.5">
-                        <span class="px-2 py-1 rounded-md text-[10px] font-bold ${order.processStatus === 'Selesai & Dikirim' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'}">${order.processStatus}</span>
+                        <span class="px-2 py-1 rounded-md text-[10px] font-bold ${statusText === 'Selesai & Dikirim' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'}">${statusText}</span>
                     </td>
                     <td class="p-3.5 text-center space-x-1 whitespace-nowrap">
-                        <button type="button" onclick="updateOrderStatus(${actualIndex}, 'Sedang Dikirim Kurir')" class="px-2 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[10px] font-bold transition cursor-pointer" title="Kirim">Kirim</button>
-                        <button type="button" onclick="updateOrderStatus(${actualIndex}, 'Selesai & Dikirim')" class="px-2 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[10px] font-bold transition cursor-pointer" title="Selesai">Selesai</button>
-                        <button type="button" onclick="deleteSingleOrder(${actualIndex})" class="px-2 py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 rounded-lg text-[10px] transition cursor-pointer" title="Hapus Pesanan Ini"><i class="fa-solid fa-trash"></i></button>
+                        <button type="button" onclick="updateOrderStatus('${actualId}', 'Sedang Dikirim Kurir')" class="px-2 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[10px] font-bold transition cursor-pointer" title="Kirim">Kirim</button>
+                        <button type="button" onclick="updateOrderStatus('${actualId}', 'Selesai & Dikirim')" class="px-2 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[10px] font-bold transition cursor-pointer" title="Selesai">Selesai</button>
+                        <button type="button" onclick="deleteSingleOrder('${actualId}')" class="px-2 py-1.5 bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/30 rounded-lg text-[10px] transition cursor-pointer" title="Hapus"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function checkForNewOrders() {
+        async function updateOrderStatus(orderId, status) {
             let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-            if (orders.length > lastOrderCount) {
-                playCashRegisterSound();
-                renderOrders();
-            }
-        }
-
-        function updateOrderStatus(index, status) {
-            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-            if (orders[index]) {
-                orders[index].processStatus = status;
+            let target = orders.find(o => (o.orderId || o.id) === orderId);
+            if (target) {
+                target.processStatus = status;
+                target.status = status;
                 localStorage.setItem('nfc_orders', JSON.stringify(orders));
-                renderOrders();
             }
+            if (supabaseClient) {
+                try {
+                    await supabaseClient.from('orders').update({ processStatus: status }).eq('orderId', orderId);
+                } catch(e) {}
+            }
+            renderOrders();
         }
 
-        function deleteSingleOrder(index) {
+        async function deleteSingleOrder(orderId) {
             if (confirm('Yakin ingin menghapus riwayat pesanan ini?')) {
                 let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-                orders.splice(index, 1);
+                orders = orders.filter(o => (o.orderId || o.id) !== orderId);
                 localStorage.setItem('nfc_orders', JSON.stringify(orders));
+
+                if (supabaseClient) {
+                    try {
+                        await supabaseClient.from('orders').delete().eq('orderId', orderId);
+                    } catch(e) {}
+                }
                 renderOrders();
             }
         }
 
-        function clearAllOrders() {
-            if (confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SELURUH riwayat pesanan masuk? Tindakan ini tidak dapat dibatalkan.')) {
+        async function clearAllOrders() {
+            if (confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SELURUH riwayat pesanan masuk?')) {
                 localStorage.removeItem('nfc_orders');
+                if (supabaseClient) {
+                    try {
+                        await supabaseClient.from('orders').delete().neq('orderId', '');
+                    } catch(e) {}
+                }
                 renderOrders();
                 alert('Seluruh riwayat pesanan berhasil dibersihkan.');
             }
