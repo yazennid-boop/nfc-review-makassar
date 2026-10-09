@@ -404,7 +404,7 @@
                     .maybeSingle();
 
                 if (!stockErr && stockData && stockData.value !== undefined) {
-                    currentStock = parseInt(stockData.value);
+                    currentStock = parseInt(stockData.value) || 3;
                     if (isNaN(currentStock)) currentStock = 3;
                 } else {
                     currentStock = 3;
