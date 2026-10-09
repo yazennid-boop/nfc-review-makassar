@@ -2,9 +2,9 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline'; img-src 'self' data: https:;">
-    <title>NFC Google Review Makassar - Solusi Rating 5 Bintang Bisnis Anda</title>
+    <title>NFC Google Review Makassar - Solusi Praktis Ulasan Bisnis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -33,7 +33,7 @@
         .star-5 { animation: starPop 0.5s ease forwards 0.5s, starShimmer 2s ease-in-out infinite 1.3s; opacity: 0; }
 
         .glass-card {
-            background: rgba(15, 23, 42, 0.92);
+            background: rgba(15, 23, 42, 0.94);
             backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
@@ -51,16 +51,16 @@
 
     <main class="max-w-xl w-full glass-card rounded-3xl overflow-hidden space-y-6 relative z-10 my-4">
         
-        <!-- TRADEMARK TICKER -->
+        <!-- TRADEMARK TICKER / TEKS BERJALAN -->
         <div class="bg-gradient-to-r from-amber-500/20 via-blue-600/25 to-emerald-500/20 border-b border-white/10 py-2 overflow-hidden whitespace-nowrap relative">
             <div class="inline-block animate-[marquee_24s_linear_infinite] text-[11px] font-bold tracking-wider text-amber-300 uppercase space-x-8">
-                <span>⭐ Kualitas Premium Standar Internasional</span>
+                <span>⭐ Solusi Praktis Ulasan Google Maps</span>
                 <span>•</span>
-                <span>🚀 Dipercaya 100+ Cafe & UMKM Terbaik di Kota Makassar</span>
+                <span>🚀 Layanan Pengantaran Langsung Area Kota Makassar</span>
                 <span>•</span>
-                <span>💎 Garansi Resmi 100% Berfungsi Sempurna</span>
+                <span>💎 Memudahkan Pelanggan Memberikan Penilaian</span>
                 <span>•</span>
-                <span>🔥 Gunakan Kode Promo Sosmed Resmi untuk Diskon Spesial</span>
+                <span>🔥 Hubungi Admin untuk Info & Konsultasi</span>
             </div>
         </div>
 
@@ -70,19 +70,19 @@
             
             <div class="text-center space-y-4">
                 <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[11px] font-bold tracking-wider uppercase shadow-inner">
-                    <i class="fa-solid fa-location-dot text-rose-500"></i> Eksklusif Area Kota Makassar & Sekitarnya
+                    <i class="fa-solid fa-location-dot text-rose-500"></i> Layanan Khusus Kota Makassar & Sekitarnya
                 </div>
 
-                <!-- PREVIEW FOTO PRODUK -->
+                <!-- PREVIEW FOTO PRODUK & BADGE STOK DINAMIS -->
                 <div class="relative w-full h-56 md:h-64 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl group flex items-center justify-center">
                     <img src="nfc-card.jpg" alt="Kartu NFC Google Review" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex items-end p-4">
                         <div class="text-left w-full flex justify-between items-end">
                             <div>
-                                <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Teknologi Tap-In NFC Pintar</span>
-                                <p class="text-xs font-bold text-white mt-1">Solusi Rating 5 Bintang Otomatis</p>
+                                <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Teknologi Tap-In NFC</span>
+                                <p class="text-xs font-bold text-white mt-1">Alat Bantu Ulasan Digital</p>
                             </div>
-                            <span class="text-[10px] bg-blue-600/80 text-white px-2 py-1 rounded-md font-mono">Stok Ready Makassar</span>
+                            <span id="liveStockBadge" class="text-[10px] bg-blue-600/90 text-white px-2.5 py-1 rounded-md font-mono font-bold shadow-lg">Sisa Stok Ready</span>
                         </div>
                     </div>
                 </div>
@@ -95,18 +95,21 @@
                     <i class="fa-solid fa-star star-5"></i>
                 </div>
                 
-                <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-snug">
-                    Dominasi Google Maps Makassar, Ubah Pengunjung Jadi <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-amber-300 to-emerald-400">Pelanggan Setia Bintang 5!</span>
-                </h1>
-                
-                <p class="text-xs md:text-sm text-slate-300 leading-relaxed px-1">
-                    Bisnis hebat butuh ulasan yang kuat. Cukup satu sentuhan kartu NFC pintar ke smartphone pelanggan, reputasi toko Anda langsung melesat terpercaya tanpa ribet.
-                </p>
+                <!-- BAGIAN SLOGAN FLEKSIBEL (BISA DIUBAH MANUAL DI SINI KAPAN SAJA) -->
+                <div id="editableSloganSection" class="space-y-3">
+                    <h1 class="text-xl md:text-2xl font-extrabold text-white tracking-tight leading-snug">
+                        Permudah Pelanggan Memberikan Ulasan Google Maps Cukup dengan Satu Sentuhan Kartu
+                    </h1>
+                    
+                    <p class="text-xs md:text-sm text-slate-300 leading-relaxed px-1">
+                        Kartu NFC praktis untuk mengarahkan pengunjung toko atau tempat usaha Anda langsung ke halaman ulasan Google Maps tanpa perlu mengetik atau mencari link secara manual.
+                    </p>
+                </div>
 
                 <div id="storeStatusBanner" class="hidden p-3 rounded-2xl text-xs font-bold border text-center"></div>
             </div>
 
-            <!-- FORM STEP 1 -->
+            <!-- FORM PEMESANAN -->
             <div id="step1" class="space-y-4">
                 <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-3 shadow-inner">
                     <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Pilih Jumlah Paket Kartu NFC</label>
@@ -127,9 +130,9 @@
                 </div>
 
                 <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-2">
-                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Masukkan Kode Promo / Voucher Sosmed Resmi</label>
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Masukkan Kode Promo / Voucher Resmi</label>
                     <div class="flex gap-2">
-                        <input type="text" id="promoInput" placeholder="Masukkan kode promo dari video sosmed..." class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white uppercase placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono">
+                        <input type="text" id="promoInput" placeholder="Masukkan kode promo jika ada..." class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white uppercase placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono">
                         <button type="button" onclick="applyPromo()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition cursor-pointer shrink-0 shadow-md">Gunakan</button>
                     </div>
                     <p id="promoMsg" class="text-[11px] font-semibold hidden"></p>
@@ -268,9 +271,12 @@
         }
 
         function checkStoreStatus() {
-            let stock = parseInt(localStorage.getItem('nfc_stock')) ?? 1000;
+            let stock = parseInt(localStorage.getItem('nfc_stock')) ?? 15;
             let manualClose = localStorage.getItem('nfc_manual_close') === 'true';
             let banner = document.getElementById('storeStatusBanner');
+            let badge = document.getElementById('liveStockBadge');
+
+            badge.innerText = `Sisa ${stock} Pcs Ready`;
 
             if (stock <= 0 || manualClose) {
                 banner.classList.remove('hidden');
@@ -310,11 +316,11 @@
 
             if (code === "MAKASSARNFC" || code === "MAKASSAR20" || code === "YAZEN7") {
                 isPromoApplied = true;
-                msg.innerText = "Voucher sosmed berhasil diterapkan. Harga khusus diaktifkan.";
+                msg.innerText = "Voucher promo berhasil diterapkan.";
                 msg.className = "text-[11px] font-semibold text-emerald-400";
             } else {
                 isPromoApplied = false;
-                msg.innerText = "Kode promo sosmed tidak valid atau telah kadaluarsa.";
+                msg.innerText = "Kode promo tidak valid atau telah kadaluarsa.";
                 msg.className = "text-[11px] font-semibold text-red-400";
             }
             calculateTotal();
@@ -362,7 +368,7 @@
                 return;
             }
 
-            let currentStock = parseInt(localStorage.getItem('nfc_stock')) ?? 1000;
+            let currentStock = parseInt(localStorage.getItem('nfc_stock')) ?? 15;
             if (currentStock < selectedQty) {
                 alert('Mohon maaf, ketersediaan stok perangkat tidak mencukupi.');
                 return;
@@ -383,7 +389,6 @@
             let addressDetail = sanitize(document.getElementById('addressDetail').value);
             let bookingDate = sanitize(document.getElementById('bookingDate').value);
 
-            // TIMESTAMP PRESISI TANGGAL, JAM, DAN MENIT
             let now = new Date();
             let formattedTimestamp = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ', ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 

@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline';">
     <title>Admin Dashboard - NFC Google Review Makassar</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -120,7 +120,8 @@
     </footer>
 
     <script>
-        const ADMIN_SHA256 = "89736e68d89cbdf52c92e7373f9a941f17eeb88c7d6e4dfba83d73966023cb6e";
+        // SHA-256 dari "Yasir Sigma"
+        const ADMIN_SHA256 = "63d76e93836d933e49635bc57c96328a6fcf74a3f124cfae4f2fa9a695e197d1";
         let lastOrderCount = 0;
 
         async function sha256(message) {
@@ -182,7 +183,7 @@
                 let attempts = parseInt(localStorage.getItem('nfc_admin_attempts') || 0) + 1;
                 localStorage.setItem('nfc_admin_attempts', attempts);
                 if (attempts >= 3) {
-                    localStorage.setItem('nfc_admin_lockout', Date.now() + 900000); // Kunci 15 menit
+                    localStorage.setItem('nfc_admin_lockout', Date.now() + 900000);
                     errDiv.innerText = "Terlalu banyak percobaan salah. Panel dikunci selama 15 menit.";
                 } else {
                     errDiv.innerText = `Password salah! Percobaan ke-${attempts} dari 3.`;
@@ -208,7 +209,7 @@
         function loadAdminData() {
             let stock = localStorage.getItem('nfc_stock');
             if (stock === null) {
-                stock = 1000;
+                stock = 15; // Default awal stok ready di Makassar
                 localStorage.setItem('nfc_stock', stock);
             }
             document.getElementById('stockInput').value = stock;
