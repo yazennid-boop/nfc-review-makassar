@@ -395,11 +395,11 @@
 
                 if (!stockErr && stockData && stockData.value !== undefined) {
                     currentStock = parseInt(stockData.value);
-                    if (isNaN(currentStock)) currentStock = 15;
+                    if (isNaN(currentStock)) currentStock = 0;
                 } else {
                     currentStock = 15;
                 }
-                document.getElementById('liveStockBadge').innerText = `Sisa ${currentStock} Pcs Ready`;
+                document.getElementById('liveStockBadge').innerText = `Sisa ${currentStock.toLocaleString('id-ID')} Pcs Ready`;
 
                 const { data: orders, error: orderErr } = await supabaseClient
                     .from('orders')
