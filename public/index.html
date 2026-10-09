@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'unsafe-inline'; img-src 'self' data: https:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline'; img-src 'self' data: https:;">
     <title>NFC Google Review Makassar - Solusi Praktis Ulasan Bisnis</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @keyframes googleShimmer {
@@ -197,7 +196,7 @@
                 <div id="storeStatusBanner" class="hidden p-3 rounded-2xl text-xs font-bold border text-center"></div>
             </div>
 
-            <!-- LIVE TREADMILL / MARQUEE PESANAN MASUK -->
+            <!-- LIVE TREADMILL / MARQUEE PESANAN MASUK DENGAN EFEK SHIMMER -->
             <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 overflow-hidden shadow-inner relative treadmill-shimmer-box">
                 <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-800 text-[11px]">
                     <span class="font-bold text-amber-400 uppercase flex items-center gap-1.5">
@@ -381,15 +380,6 @@
         let selectedQty = 1;
         let isPromoApplied = false;
 
-        const SUPABASE_URL = "https://your-supabase-project.supabase.co"; 
-        const SUPABASE_ANON_KEY = "your-supabase-anon-key";
-        let supabaseClient = null;
-        try {
-            if (typeof supabase !== 'undefined' && SUPABASE_URL.startsWith('http')) {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
-        } catch(e) {}
-
         function sanitize(str) {
             if (!str) return '';
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
@@ -400,25 +390,10 @@
             box.classList.toggle('hidden');
         }
 
-        async function checkStoreStatus() {
-            let stock = 15;
-            let manualClose = false;
-
-            if (supabaseClient) {
-                try {
-                    let { data } = await supabaseClient.from('settings').select('*');
-                    if (data) {
-                        data.forEach(item => {
-                            if (item.key === 'stock') stock = parseInt(item.value) || 0;
-                            if (item.key === 'shop_status') manualClose = (item.value === 'tutup');
-                        });
-                    }
-                } catch(e) {}
-            }
-            
-            if (isNaN(stock)) stock = localStorage.getItem('nfc_stock') !== null ? parseInt(localStorage.getItem('nfc_stock')) : 15;
-            if (localStorage.getItem('nfc_manual_close') === 'true') manualClose = true;
-
+        function checkStoreStatus() {
+            let stockVal = localStorage.getItem('nfc_stock');
+            let stock = stockVal !== null ? parseInt(stockVal) : 15;
+            let manualClose = localStorage.getItem('nfc_manual_close') === 'true';
             let banner = document.getElementById('storeStatusBanner');
             let badge = document.getElementById('liveStockBadge');
 
@@ -441,19 +416,10 @@
             }
         }
 
-        async function renderTreadmill() {
-            let orders = [];
-            if (supabaseClient) {
-                try {
-                    let { data } = await supabaseClient.from('orders').select('*');
-                    if (data) orders = data;
-                } catch(e) {}
-            }
-            if (orders.length === 0) {
-                orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-            }
-
+        function renderTreadmill() {
+            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
             let container = document.getElementById('treadmillContainer');
+
             if (orders.length === 0) {
                 container.innerHTML = `<span class="text-slate-400 px-4">🚀 Belum ada pesanan hari ini. Jadilah yang pertama memesan kartu NFC Google Review!</span>`;
                 return;
@@ -464,7 +430,7 @@
 
             loopOrders.forEach(order => {
                 let statusColor = "text-amber-400 bg-amber-500/10 border-amber-500/30";
-                let statusText = order.processStatus || order.status || 'Menunggu Konfirmasi';
+                let statusText = order.processStatus || 'Menunggu Konfirmasi';
                 if (statusText === 'Selesai & Dikirim') {
                     statusColor = "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
                 } else if (statusText === 'Sedang Dikirim Kurir') {
@@ -473,9 +439,9 @@
 
                 itemsHtml += `
                     <div class="inline-flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 shrink-0">
-                        <span class="font-mono font-bold text-white">${order.orderId || order.id}</span>
+                        <span class="font-mono font-bold text-white">${order.orderId}</span>
                         <span class="text-slate-400">•</span>
-                        <span class="text-slate-200 font-semibold">${order.businessName || order.business} (${order.name})</span>
+                        <span class="text-slate-200 font-semibold">${order.businessName} (${order.name})</span>
                         <span class="text-slate-400">•</span>
                         <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${statusColor}">${statusText}</span>
                     </div>
@@ -486,6 +452,9 @@
         }
 
         window.onload = function() {
+            if (localStorage.getItem('nfc_stock') === null) {
+                localStorage.setItem('nfc_stock', '15');
+            }
             checkStoreStatus();
             let today = new Date().toISOString().split('T')[0];
             let bookingDateEl = document.getElementById('bookingDate');
@@ -512,6 +481,7 @@
             if (selectedQty < 1) selectedQty = 1;
             if (selectedQty > 100) selectedQty = 100;
             document.getElementById('customQtyInput').value = selectedQty;
+            
             document.querySelectorAll('.pkg-btn').forEach(btn => {
                 btn.className = "pkg-btn p-2.5 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700";
             });
@@ -579,18 +549,14 @@
             document.getElementById('step1').classList.remove('hidden');
         }
 
-        async function submitOrder() {
+        function submitOrder() {
             let proofInput = document.getElementById('paymentProof');
             if (proofInput.files.length === 0) {
                 alert('Mohon unggah berkas bukti transfer pembayaran.');
                 return;
             }
 
-            let currentStock = 15;
-            if (localStorage.getItem('nfc_stock') !== null) {
-                currentStock = parseInt(localStorage.getItem('nfc_stock')) || 0;
-            }
-
+            let currentStock = parseInt(localStorage.getItem('nfc_stock')) ?? 15;
             if (currentStock < selectedQty) {
                 alert('Mohon maaf, ketersediaan stok perangkat tidak mencukupi.');
                 return;
@@ -630,14 +596,7 @@
             currentStock -= selectedQty;
             localStorage.setItem('nfc_stock', currentStock < 0 ? 0 : currentStock);
             if (currentStock <= 0) {
-                localStorage.setItem('nfc_manual_close', 'true');
-            }
-
-            if (supabaseClient) {
-                try {
-                    await supabaseClient.from('orders').insert([orderData]);
-                    await supabaseClient.from('settings').upsert({ key: 'stock', value: String(currentStock) });
-                } catch(e) {}
+                localStorage.setItem('nfc_stock', '0');
             }
 
             let waMessage = encodeURIComponent(

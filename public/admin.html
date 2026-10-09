@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline';">
     <title>Admin Dashboard - NFC Google Review Makassar</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @keyframes googleShimmer {
@@ -104,9 +103,6 @@
                     <button type="button" onclick="clearAllOrders()" class="px-3.5 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
                         <i class="fa-solid fa-trash-can"></i> <span>Hapus Semua Riwayat</span>
                     </button>
-                    <a href="index.html" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-blue-400 border border-blue-500/30 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
-                        <i class="fa-solid fa-house"></i> <span>Beranda</span>
-                    </a>
                     <button type="button" onclick="handleLogout()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
                         <i class="fa-solid fa-right-from-bracket"></i> <span>Keluar</span>
                     </button>
@@ -117,7 +113,7 @@
                 <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-2">
                     <label class="block font-bold text-slate-300 uppercase">Kelola Stok Perangkat NFC</label>
                     <div class="flex gap-2">
-                        <input type="number" id="stockInput" min="0" max="100000" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono font-bold text-sm">
+                        <input type="number" id="stockInput" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono font-bold">
                         <button type="button" onclick="updateStock()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition cursor-pointer shrink-0 shadow">Simpan</button>
                     </div>
                 </div>
@@ -168,14 +164,6 @@
     <script>
         const CORRECT_PASSWORD = "Yasir Sigma";
         let lastOrderCount = 0;
-        const SUPABASE_URL = "https://your-supabase-project.supabase.co"; 
-        const SUPABASE_ANON_KEY = "your-supabase-anon-key";
-        let supabaseClient = null;
-        try {
-            if (typeof supabase !== 'undefined' && SUPABASE_URL.startsWith('http')) {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
-        } catch(e) {}
 
         function togglePasswordVisibility() {
             let passInput = document.getElementById('adminPassword');
@@ -245,29 +233,20 @@
             setInterval(checkForNewOrders, 4000);
         }
 
-        async function loadAdminData() {
-            let stock = 15;
-            if (localStorage.getItem('nfc_stock') !== null) {
-                stock = parseInt(localStorage.getItem('nfc_stock')) || 0;
+        function loadAdminData() {
+            let stockVal = localStorage.getItem('nfc_stock');
+            if (stockVal === null) {
+                stockVal = '15';
+                localStorage.setItem('nfc_stock', stockVal);
             }
-            if (supabaseClient) {
-                try {
-                    let { data } = await supabaseClient.from('settings').select('*');
-                    if (data) {
-                        data.forEach(item => {
-                            if (item.key === 'stock') stock = parseInt(item.value) || 0;
-                        });
-                    }
-                } catch(e) {}
-            }
-            document.getElementById('stockInput').value = stock;
+            document.getElementById('stockInput').value = stockVal;
 
             let manualClose = localStorage.getItem('nfc_manual_close') === 'true';
             let statusLabel = document.getElementById('storeStatusLabel');
             let toggleBtn = document.getElementById('toggleStoreBtn');
 
-            if (manualClose || stock <= 0) {
-                statusLabel.innerText = stock <= 0 ? "Tutup (Stok Habis)" : "Tutup (Manual)";
+            if (manualClose) {
+                statusLabel.innerText = "Tutup (Manual)";
                 statusLabel.className = "font-bold text-red-400";
                 toggleBtn.innerText = "Buka Toko";
             } else {
@@ -278,51 +257,21 @@
             renderOrders();
         }
 
-        async function updateStock() {
-            let val = parseInt(document.getElementById('stockInput').value);
-            if (isNaN(val) || val < 0) val = 0;
-
+        function updateStock() {
+            let val = document.getElementById('stockInput').value;
             localStorage.setItem('nfc_stock', val);
-            if (val > 0 && localStorage.getItem('nfc_manual_close') === 'true') {
-                localStorage.setItem('nfc_manual_close', 'false');
-            }
-
-            if (supabaseClient) {
-                try {
-                    await supabaseClient.from('settings').upsert({ key: 'stock', value: String(val) });
-                    await supabaseClient.from('settings').upsert({ key: 'shop_status', value: val <= 0 ? 'tutup' : 'buka' });
-                } catch(e) {}
-            }
-
-            alert('Stok perangkat berhasil diperbarui menjadi ' + val.toLocaleString('id-ID') + ' Pcs.');
+            alert('Stok perangkat berhasil diperbarui menjadi ' + val + ' Pcs.');
             loadAdminData();
         }
 
-        async function toggleStoreStatus() {
+        function toggleStoreStatus() {
             let manualClose = localStorage.getItem('nfc_manual_close') === 'true';
-            let newStatus = !manualClose;
-            localStorage.setItem('nfc_manual_close', newStatus);
-
-            if (supabaseClient) {
-                try {
-                    await supabaseClient.from('settings').upsert({ key: 'shop_status', value: newStatus ? 'tutup' : 'buka' });
-                } catch(e) {}
-            }
+            localStorage.setItem('nfc_manual_close', !manualClose);
             loadAdminData();
         }
 
-        async function renderOrders() {
-            let orders = [];
-            if (supabaseClient) {
-                try {
-                    let { data } = await supabaseClient.from('orders').select('*');
-                    if (data) orders = data;
-                } catch(e) {}
-            }
-            if (orders.length === 0) {
-                orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-            }
-
+        function renderOrders() {
+            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
             let tbody = document.getElementById('ordersTableBody');
             document.getElementById('orderCountBadge').innerText = orders.length + " Pesanan";
 
@@ -335,38 +284,38 @@
             lastOrderCount = orders.length;
             tbody.innerHTML = '';
             orders.slice().reverse().forEach((order) => {
-                let actualId = order.orderId || order.id;
-                let statusText = order.processStatus || order.status || 'Menunggu Konfirmasi';
+                let actualIndex = orders.findIndex(o => o.orderId === order.orderId);
                 let tr = document.createElement('tr');
+                let statusText = order.processStatus || 'Menunggu Konfirmasi';
                 tr.className = "hover:bg-slate-800/40 transition";
                 tr.innerHTML = `
                     <td class="p-3.5 font-mono">
-                        <span class="text-white font-bold">${actualId}</span><br>
-                        <span class="text-[10px] text-amber-400"><i class="fa-regular fa-clock"></i> ${order.date || '-'}</span><br>
+                        <span class="text-white font-bold">${order.orderId}</span><br>
+                        <span class="text-[10px] text-amber-400"><i class="fa-regular fa-clock"></i> ${order.date}</span><br>
                         <span class="text-[10px] text-slate-400">Order: ${order.bookingDate || '-'}</span>
                     </td>
                     <td class="p-3.5">
                         <span class="text-white font-bold">${order.name}</span> (${order.whatsapp})<br>
-                        <span class="text-blue-400 font-medium">${order.businessName || order.business}</span><br>
-                        <a href="${order.businessProfileLink || '#'}" target="_blank" class="text-[10px] text-slate-400 hover:underline">🔗 Maps Usaha</a>
+                        <span class="text-blue-400 font-medium">${order.businessName}</span><br>
+                        <a href="${order.businessProfileLink}" target="_blank" class="text-[10px] text-slate-400 hover:underline">🔗 Maps Usaha</a>
                     </td>
                     <td class="p-3.5">
                         <p class="text-slate-200 font-medium bg-slate-950 p-2 rounded-lg border border-slate-800 text-[11px] mb-1">
                             📍 ${order.addressDetail || 'Tidak ada catatan patokan.'}
                         </p>
-                        <a href="${order.deliverySharelock || '#'}" target="_blank" class="text-[10px] text-blue-400 font-bold hover:underline">📍 Buka Tautan Titik Sharelok</a>
+                        <a href="${order.deliverySharelock}" target="_blank" class="text-[10px] text-blue-400 font-bold hover:underline">📍 Buka Tautan Titik Sharelok</a>
                     </td>
                     <td class="p-3.5">
-                        ${order.packageType || order.qty} Pcs<br>
-                        <span class="text-emerald-400 font-bold">Rp ${(order.totalPrice || order.total || 0).toLocaleString('id-ID')}</span>
+                        ${order.packageType} Pcs<br>
+                        <span class="text-emerald-400 font-bold">Rp ${order.totalPrice.toLocaleString('id-ID')}</span>
                     </td>
                     <td class="p-3.5">
                         <span class="px-2 py-1 rounded-md text-[10px] font-bold ${statusText === 'Selesai & Dikirim' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'}">${statusText}</span>
                     </td>
                     <td class="p-3.5 text-center space-x-1 whitespace-nowrap">
-                        <button type="button" onclick="updateOrderStatus('${actualId}', 'Sedang Dikirim Kurir')" class="px-2 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[10px] font-bold transition cursor-pointer" title="Kirim">Kirim</button>
-                        <button type="button" onclick="updateOrderStatus('${actualId}', 'Selesai & Dikirim')" class="px-2 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[10px] font-bold transition cursor-pointer" title="Selesai">Selesai</button>
-                        <button type="button" onclick="deleteSingleOrder('${actualId}')" class="px-2 py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 rounded-lg text-[10px] transition cursor-pointer" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                        <button type="button" onclick="updateOrderStatus(${actualIndex}, 'Sedang Dikirim Kurir')" class="px-2 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[10px] font-bold transition cursor-pointer" title="Kirim">Kirim</button>
+                        <button type="button" onclick="updateOrderStatus(${actualIndex}, 'Selesai & Dikirim')" class="px-2 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[10px] font-bold transition cursor-pointer" title="Selesai">Selesai</button>
+                        <button type="button" onclick="deleteSingleOrder(${actualIndex})" class="px-2 py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 rounded-lg text-[10px] transition cursor-pointer" title="Hapus Pesanan Ini"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -381,45 +330,27 @@
             }
         }
 
-        async function updateOrderStatus(orderId, status) {
+        function updateOrderStatus(index, status) {
             let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-            let target = orders.find(o => (o.orderId || o.id) === orderId);
-            if (target) {
-                target.processStatus = status;
-                target.status = status;
+            if (orders[index]) {
+                orders[index].processStatus = status;
                 localStorage.setItem('nfc_orders', JSON.stringify(orders));
-            }
-            if (supabaseClient) {
-                try {
-                    await supabaseClient.from('orders').update({ processStatus: status }).eq('orderId', orderId);
-                } catch(e) {}
-            }
-            renderOrders();
-        }
-
-        async function deleteSingleOrder(orderId) {
-            if (confirm('Yakin ingin menghapus riwayat pesanan ini?')) {
-                let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-                orders = orders.filter(o => (o.orderId || o.id) !== orderId);
-                localStorage.setItem('nfc_orders', JSON.stringify(orders));
-
-                if (supabaseClient) {
-                    try {
-                        await supabaseClient.from('orders').delete().eq('orderId', orderId);
-                    } catch(e) {}
-                }
                 renderOrders();
             }
         }
 
-        async function clearAllOrders() {
-            if (confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SELURUH riwayat pesanan masuk?')) {
+        function deleteSingleOrder(index) {
+            if (confirm('Yakin ingin menghapus riwayat pesanan ini?')) {
+                let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
+                orders.splice(index, 1);
+                localStorage.setItem('nfc_orders', JSON.stringify(orders));
+                renderOrders();
+            }
+        }
+
+        function clearAllOrders() {
+            if (confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SELURUH riwayat pesanan masuk? Tindakan ini tidak dapat dibatalkan.')) {
                 localStorage.removeItem('nfc_orders');
-                if (supabaseClient) {
-                    try {
-                        await supabaseClient.from('orders').delete().neq('orderId', '');
-                    } catch(e) {}
-                }
                 renderOrders();
                 alert('Seluruh riwayat pesanan berhasil dibersihkan.');
             }

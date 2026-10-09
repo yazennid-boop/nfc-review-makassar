@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline';">
     <title>Status Pesanan - NFC Google Review Makassar</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @keyframes googleShimmer {
@@ -91,7 +90,7 @@
             </div>
 
             <div id="orderResultContainer" class="hidden space-y-4 pt-4 border-t border-slate-800">
-                <!-- Hasil pencarian -->
+                <!-- Hasil pencarian pesanan akan tampil di sini secara dinamis -->
             </div>
         </div>
     </main>
@@ -101,15 +100,6 @@
     </footer>
 
     <script>
-        const SUPABASE_URL = "https://your-supabase-project.supabase.co"; 
-        const SUPABASE_ANON_KEY = "your-supabase-anon-key";
-        let supabaseClient = null;
-        try {
-            if (typeof supabase !== 'undefined' && SUPABASE_URL.startsWith('http')) {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
-        } catch(e) {}
-
         window.onload = function() {
             let lastId = localStorage.getItem('last_order_id');
             if (lastId) {
@@ -118,7 +108,7 @@
             }
         }
 
-        async function searchOrder() {
+        function searchOrder() {
             let queryId = document.getElementById('searchOrderIdInput').value.trim().toUpperCase();
             let container = document.getElementById('orderResultContainer');
             container.classList.remove('hidden');
@@ -129,30 +119,23 @@
             }
 
             let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-            let found = orders.find(o => (o.orderId || o.id || '').toUpperCase() === queryId);
-
-            if (!found && supabaseClient) {
-                try {
-                    let { data } = await supabaseClient.from('orders').select('*').eq('orderId', queryId);
-                    if (data && data.length > 0) found = data[0];
-                } catch(e) {}
-            }
+            let found = orders.find(o => o.orderId.toUpperCase() === queryId);
 
             if (!found) {
                 container.innerHTML = `<p class="text-amber-400 text-center text-xs">Pesanan dengan ID <b>${queryId}</b> tidak ditemukan. Pastikan ID pesanan sudah benar.</p>`;
                 return;
             }
 
-            let statusText = found.processStatus || found.status || 'Menunggu Konfirmasi';
+            let processStatus = found.processStatus || 'Menunggu Konfirmasi';
             let statusBadgeClass = "bg-amber-500/20 text-amber-400 border-amber-500/30";
             let statusIcon = "fa-clock";
             let statusDesc = "Pesanan Anda sedang menunggu verifikasi pembayaran oleh admin.";
 
-            if (statusText === 'Sedang Dikirim Kurir') {
+            if (processStatus === 'Sedang Dikirim Kurir') {
                 statusBadgeClass = "bg-blue-500/20 text-blue-400 border-blue-500/30";
                 statusIcon = "fa-truck-fast";
                 statusDesc = "Kurir sedang dalam perjalanan mengantar pesanan ke lokasi usaha Anda di Makassar.";
-            } else if (statusText === 'Selesai & Dikirim') {
+            } else if (processStatus === 'Selesai & Dikirim') {
                 statusBadgeClass = "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
                 statusIcon = "fa-circle-check";
                 statusDesc = "Pesanan telah selesai diantar dan diterima dengan baik. Terima kasih!";
@@ -161,19 +144,19 @@
             container.innerHTML = `
                 <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs">
                     <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
-                        <span class="font-mono font-bold text-white text-sm">${found.orderId || found.id}</span>
+                        <span class="font-mono font-bold text-white text-sm">${found.orderId}</span>
                         <span class="px-2.5 py-1 rounded-lg font-bold border text-[10px] ${statusBadgeClass} flex items-center gap-1.5">
-                            <i class="fa-solid ${statusIcon}"></i> ${statusText}
+                            <i class="fa-solid ${statusIcon}"></i> ${processStatus}
                         </span>
                     </div>
 
                     <div class="space-y-1.5 text-slate-300">
                         <p><b>Nama Pemesan:</b> ${found.name} (${found.whatsapp})</p>
-                        <p><b>Nama Usaha:</b> <span class="text-blue-400 font-semibold">${found.businessName || found.business}</span></p>
+                        <p><b>Nama Usaha:</b> <span class="text-blue-400 font-semibold">${found.businessName}</span></p>
                         <p><b>Patokan Alamat:</b> ${found.addressDetail || '-'}</p>
-                        <p><b>Jumlah Paket:</b> ${found.packageType || found.qty} Pcs</p>
-                        <p><b>Total Pembayaran:</b> <span class="text-emerald-400 font-bold">Rp ${(found.totalPrice || found.total || 0).toLocaleString('id-ID')}</span></p>
-                        <p><b>Waktu Pesan:</b> <span class="text-slate-400 font-mono">${found.date || '-'}</span></p>
+                        <p><b>Jumlah Paket:</b> ${found.packageType} Pcs</p>
+                        <p><b>Total Pembayaran:</b> <span class="text-emerald-400 font-bold">Rp ${found.totalPrice.toLocaleString('id-ID')}</span></p>
+                        <p><b>Waktu Pesan:</b> <span class="text-slate-400 font-mono">${found.date}</span></p>
                     </div>
 
                     <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-[11px] text-slate-300 flex items-start gap-2">
@@ -182,7 +165,7 @@
                     </div>
 
                     <div class="pt-2">
-                        <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20menanyakan%20detail%20pengiriman%20untuk%20ID%20Pesanan%20${found.orderId || found.id}" target="_blank" class="block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-center rounded-xl transition shadow-lg shimmer-btn">
+                        <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20menanyakan%20detail%20pengiriman%20untuk%20ID%20Pesanan%20${found.orderId}" target="_blank" class="block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-center rounded-xl transition shadow-lg shimmer-btn">
                             <i class="fa-brands fa-whatsapp"></i> Konfirmasi via WhatsApp Admin
                         </a>
                     </div>
