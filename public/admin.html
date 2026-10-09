@@ -52,7 +52,7 @@
     </div>
 
     <!-- DASHBOARD PANEL -->
-    <div id="dashboardPanel" class="hidden max-w-4xl w-full glass-card rounded-3xl overflow-hidden shadow-2xl relative z-10 my-4">
+    <div id="dashboardPanel" class="hidden max-w-5xl w-full glass-card rounded-3xl overflow-hidden shadow-2xl relative z-10 my-4">
         <div class="h-2.5 google-gradient-bar"></div>
         
         <div class="p-6 md:p-8 space-y-6">
@@ -101,7 +101,8 @@
                         <thead class="bg-slate-900 text-slate-400 uppercase font-bold border-b border-slate-800">
                             <tr>
                                 <th class="p-3.5">ID & Waktu Pesan</th>
-                                <th class="p-3.5">Pemesan & Usaha</th>
+                                <th class="p-3.5">Pemesan & Toko</th>
+                                <th class="p-3.5">Patokan Alamat & Kurir</th>
                                 <th class="p-3.5">Detail Paket</th>
                                 <th class="p-3.5">Status Pesanan</th>
                                 <th class="p-3.5 text-center">Aksi Konfirmasi</th>
@@ -109,7 +110,7 @@
                         </thead>
                         <tbody id="ordersTableBody" class="divide-y divide-slate-800 text-slate-300">
                             <tr>
-                                <td colspan="5" class="p-6 text-center text-slate-500">Belum ada pesanan masuk.</td>
+                                <td colspan="6" class="p-6 text-center text-slate-500">Belum ada pesanan masuk.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -240,7 +241,7 @@
             document.getElementById('orderCountBadge').innerText = orders.length + " Pesanan";
 
             if (orders.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">Belum ada pesanan masuk.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">Belum ada pesanan masuk.</td></tr>`;
                 lastOrderCount = 0;
                 return;
             }
@@ -254,13 +255,19 @@
                 tr.innerHTML = `
                     <td class="p-3.5 font-mono">
                         <span class="text-white font-bold">${order.orderId}</span><br>
-                        <span class="text-[10px] text-amber-400"><i class="fa-regular fa-clock"></i> ${order.date}</span>
+                        <span class="text-[10px] text-amber-400"><i class="fa-regular fa-clock"></i> ${order.date}</span><br>
+                        <span class="text-[10px] text-slate-400">Order: ${order.bookingDate || '-'}</span>
                     </td>
                     <td class="p-3.5">
                         <span class="text-white font-bold">${order.name}</span> (${order.whatsapp})<br>
                         <span class="text-blue-400 font-medium">${order.businessName}</span><br>
-                        <a href="${order.businessProfileLink}" target="_blank" class="text-[10px] text-slate-400 hover:underline">🔗 Maps Usaha</a> | 
-                        <a href="${order.deliverySharelock}" target="_blank" class="text-[10px] text-slate-400 hover:underline">📍 Sharelok</a>
+                        <a href="${order.businessProfileLink}" target="_blank" class="text-[10px] text-slate-400 hover:underline">🔗 Maps Usaha</a>
+                    </td>
+                    <td class="p-3.5">
+                        <p class="text-slate-200 font-medium bg-slate-950 p-2 rounded-lg border border-slate-800 text-[11px] mb-1">
+                            📍 ${order.addressDetail || 'Tidak ada catatan patokan.'}
+                        </p>
+                        <a href="${order.deliverySharelock}" target="_blank" class="text-[10px] text-blue-400 font-bold hover:underline">📍 Buka Tautan Titik Sharelok</a>
                     </td>
                     <td class="p-3.5">
                         ${order.packageType} Pcs<br>
