@@ -8,9 +8,44 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .google-gradient-bar {
-            background: linear-gradient(90deg, #4285F4 0%, #EA4335 25%, #FBBC05 50%, #34A853 100%);
+        @keyframes googleShimmer {
+            0% { background-position: 0% 50%; filter: brightness(1); }
+            50% { background-position: 100% 50%; filter: brightness(1.4) drop-shadow(0 0 10px rgba(66, 133, 244, 0.7)); }
+            100% { background-position: 0% 50%; filter: brightness(1); }
         }
+        .google-gradient-bar {
+            background: linear-gradient(90deg, #4285F4, #EA4335, #FBBC05, #34A853, #4285F4);
+            background-size: 300% 300%;
+            animation: googleShimmer 4s ease infinite;
+        }
+
+        @keyframes borderShimmer {
+            0% { border-color: rgba(66, 133, 244, 0.4); box-shadow: 0 0 10px rgba(66, 133, 244, 0.1); }
+            33% { border-color: rgba(234, 67, 53, 0.6); box-shadow: 0 0 18px rgba(234, 67, 53, 0.25); }
+            66% { border-color: rgba(251, 188, 5, 0.6); box-shadow: 0 0 18px rgba(251, 188, 5, 0.25); }
+            100% { border-color: rgba(52, 168, 83, 0.4); box-shadow: 0 0 10px rgba(52, 168, 83, 0.1); }
+        }
+        .shimmer-card-border {
+            animation: borderShimmer 6s infinite;
+        }
+
+        @keyframes btnSweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .shimmer-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            animation: btnSweep 3s infinite;
+        }
+
         @keyframes ambientGlow {
             0%, 100% { opacity: 0.3; transform: scale(1); }
             50% { opacity: 0.7; transform: scale(1.08); }
@@ -71,6 +106,7 @@
             </div>
         </div>
 
+        <!-- TITIK 1: GARIS GRADASI GOOGLE DENGAN EFEK SHIMMER BERKILAU -->
         <div class="h-2.5 google-gradient-bar"></div>
 
         <div class="p-6 md:p-8 space-y-6 pt-2">
@@ -80,8 +116,8 @@
                     <i class="fa-solid fa-location-dot text-rose-500"></i> Layanan Khusus Kota Makassar & Sekitarnya
                 </div>
 
-                <!-- PREVIEW FOTO PRODUK & BADGE STOK DINAMIS -->
-                <div class="relative w-full h-56 md:h-64 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl group flex items-center justify-center">
+                <!-- TITIK 2: BINGKAI FOTO PRODUK DENGAN EFEK SHIMMER KILAU BERGERAK -->
+                <div class="relative w-full h-56 md:h-64 bg-slate-950 rounded-2xl border-2 shimmer-card-border overflow-hidden shadow-2xl group flex items-center justify-center">
                     <img src="nfc-card.jpg" alt="Kartu NFC Google Review" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex items-end p-4">
                         <div class="text-left w-full flex justify-between items-end">
@@ -102,7 +138,6 @@
                     <i class="fa-solid fa-star star-5"></i>
                 </div>
                 
-                <!-- SLOGAN UTAMA YANG REALISTIS & FLEKSIBEL -->
                 <div id="editableSloganSection" class="space-y-3">
                     <h1 class="text-xl md:text-2xl font-extrabold text-white tracking-tight leading-snug">
                         Permudah Pelanggan Memberikan Ulasan Google Maps Cukup dengan Satu Sentuhan Kartu
@@ -116,12 +151,11 @@
                 <div id="storeStatusBanner" class="hidden p-3 rounded-2xl text-xs font-bold border text-center"></div>
             </div>
 
-            <!-- FORM PEMESANAN DENGAN KUANTITAS INTERAKTIF -->
+            <!-- FORM PEMESANAN -->
             <div id="step1" class="space-y-4">
                 <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-3 shadow-inner">
                     <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Pilih Jumlah Paket & Kuantitas Kartu NFC</label>
                     
-                    <!-- Pilihan Paket Cepat -->
                     <div class="grid grid-cols-3 gap-2">
                         <button type="button" onclick="setPackagePreset(1)" id="pkgBtn1" class="pkg-btn p-2.5 rounded-xl border border-blue-500 bg-blue-500/15 text-center transition cursor-pointer hover:border-blue-400 shadow">
                             <span class="block text-xs font-bold text-white">1 Pcs</span>
@@ -137,7 +171,6 @@
                         </button>
                     </div>
 
-                    <!-- Input Kuantitas Manual dengan Tombol Plus / Minus -->
                     <div class="pt-2 flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
                         <span class="font-bold text-slate-300 uppercase">Atur Jumlah Kustom (Pcs):</span>
                         <div class="flex items-center gap-2">
@@ -206,8 +239,8 @@
                             <span class="text-[10px] text-slate-400 mt-1 block">*Tarif Kurir Makassar: ≤5km = Rp 5rb | 6-12km = Rp 10rb | >12km = Rp 15rb</span>
                         </div>
                         <div>
-                            <label class="block text-slate-400 mb-1 font-medium">Tanggal Pengantaran Pesanan</label>
-                            <input type="date" id="bookingDate" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                            <label class="block text-slate-400 mb-1 font-medium">Tanggal Order</label>
+                            <input type="date" id="bookingDate" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500 font-mono">
                         </div>
                     </div>
                 </div>
@@ -227,7 +260,8 @@
                     </div>
                 </div>
 
-                <button type="button" id="proceedToPayBtn" onclick="goToPayment()" class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-blue-500/25 cursor-pointer uppercase tracking-wider">
+                <!-- TITIK 3: TOMBOL UTAMA DENGAN EFEK SAPUAN KILAU SHIMMER -->
+                <button type="button" id="proceedToPayBtn" onclick="goToPayment()" class="w-full py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-blue-500/25 cursor-pointer uppercase tracking-wider shimmer-btn">
                     Lanjut ke Pembayaran QRIS
                 </button>
             </div>
@@ -251,7 +285,7 @@
 
                 <div class="flex gap-2">
                     <button type="button" onclick="backToStep1()" class="w-1/3 py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs transition cursor-pointer">Kembali</button>
-                    <button type="button" id="confirmPayBtn" onclick="submitOrder()" class="w-2/3 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg cursor-pointer">Konfirmasi & Kirim Pesanan</button>
+                    <button type="button" id="confirmPayBtn" onclick="submitOrder()" class="w-2/3 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg cursor-pointer shimmer-btn">Konfirmasi & Kirim Pesanan</button>
                 </div>
             </div>
 
@@ -266,7 +300,7 @@
                 <a href="status.html" class="block w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-blue-400 font-bold rounded-xl text-xs transition border border-blue-500/30">Cek Status Pesanan Anda</a>
             </div>
 
-            <!-- SECTION Q&A / TANYA JAWAB EDUKATIF UNTUK PENGUNJUNG -->
+            <!-- SECTION Q&A -->
             <div class="border-t border-slate-800 pt-5 space-y-4 text-xs">
                 <h3 class="font-bold text-white uppercase tracking-wider text-center flex items-center justify-center gap-2">
                     <i class="fa-solid fa-circle-question text-blue-400"></i> Tanya Jawab & Panduan Produk (Q&A)
@@ -356,7 +390,6 @@
             if (selectedQty > 100) selectedQty = 100;
             document.getElementById('customQtyInput').value = selectedQty;
             
-            // Reset highlight preset jika diubah manual
             document.querySelectorAll('.pkg-btn').forEach(btn => {
                 btn.className = "pkg-btn p-2.5 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700";
             });
@@ -483,7 +516,7 @@
                 `*Maps Usaha:* ${businessProfileLink}\n` +
                 `*Sharelok:* ${deliverySharelock}\n` +
                 `*Patokan Alamat:* ${addressDetail}\n` +
-                `*Tanggal Pengantaran:* ${bookingDate}\n` +
+                `*Tanggal Order:* ${bookingDate}\n` +
                 `*Paket:* ${selectedQty} Pcs\n` +
                 `*Total Pembayaran:* Rp ${totalPrice.toLocaleString('id-ID')}\n\n` +
                 `Bukti transfer telah diunggah. Mohon verifikasi dan proses pengirimannya. Terima kasih.`
@@ -500,7 +533,7 @@
                     waBtn.id = 'waDirectBtn';
                     waBtn.href = `https://wa.me/${ADMIN_PHONE}?text=${waMessage}`;
                     waBtn.target = '_blank';
-                    waBtn.className = 'inline-flex justify-center items-center gap-2 w-full py-3.5 mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg';
+                    waBtn.className = 'inline-flex justify-center items-center gap-2 w-full py-3.5 mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg shimmer-btn';
                     waBtn.innerHTML = '<i class="fa-brands fa-whatsapp text-lg"></i><span>Kirim Detail ke WhatsApp Admin</span>';
                     successContainer.appendChild(waBtn);
                 }
