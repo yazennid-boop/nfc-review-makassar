@@ -24,6 +24,24 @@ button,input,textarea{font:inherit}
 .small{font-size:.85rem}
 section[id]{scroll-margin-top:70px}
 
+/* ---------- Loader premium ---------- */
+#loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:var(--bg);transition:opacity .6s ease,visibility .6s ease}
+#loader.selesai{opacity:0;visibility:hidden}
+.ld-box{display:grid;justify-items:center;gap:14px;text-align:center;padding:20px}
+.ld-ring{width:76px;height:76px;border-radius:50%;background:conic-gradient(var(--blue) 0 25%,var(--red) 25% 50%,var(--yellow) 50% 75%,var(--green) 75% 100%);display:grid;place-items:center;animation:ldSpin 2.4s linear infinite;box-shadow:0 12px 30px -12px rgba(66,133,244,.6)}
+.ld-ring span{width:58px;height:58px;border-radius:50%;background:#fff;display:grid;place-items:center;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.6rem;color:var(--ink);animation:ldSpinRev 2.4s linear infinite}
+@keyframes ldSpin{to{transform:rotate(360deg)}}
+@keyframes ldSpinRev{to{transform:rotate(-360deg)}}
+.ld-nama{font-family:"Playfair Display",Georgia,serif;font-size:1.25rem;font-weight:700;letter-spacing:.02em;background:linear-gradient(110deg,var(--blue) 0%,var(--blue) 20%,#fff 35%,var(--red) 45%,var(--yellow) 60%,var(--green) 75%,var(--blue) 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 3s linear infinite}
+.ld-pesan{min-height:1.2em;font-size:.85rem;color:var(--muted)}
+.ld-bar{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--green));transform-origin:left;animation:ldBar 8s ease-out forwards}
+@keyframes ldBar{from{transform:scaleX(0)}to{transform:scaleX(.9)}}
+
+/* ---------- Skeleton (placeholder berkilau) ---------- */
+.skel{display:inline-block;border-radius:8px;background:linear-gradient(90deg,#eef1f8 0%,#ffffff 50%,#eef1f8 100%);background-size:200% 100%;animation:skelMove 1.4s ease-in-out infinite;color:transparent}
+@keyframes skelMove{from{background-position:200% 0}to{background-position:-200% 0}}
+.paket-skel{display:block;height:118px;border-radius:16px}
+
 .topbar{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px max(5vw,16px);background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .logo{display:flex;align-items:center;gap:5px;font-weight:600;font-size:1rem;white-space:nowrap}
 .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
@@ -204,6 +222,15 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
 </head>
 <body>
 
+<div id="loader" role="status" aria-live="polite" aria-label="Memuat halaman">
+  <div class="ld-box">
+    <div class="ld-ring" aria-hidden="true"><span>G</span></div>
+    <p class="ld-nama">ReviewCard Makassar</p>
+    <p id="ldPesan" class="ld-pesan"></p>
+  </div>
+  <div class="ld-bar" aria-hidden="true"></div>
+</div>
+
 <header class="topbar">
   <div class="logo">
     <span class="dot b"></span><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
@@ -232,7 +259,7 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
       <strong id="bannerJudul"></strong>
       <p id="bannerIsi"></p>
     </div>
-    <p class="chip">Stok ready: <strong id="stokTampil">-</strong> pcs</p>
+    <p class="chip">Stok ready: <strong id="stokTampil" class="skel">&nbsp;&nbsp;&nbsp;&nbsp;</strong> pcs</p>
   </section>
 
   <section class="wrap" aria-label="Produk">
@@ -244,7 +271,9 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
   </section>
 
   <div class="ticker-wrap" aria-label="Aktivitas pesanan terbaru">
-    <div class="ticker" id="ticker"></div>
+    <div class="ticker" id="ticker">
+      <span class="tk"><span class="skel" style="width:220px;height:14px"></span></span>
+    </div>
   </div>
 
   <div class="ticker-wrap promo-wrap" aria-label="Kode promo aktif">
@@ -325,7 +354,11 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     <div class="booking">
       <fieldset id="fsForm">
         <h3 class="h3">1. Pilih paket atau jumlah</h3>
-        <div class="paket-grid" id="paketGrid"></div>
+        <div class="paket-grid" id="paketGrid">
+          <div class="skel paket-skel"></div>
+          <div class="skel paket-skel"></div>
+          <div class="skel paket-skel"></div>
+        </div>
 
         <div class="custom" id="customBox">
           <div>
@@ -477,6 +510,8 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
   const TIPE_BUKTI = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "application/pdf": "pdf" };
   const DURASI_BAYAR_MS = 5 * 60 * 1000;
   const REGEX_MAPS = /^https:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps|www\.google\.com\/maps|maps\.google\.com)/i;
+  const LOADER_MIN_MS = 800;
+  const LOADER_MAKS_MS = 8000;
 
   const sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -512,6 +547,7 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
   const st = {
     toko: { stok_ready: 0, status_toko: "buka", harga_satuan: 100000, diskon_kode_paket: 25000, diskon_kode_normal: 20000 },
     paket: [],
+    paketSiap: false,
     pilihan: { tipe: "paket", kode: null, jumlah: 0 },
     jumlahCustom: 1,
     promo: null,
@@ -530,6 +566,22 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     return "Terjadi kendala. Silakan coba lagi.";
   };
 
+  /* ===== LOADER ===== */
+  const mulaiLoader = Date.now();
+  let loaderSelesai = false;
+
+  function selesaiLoader() {
+    if (loaderSelesai) return;
+    loaderSelesai = true;
+    const sisa = Math.max(0, LOADER_MIN_MS - (Date.now() - mulaiLoader));
+    setTimeout(() => {
+      const l = $("loader");
+      if (!l) return;
+      l.classList.add("selesai");
+      setTimeout(() => l.remove(), 600);
+    }, sisa);
+  }
+
   /* ===== HARGA ===== */
   function hitung(jumlah, tipe) {
     const s = st.toko;
@@ -543,7 +595,11 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     const { data, error } = await sb.from("pengaturan")
       .select("stok_ready,status_toko,harga_satuan,diskon_kode_paket,diskon_kode_normal")
       .eq("id", 1).single();
-    if (error || !data) return;
+    if (error || !data) {
+      $("stokTampil").classList.remove("skel");
+      $("stokTampil").textContent = "-";
+      return;
+    }
     Object.assign(st.toko, data);
     renderToko();
     renderHarga();
@@ -551,6 +607,7 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
 
   function renderToko() {
     const s = st.toko;
+    $("stokTampil").classList.remove("skel");
     $("stokTampil").textContent = s.stok_ready;
     const banner = $("banner");
     const fs = $("fsForm");
@@ -578,7 +635,8 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
   /* ===== PAKET ===== */
   async function muatPaket() {
     const { data, error } = await sb.from("paket").select("kode,nama,jumlah").eq("aktif", true).order("urutan");
-    if (error || !data) return;
+    st.paketSiap = true;
+    if (error || !data) { renderPaket(); return; }
     st.paket = data;
     if (!st.pilihan.kode && data.length) {
       st.pilihan = { tipe: "paket", kode: data[0].kode, jumlah: data[0].jumlah };
@@ -587,8 +645,18 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
   }
 
   function renderPaket() {
+    if (!st.paketSiap) return;
     const grid = $("paketGrid");
     grid.replaceChildren();
+
+    if (!st.paket.length) {
+      const p = document.createElement("p");
+      p.className = "muted small";
+      p.textContent = "Paket belum tersedia.";
+      grid.append(p);
+      return;
+    }
+
     for (const p of st.paket) {
       const h = hitung(p.jumlah, "paket");
       const aktif = st.pilihan.tipe === "paket" && st.pilihan.kode === p.kode;
@@ -938,18 +1006,23 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
       `https://wa.me/${CONFIG.adminWA}?text=` +
       encodeURIComponent("Halo Admin, saya butuh bantuan terkait pesanan Kartu Google Review. Kode pesanan saya: ");
 
-    renderHarga();
-    muatToko();
-    muatPaket();
-    muatAktivitas();
-    muatPromo();
-    muatSosmed();
+    // Loader tampil sampai data awal siap, atau berhenti paksa setelah batas waktu
+    Promise.allSettled([muatToko(), muatPaket(), muatAktivitas(), muatPromo(), muatSosmed()])
+      .then(() => selesaiLoader());
+    setTimeout(() => {
+      if (!loaderSelesai) {
+        $("ldPesan").textContent = "Koneksi lambat, data sedang dimuat...";
+        selesaiLoader();
+      }
+    }, LOADER_MAKS_MS);
 
     sb.channel("toko-live")
       .on("postgres_changes", { event: "*", schema: "public", table: "pengaturan" }, muatToko)
       .on("postgres_changes", { event: "*", schema: "public", table: "paket" }, muatPaket)
       .subscribe();
 
+    // Stok cadangan: cek ulang stok setiap 30 detik jika realtime terputus
+    setInterval(muatToko, 30000);
     setInterval(muatAktivitas, 60000);
     setInterval(muatPromo, 60000);
     setInterval(muatSosmed, 300000);
