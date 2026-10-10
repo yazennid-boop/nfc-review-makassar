@@ -179,6 +179,15 @@ textarea{resize:vertical;min-height:70px}
 
 footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);margin-top:20px}
 
+.promo-wrap{margin-top:12px;background:linear-gradient(90deg,#fff7e6,#ffffff 50%,#eef6ff)}
+.promo-tk .tk b{color:var(--red);font-weight:700}
+.sosmed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;max-width:720px;margin:0 auto}
+.sosmed{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;text-decoration:none;color:var(--ink);transition:transform .25s,box-shadow .25s}
+.sosmed:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.sosmed .logo-s{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#000;color:#fff;font-weight:700;font-size:.85rem;flex:none}
+.sosmed b{display:block;font-weight:600}
+.sosmed small{color:var(--muted)}
+
 @media (max-width:560px){
   .topbar{padding:10px 14px}
   .logo{font-size:.9rem}
@@ -236,6 +245,10 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
 
   <div class="ticker-wrap" aria-label="Aktivitas pesanan terbaru">
     <div class="ticker" id="ticker"></div>
+  </div>
+
+  <div class="ticker-wrap promo-wrap" aria-label="Kode promo aktif">
+    <div class="ticker promo-tk" id="tickerPromo"></div>
   </div>
 
   <div class="ticker-wrap slogan-wrap" aria-label="Slogan ReviewCard">
@@ -435,6 +448,13 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
       Apabila data tidak sesuai dengan data yang ditampilkan, mohon maaf, kami tidak akan memproses pesanan Anda. Apabila biaya atau bukti transfer teridentifikasi manipulasi, kami tidak akan memproses. Kami hanya memproses sesuai bukti transfer dan data real-time yang kami dapatkan. Di luar itu, kami di luar tanggung jawab kami. Terima kasih atas perhatian Anda.
     </div>
   </div>
+</section>
+
+<section class="wrap hidden" id="ikuti" aria-label="Ikuti kami">
+  <h2 class="title">Ikuti Kami</h2>
+  <p class="title-sub">Info promo terbaru dan aktivitas kami ada di media sosial resmi.</p>
+  <div class="sosmed-grid" id="sosmedGrid"></div>
+  <p class="muted small" style="text-align:center;margin-top:18px">Pembayaran hanya melalui QRIS yang tampil di website ini.</p>
 </section>
 
 <footer>
@@ -835,6 +855,82 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     ticker.append(...buat(), ...buat());
   }
 
+  /* ===== PROMO BERJANGKA (treadmill) ===== */
+  const fmtTanggal = (iso) =>
+    new Date(iso).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+
+  function buatItemPromo(p) {
+    const span = document.createElement("span");
+    span.className = "tk";
+    const kode = document.createElement("b");
+    kode.textContent = p.kode;
+    const info = document.createElement("em");
+    const sampai = p.berakhir ? "berlaku s.d. " + fmtTanggal(p.berakhir) : "tanpa batas waktu";
+    info.textContent = `hemat ${rp.format(p.diskon_paket)}/pcs paket · ${rp.format(p.diskon_normal)}/pcs custom · ${sampai}`;
+    span.append(kode, document.createTextNode(" · "), info);
+    if (p.keterangan) span.append(document.createTextNode(" · " + p.keterangan));
+    return span;
+  }
+
+  function buatItemKosong() {
+    const span = document.createElement("span");
+    span.className = "tk";
+    span.textContent = "Pantau terus, kode promo baru akan kami umumkan di sini";
+    return span;
+  }
+
+  async function muatPromo() {
+    const { data, error } = await sb.rpc("daftar_promo");
+    const t = $("tickerPromo");
+    t.replaceChildren();
+
+    const kosong = error || !data || !data.length;
+    const bagian = () => {
+      const arr = [];
+      for (let i = 0; i < 3; i++) {
+        if (kosong) arr.push(buatItemKosong());
+        else arr.push(...data.map(buatItemPromo));
+      }
+      return arr;
+    };
+    t.append(...bagian(), ...bagian());
+  }
+
+  /* ===== SOSMED (Ikuti Kami) ===== */
+  async function muatSosmed() {
+    const { data, error } = await sb.from("sosmed")
+      .select("platform,akun,url").eq("aktif", true).order("urutan");
+    const bagian = $("ikuti");
+    const grid = $("sosmedGrid");
+    grid.replaceChildren();
+
+    if (error || !data || !data.length) { bagian.classList.add("hidden"); return; }
+    bagian.classList.remove("hidden");
+
+    for (const s of data) {
+      if (!/^https:\/\//.test(s.url)) continue;
+      const a = document.createElement("a");
+      a.className = "sosmed";
+      a.href = s.url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+
+      const logo = document.createElement("span");
+      logo.className = "logo-s";
+      logo.textContent = s.platform.slice(0, 2).toUpperCase();
+
+      const teks = document.createElement("span");
+      const judul = document.createElement("b");
+      judul.textContent = s.platform;
+      const akun = document.createElement("small");
+      akun.textContent = s.akun || "Kunjungi akun kami";
+      teks.append(judul, akun);
+
+      a.append(logo, teks);
+      grid.append(a);
+    }
+  }
+
   /* ===== INISIALISASI ===== */
   function init() {
     $("tahun").textContent = new Date().getFullYear();
@@ -846,6 +942,8 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     muatToko();
     muatPaket();
     muatAktivitas();
+    muatPromo();
+    muatSosmed();
 
     sb.channel("toko-live")
       .on("postgres_changes", { event: "*", schema: "public", table: "pengaturan" }, muatToko)
@@ -853,6 +951,8 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
       .subscribe();
 
     setInterval(muatAktivitas, 60000);
+    setInterval(muatPromo, 60000);
+    setInterval(muatSosmed, 300000);
   }
 
   init();
@@ -860,4 +960,3 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
 </script>
 </body>
 </html>
-

@@ -58,7 +58,6 @@ button.ok{background:var(--green)}
 .item a{color:var(--blue);font-size:.9rem}
 .filter{max-width:260px}
 .paket-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:8px}
-.promo-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
 .grid2 label{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}
 
@@ -137,12 +136,28 @@ button.ok{background:var(--green)}
 
   <section class="card">
     <h2>Kode promo</h2>
-    <div class="row">
-      <input id="kodeBaru" type="text" maxlength="40" placeholder="Kode baru, contoh REVIEW20" autocomplete="off" autocapitalize="characters">
-      <button id="btnTambahPromo" type="button">Tambah kode</button>
+    <p class="muted small">Kode yang aktif dan belum berakhir tampil di treadmill beranda. Kosongkan masa berlaku untuk tanpa batas waktu.</p>
+    <div class="grid2">
+      <label>Kode<input id="kodeBaru" type="text" maxlength="40" placeholder="Contoh REVIEW20" autocomplete="off" autocapitalize="characters"></label>
+      <label>Keterangan (opsional)<input id="ketBaru" type="text" maxlength="80" placeholder="Contoh: Promo Lebaran"></label>
+      <label>Berakhir (kosongkan = tanpa batas)<input id="berakhirBaru" type="datetime-local"></label>
     </div>
+    <div class="row"><button id="btnTambahPromo" type="button">Tambah kode</button></div>
     <p id="msgPromo" class="msg"></p>
     <div id="daftarPromo" class="list"></div>
+  </section>
+
+  <section class="card">
+    <h2>Sosmed</h2>
+    <p class="muted small">Sosmed yang aktif tampil di bagian "Ikuti Kami" beranda.</p>
+    <div class="grid2">
+      <label>Platform<input id="sosPlatform" type="text" maxlength="30" placeholder="TikTok"></label>
+      <label>Nama akun<input id="sosAkun" type="text" maxlength="60" placeholder="@id.card_aff"></label>
+      <label>Link (https)<input id="sosUrl" type="url" maxlength="200" placeholder="https://tiktok.com/@id.card_aff"></label>
+    </div>
+    <div class="row"><button id="btnTambahSosmed" type="button">Tambah sosmed</button></div>
+    <p id="msgSosmed" class="msg"></p>
+    <div id="daftarSosmed" class="list"></div>
   </section>
 
   <section class="card">
@@ -199,6 +214,14 @@ button.ok{background:var(--green)}
   let filter = "";
 
   const say = (el, teks, tipe = "") => { el.textContent = teks; el.className = "msg " + tipe; };
+  const catatan = (teks) => { const p = document.createElement("p"); p.className = "muted small"; p.textContent = teks; return p; };
+
+  function keLokal(iso) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    const offset = d.getTimezoneOffset() * 60000;
+    return new Date(d - offset).toISOString().slice(0, 16);
+  }
 
   /* ===== LOGIN ===== */
   $("fLogin").addEventListener("submit", async (e) => {
@@ -245,6 +268,7 @@ button.ok{background:var(--green)}
     pasangRealtime();
     perbaruiLabelNotif();
     muatSemua();
+    muatSosmed();
   }
 
   async function keluar(alasan) {
@@ -256,6 +280,7 @@ button.ok{background:var(--green)}
     $("daftarPesanan").replaceChildren();
     $("daftarPaket").replaceChildren();
     $("daftarPromo").replaceChildren();
+    $("daftarSosmed").replaceChildren();
     $("stokInput").value = "";
     $("dashboard").classList.add("hidden");
     $("layarKunci").classList.remove("hidden");
@@ -304,7 +329,7 @@ button.ok{background:var(--green)}
     isiFilter();
   }
 
-  /* ===== RENDER: TOKO ===== */
+  /* ===== TOKO ===== */
   function renderToko(s) {
     const pill = $("statusToko");
     pill.textContent = LABEL_TOKO[s.status_toko] || s.status_toko;
@@ -364,10 +389,12 @@ button.ok{background:var(--green)}
     say($("msgHarga"), "Harga tersimpan.", "ok");
   });
 
-  /* ===== RENDER: PAKET ===== */
+  /* ===== PAKET ===== */
   function renderPaket(list) {
     const wrap = $("daftarPaket");
     wrap.replaceChildren();
+    if (!list.length) { wrap.append(catatan("Belum ada paket.")); return; }
+
     for (const p of list) {
       const row = document.createElement("div");
       row.className = "paket-row";
@@ -409,30 +436,54 @@ button.ok{background:var(--green)}
       row.append(nm, input, act);
       wrap.append(row);
     }
-    if (!list.length) {
-      const m = document.createElement("p");
-      m.className = "muted small";
-      m.textContent = "Belum ada paket.";
-      wrap.append(m);
-    }
   }
 
-  /* ===== RENDER: PROMO ===== */
+  /* ===== KODE PROMO ===== */
   function renderPromo(list) {
     const wrap = $("daftarPromo");
     wrap.replaceChildren();
-    for (const k of list) {
-      const row = document.createElement("div");
-      row.className = "promo-row";
+    if (!list.length) { wrap.append(catatan("Belum ada kode promo.")); return; }
 
+    const kini = Date.now();
+    for (const k of list) {
+      const lewat = k.berakhir && new Date(k.berakhir).getTime() <= kini;
+      const label = !k.aktif ? "Nonaktif" : lewat ? "Kedaluwarsa" : "Aktif";
+
+      const row = document.createElement("div");
+      row.className = "item";
+
+      const head = document.createElement("div");
+      head.className = "item-head";
       const nm = document.createElement("strong");
       nm.textContent = k.kode;
       const badge = document.createElement("span");
-      badge.className = "pill" + (k.aktif ? "" : " tutup");
-      badge.textContent = k.aktif ? "Aktif" : "Nonaktif";
+      badge.className = "pill" + (label === "Aktif" ? "" : " tutup");
+      badge.textContent = label;
+      head.append(nm, badge);
 
-      const act = document.createElement("div");
-      act.className = "row";
+      const info = document.createElement("p");
+      info.className = "muted small";
+      info.textContent = (k.keterangan ? k.keterangan + " · " : "") +
+        (k.berakhir ? "berakhir " + new Date(k.berakhir).toLocaleString("id-ID") : "tanpa batas waktu");
+
+      const atur = document.createElement("div");
+      atur.className = "row";
+
+      const tgl = document.createElement("input");
+      tgl.type = "datetime-local";
+      tgl.value = keLokal(k.berakhir);
+      tgl.setAttribute("aria-label", `Masa berlaku kode ${k.kode}`);
+
+      const simpanTgl = document.createElement("button");
+      simpanTgl.type = "button";
+      simpanTgl.textContent = "Simpan masa berlaku";
+      simpanTgl.addEventListener("click", async () => {
+        const berakhir = tgl.value ? new Date(tgl.value).toISOString() : null;
+        const { error } = await sb.from("kode_promo").update({ berakhir }).eq("kode", k.kode);
+        if (error) alert("Gagal menyimpan masa berlaku.");
+        muatSemua();
+      });
+
       const toggle = document.createElement("button");
       toggle.type = "button";
       toggle.className = "ghost";
@@ -442,6 +493,7 @@ button.ok{background:var(--green)}
         if (error) alert("Gagal mengubah kode.");
         muatSemua();
       });
+
       const hapus = document.createElement("button");
       hapus.type = "button";
       hapus.className = "danger";
@@ -452,36 +504,122 @@ button.ok{background:var(--green)}
         if (error) alert("Gagal menghapus kode.");
         muatSemua();
       });
-      act.append(toggle, hapus);
 
-      row.append(nm, badge, act);
+      atur.append(tgl, simpanTgl, toggle, hapus);
+      row.append(head, info, atur);
       wrap.append(row);
-    }
-    if (!list.length) {
-      const m = document.createElement("p");
-      m.className = "muted small";
-      m.textContent = "Belum ada kode promo.";
-      wrap.append(m);
     }
   }
 
   $("btnTambahPromo").addEventListener("click", async () => {
     const kode = $("kodeBaru").value.trim().toUpperCase();
+    const ket = $("ketBaru").value.trim();
+    const tglVal = $("berakhirBaru").value;
+
     if (!/^[A-Z0-9-]{3,40}$/.test(kode)) {
       say($("msgPromo"), "Kode hanya boleh huruf, angka, dan tanda minus, minimal 3 karakter.", "err");
       return;
     }
-    const { error } = await sb.from("kode_promo").insert({ kode, aktif: true });
+
+    let berakhir = null;
+    if (tglVal) {
+      berakhir = new Date(tglVal).toISOString();
+      if (new Date(berakhir).getTime() <= Date.now()) {
+        say($("msgPromo"), "Masa berlaku harus di masa depan.", "err");
+        return;
+      }
+    }
+
+    const { error } = await sb.from("kode_promo").insert({
+      kode, aktif: true, keterangan: ket || null, berakhir,
+    });
     if (error) {
       say($("msgPromo"), error.code === "23505" ? "Kode tersebut sudah ada." : "Gagal menambah kode.", "err");
       return;
     }
+
     $("kodeBaru").value = "";
+    $("ketBaru").value = "";
+    $("berakhirBaru").value = "";
     say($("msgPromo"), `Kode ${kode} ditambahkan.`, "ok");
     muatSemua();
   });
 
-  /* ===== RENDER: PESANAN ===== */
+  /* ===== SOSMED ===== */
+  async function muatSosmed() {
+    const { data, error } = await sb.from("sosmed").select("*").order("urutan").order("platform");
+    const wrap = $("daftarSosmed");
+    wrap.replaceChildren();
+
+    if (error) { say($("msgSosmed"), "Gagal memuat sosmed.", "err"); return; }
+    if (!data.length) { wrap.append(catatan("Belum ada sosmed.")); return; }
+
+    for (const s of data) {
+      const row = document.createElement("div");
+      row.className = "item";
+
+      const head = document.createElement("div");
+      head.className = "item-head";
+      const nm = document.createElement("strong");
+      nm.textContent = s.platform + (s.akun ? " · " + s.akun : "");
+      const badge = document.createElement("span");
+      badge.className = "pill" + (s.aktif ? "" : " tutup");
+      badge.textContent = s.aktif ? "Tampil" : "Disembunyikan";
+      head.append(nm, badge);
+
+      const link = document.createElement("a");
+      link.href = s.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = s.url;
+
+      const act = document.createElement("div");
+      act.className = "row";
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "ghost";
+      toggle.textContent = s.aktif ? "Sembunyikan" : "Tampilkan";
+      toggle.addEventListener("click", async () => {
+        const { error: e } = await sb.from("sosmed").update({ aktif: !s.aktif }).eq("id", s.id);
+        if (e) alert("Gagal mengubah sosmed.");
+        muatSosmed();
+      });
+      const hapus = document.createElement("button");
+      hapus.type = "button";
+      hapus.className = "danger";
+      hapus.textContent = "Hapus";
+      hapus.addEventListener("click", async () => {
+        if (!confirm(`Hapus ${s.platform}?`)) return;
+        const { error: e } = await sb.from("sosmed").delete().eq("id", s.id);
+        if (e) alert("Gagal menghapus sosmed.");
+        muatSosmed();
+      });
+      act.append(toggle, hapus);
+
+      row.append(head, link, act);
+      wrap.append(row);
+    }
+  }
+
+  $("btnTambahSosmed").addEventListener("click", async () => {
+    const platform = $("sosPlatform").value.trim();
+    const akun = $("sosAkun").value.trim();
+    const url = $("sosUrl").value.trim();
+
+    if (platform.length < 2) { say($("msgSosmed"), "Isi nama platform.", "err"); return; }
+    if (!/^https:\/\/\S+$/.test(url)) { say($("msgSosmed"), "Link harus diawali https://", "err"); return; }
+
+    const { error } = await sb.from("sosmed").insert({ platform, akun: akun || null, url, aktif: true });
+    if (error) { say($("msgSosmed"), "Gagal menambah sosmed.", "err"); return; }
+
+    $("sosPlatform").value = "";
+    $("sosAkun").value = "";
+    $("sosUrl").value = "";
+    say($("msgSosmed"), `${platform} ditambahkan.`, "ok");
+    muatSosmed();
+  });
+
+  /* ===== PESANAN ===== */
   function isiFilter() {
     const sel = $("filterStatus");
     if (sel.options.length > 1) return;
@@ -523,13 +661,7 @@ button.ok{background:var(--green)}
     wrap.replaceChildren();
 
     const tampil = filter ? list.filter((o) => o.status === filter) : list;
-    if (!tampil.length) {
-      const m = document.createElement("p");
-      m.className = "muted";
-      m.textContent = "Tidak ada pesanan.";
-      wrap.append(m);
-      return;
-    }
+    if (!tampil.length) { wrap.append(catatan("Tidak ada pesanan.")); return; }
 
     for (const o of tampil) {
       const item = document.createElement("article");
