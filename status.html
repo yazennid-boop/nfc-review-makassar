@@ -1,144 +1,418 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Status Pesanan - NFC Google Review Makassar</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @keyframes googleGlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .google-bar {
-            background: linear-gradient(90deg, #4285F4, #EA4335, #FBBC05, #34A853, #4285F4);
-            background-size: 300% 300%;
-            animation: googleGlow 5s ease infinite;
-        }
-        .glass-card {
-            background: rgba(15, 23, 42, 0.96);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.85);
-        }
-    </style>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-3 md:p-6 selection:bg-blue-500 selection:text-white">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="description" content="Cek status pesanan Kartu Google Review, lanjutkan pembayaran, atau ajukan refund.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>Cek Status Pesanan | ReviewCard Makassar</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4285F4;--red:#EA4335;--yellow:#FBBC05;--green:#34A853;
+  --ink:#1f2330;--muted:#6b7280;--bg:#fafbff;--card:#fff;--line:#e7eaf3;
+  --shadow:0 18px 50px -22px rgba(31,35,48,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh;min-height:100dvh;padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);overflow-x:hidden}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
 
-    <div class="w-full max-w-lg flex justify-between items-center mb-2 relative z-20">
-        <a href="index.html" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-blue-400 border border-blue-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-lg">
-            <i class="fa-solid fa-arrow-left"></i> <span>Kembali ke Beranda</span>
-        </a>
-        <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20menanyakan%20status%20pesanan%20saya." target="_blank" class="px-3 py-2 bg-slate-900/90 hover:bg-slate-800 text-emerald-400 border border-emerald-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-lg">
-            <i class="fa-brands fa-whatsapp text-sm"></i> <span>Hubungi Admin</span>
-        </a>
+.topbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:12px max(5vw,16px);background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:5px;font-weight:600;text-decoration:none;color:var(--ink)}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.dot.b{background:var(--blue)}.dot.r{background:var(--red)}.dot.y{background:var(--yellow)}.dot.g{background:var(--green)}
+.back{text-decoration:none;color:var(--blue);font-weight:600;font-size:.85rem;padding:7px 14px;border:1.5px solid var(--blue);border-radius:999px}
+
+.wrap{max-width:720px;margin:0 auto;padding:clamp(24px,5vw,44px) 5vw;display:grid;gap:18px}
+.card{background:var(--card);border-radius:24px;padding:clamp(22px,4vw,32px);box-shadow:var(--shadow);border:1px solid var(--line);display:grid;gap:14px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--green));background-size:200% 100%;animation:flow 5s linear infinite}
+@keyframes flow{from{background-position:0 0}to{background-position:200% 0}}
+.card h1,.card h2{font-family:"Playfair Display",Georgia,serif;font-size:clamp(1.4rem,4vw,1.8rem)}
+
+label{font-size:.88rem;font-weight:500}
+input,textarea{width:100%;font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(66,133,244,.15)}
+textarea{resize:vertical;min-height:70px}
+.field{display:grid;gap:6px}
+
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;border:none;cursor:pointer;font:inherit;font-weight:600;color:#fff;padding:14px 24px;border-radius:999px;background:linear-gradient(120deg,var(--blue),var(--green),var(--yellow),var(--red),var(--blue));background-size:300% 300%;animation:gradMove 6s ease infinite;box-shadow:0 10px 25px -10px rgba(66,133,244,.7);transition:transform .2s,opacity .2s}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-100%);animation:sweep 3.2s ease-in-out infinite}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn.wide{width:100%}
+.btn.danger{background:var(--red);box-shadow:0 10px 25px -10px rgba(234,67,53,.6)}
+.btn.ghost{background:#fff;color:var(--blue);border:1.5px solid var(--blue);box-shadow:none;animation:none}
+.btn.ghost::after{display:none}
+@keyframes gradMove{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes sweep{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+
+.msg{min-height:1.3em;font-size:.9rem}
+.msg.err{color:var(--red)}
+.msg.ok{color:var(--green);font-weight:600}
+
+.pill{display:inline-block;padding:8px 16px;border-radius:999px;background:#eef6ff;color:var(--blue);font-weight:600;font-size:.92rem;justify-self:start}
+.pill.bad{background:#fff0ee;color:var(--red)}
+.pill.good{background:#eaf7ef;color:var(--green)}
+
+.info{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.93rem}
+.info dt{color:var(--muted)}
+.info dd{font-weight:500;overflow-wrap:anywhere}
+
+.timer{display:flex;justify-content:space-between;align-items:center;background:#fff7e6;border:1px solid #ffe0a3;border-radius:14px;padding:12px 16px}
+.timer strong{font-size:1.5rem;font-variant-numeric:tabular-nums;color:var(--red)}
+
+.qris{max-width:260px;width:100%;margin:0 auto;border-radius:16px;border:1px solid var(--line)}
+.warn{border-left:4px solid var(--red);background:#fff5f4;padding:14px 16px;border-radius:12px;font-size:.88rem;color:#7a2a24}
+.warn strong{display:block;margin-bottom:4px;color:var(--red)}
+
+.section{display:grid;gap:12px;border-top:1px dashed var(--line);padding-top:16px}
+.section.hidden{display:none!important}
+
+@media (max-width:480px){
+  .info{grid-template-columns:1fr;gap:2px}
+  .info dt{margin-top:8px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="index.html">
+    <span class="dot b"></span><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span>ReviewCard Makassar</span>
+  </a>
+  <a class="back" href="index.html">Beranda</a>
+</header>
+
+<main class="wrap">
+
+  <section class="card" id="cCari">
+    <h1>Cek Status Pesanan</h1>
+    <p class="muted small">Masukkan kode pesanan dan nomor WhatsApp yang digunakan saat memesan.</p>
+    <form id="fCari" novalidate>
+      <div class="field">
+        <label for="kode">Kode pesanan</label>
+        <input type="text" id="kode" placeholder="Contoh: RV-1A2B3C4D" maxlength="20" autocomplete="off" autocapitalize="characters" required>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label for="wa">Nomor WhatsApp</label>
+        <input type="tel" id="wa" placeholder="628xxxxxxxxxx" maxlength="16" inputmode="numeric" autocomplete="tel" required>
+      </div>
+      <button type="submit" class="btn wide" id="btnCari" style="margin-top:14px">Cek Status</button>
+      <p class="msg" id="msgCari" role="alert" style="margin-top:8px"></p>
+    </form>
+  </section>
+
+  <section class="card hidden" id="cDetail" aria-live="polite">
+    <h2>Pesanan <span id="dKode"></span></h2>
+    <span class="pill" id="dStatus">-</span>
+
+    <dl class="info">
+      <dt>Nama pemesan</dt><dd id="dNama">-</dd>
+      <dt>Paket</dt><dd id="dPaket">-</dd>
+      <dt>Jumlah</dt><dd id="dJumlah">-</dd>
+      <dt>Total</dt><dd id="dTotal">-</dd>
+      <dt>Tipe</dt><dd id="dTipe">-</dd>
+      <dt>Dibuat</dt><dd id="dWaktu">-</dd>
+    </dl>
+
+    <div class="section hidden" id="sBayar">
+      <div class="timer">
+        <span>Sisa waktu pembayaran</span>
+        <strong id="dTimer">00:00</strong>
+      </div>
+      <img class="qris" src="assets/qris.jpg" alt="Kode QRIS untuk pembayaran">
+      <p class="muted small">Scan QRIS, transfer sesuai total, lalu unggah bukti transfer. Format JPG, PNG, WEBP, atau PDF, maksimal 20 MB.</p>
+      <div class="field">
+        <label for="bukti">Bukti transfer *</label>
+        <input type="file" id="bukti" accept="image/jpeg,image/png,image/webp,application/pdf">
+      </div>
+      <button type="button" class="btn wide" id="btnBukti">Kirim Bukti Transfer</button>
+      <p class="msg" id="msgBukti" role="alert"></p>
     </div>
 
-    <main class="max-w-lg w-full glass-card rounded-3xl overflow-hidden space-y-6 relative z-10 my-4">
-        <div class="h-2.5 google-bar"></div>
+    <div class="section hidden" id="sPre">
+      <p>Pesanan pre-order Anda sudah tercatat dan akan diprioritaskan saat stok ready. Pembayaran dilakukan setelah stok tersedia. Muat ulang halaman ini secara berkala untuk melihat perubahan status.</p>
+    </div>
 
-        <div class="p-6 md:p-8 space-y-6 pt-2">
-            <div class="text-center space-y-2">
-                <div class="w-12 h-12 mx-auto rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/30 text-xl">
-                    <i class="fa-solid fa-truck-fast"></i>
-                </div>
-                <h1 class="text-xl font-bold text-white">Pelacakan Status Pesanan</h1>
-                <p class="text-xs text-slate-400">Masukkan ID Pesanan atau lihat pesanan terakhir Anda.</p>
-            </div>
+    <div class="section hidden" id="sBatal">
+      <p class="muted small">Jika Anda tidak yakin dengan pesanan ini, Anda dapat membatalkannya. Pesanan yang belum dibayar akan dibatalkan langsung. Pesanan yang sudah dibayar akan diarahkan ke pengajuan refund.</p>
+      <button type="button" class="btn danger wide" id="btnBatal">Batalkan Pesanan</button>
+    </div>
 
-            <div class="space-y-3 text-xs">
-                <div>
-                    <label class="block text-slate-400 mb-1 font-medium">ID Pesanan (Contoh: NFC-123456)</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="searchIdInput" placeholder="Masukkan ID Pesanan..." class="w-full px-3.5 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white uppercase font-mono focus:outline-none focus:border-blue-500">
-                        <button type="button" onclick="searchOrder()" class="px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition cursor-pointer shrink-0">Cari</button>
-                    </div>
-                </div>
-            </div>
+    <div class="section hidden" id="sRefund">
+      <p><strong>Pengajuan refund aktif.</strong> Lampirkan bukti transfer yang sesuai agar kami dapat memeriksa biaya dan data transaksi.</p>
+      <p class="muted small" id="dAlasan"></p>
+      <div class="field" id="fRefundFile">
+        <label for="buktiRefund">Bukti transfer untuk refund *</label>
+        <input type="file" id="buktiRefund" accept="image/jpeg,image/png,image/webp,application/pdf">
+      </div>
+      <button type="button" class="btn wide" id="btnRefund">Kirim Bukti Refund</button>
+      <p class="msg" id="msgRefund" role="alert"></p>
+    </div>
 
-            <div id="resultContainer" class="hidden space-y-4 pt-4 border-t border-slate-800"></div>
-        </div>
-    </main>
+    <div class="section hidden" id="sSelesai">
+      <p class="msg ok" id="pesanSelesai"></p>
+    </div>
 
-    <footer class="w-full py-4 text-center text-[11px] text-slate-500 relative z-10">
-        &copy; 2026 NFC Google Review Makassar. All Rights Reserved.
-    </footer>
+    <div class="warn">
+      <strong>PERINGATAN PENTING</strong>
+      Apabila data tidak sesuai dengan data yang ditampilkan, mohon maaf, kami tidak akan memproses pesanan Anda. Apabila biaya atau bukti transfer teridentifikasi manipulasi, kami tidak akan memproses. Kami hanya memproses sesuai bukti transfer dan data real-time yang kami dapatkan. Di luar itu, kami di luar tanggung jawab kami.
+    </div>
+    <p class="msg" id="msgDetail" role="status"></p>
+  </section>
 
-    <script>
-        window.onload = function() {
-            let lastId = localStorage.getItem('last_order_id');
-            if (lastId) {
-                document.getElementById('searchIdInput').value = lastId;
-                searchOrder();
-            }
-        }
+</main>
 
-        function searchOrder() {
-            let id = document.getElementById('searchIdInput').value.trim().toUpperCase();
-            let container = document.getElementById('resultContainer');
-            container.classList.remove('hidden');
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(() => {
+  "use strict";
 
-            if (!id) {
-                container.innerHTML = `<p class="text-red-400 text-center text-xs">Masukkan ID Pesanan yang valid.</p>`;
-                return;
-            }
+  const CONFIG = {
+    supabaseUrl: "https://rbxkasjljehbejkehslr.supabase.co",
+    supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieGthc2psamVoYmVqa2Voc2xyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NDQxMDMsImV4cCI6MjEwNzEyMDEwM30.HlAFJArWgzbvFjorcPgMVCrSBjXJdijsfUOMHHkfyRQ",
+  };
 
-            let orders = JSON.parse(localStorage.getItem('nfc_orders')) || [];
-            let found = orders.find(o => o.orderId.toUpperCase() === id);
+  const MAKS_BUKTI = 20 * 1024 * 1024;
+  const TIPE_BUKTI = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "application/pdf": "pdf" };
+  const REFRESH_MS = 30000;
 
-            if (!found) {
-                container.innerHTML = `<p class="text-amber-400 text-center text-xs">Pesanan dengan ID <b>${id}</b> tidak ditemukan.</p>`;
-                return;
-            }
+  const sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
 
-            let status = found.processStatus || 'Menunggu Konfirmasi';
-            let badgeClass = "bg-amber-500/20 text-amber-400 border-amber-500/30";
-            let icon = "fa-clock";
-            let desc = "Pesanan sedang menunggu verifikasi pembayaran oleh admin.";
+  const $ = (id) => document.getElementById(id);
+  const rp = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 });
 
-            if (status === 'Sedang Dikirim Kurir') {
-                badgeClass = "bg-blue-500/20 text-blue-400 border-blue-500/30";
-                icon = "fa-truck-fast";
-                desc = "Kurir sedang dalam perjalanan mengantar pesanan ke lokasi usaha Anda di Makassar.";
-            } else if (status === 'Selesai & Dikirim') {
-                badgeClass = "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
-                icon = "fa-circle-check";
-                desc = "Pesanan telah selesai diantar dan diterima dengan baik. Terima kasih!";
-            }
+  const LABEL = {
+    preorder: "Pre-order, menunggu stok ready",
+    menunggu_pembayaran: "Menunggu pembayaran",
+    bukti_diterima: "Bukti diterima, sedang diverifikasi",
+    diaktivasi: "Sedang diaktivasi, akan diantar",
+    dikirim: "Sedang dikirim",
+    selesai: "Selesai",
+    dibatalkan: "Dibatalkan",
+    refund_diajukan: "Refund sedang diajukan",
+    refund_selesai: "Refund selesai",
+  };
 
-            container.innerHTML = `
-                <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
-                        <span class="font-mono font-bold text-white text-sm">${found.orderId}</span>
-                        <span class="px-2.5 py-1 rounded-lg font-bold border text-[10px] ${badgeClass} flex items-center gap-1.5">
-                            <i class="fa-solid ${icon}"></i> ${status}
-                        </span>
-                    </div>
+  const PESAN_ERR = {
+    PESANAN_TIDAK_DITEMUKAN: "Pesanan tidak ditemukan. Periksa kode dan nomor WhatsApp Anda.",
+    TIDAK_DAPAT_MEMBAYAR: "Waktu pembayaran sudah habis atau pesanan tidak dapat dibayar.",
+    PESANAN_TIDAK_BISA_DIBATALKAN: "Pesanan ini tidak dapat dibatalkan.",
+    REFUND_TIDAK_DITEMUKAN: "Pengajuan refund tidak ditemukan untuk pesanan ini.",
+  };
 
-                    <div class="space-y-1.5 text-slate-300">
-                        <p><b>Nama Pemesan:</b> ${found.name} (${found.whatsapp})</p>
-                        <p><b>Nama Usaha:</b> <span class="text-blue-400 font-semibold">${found.businessName}</span></p>
-                        <p><b>Patokan Alamat:</b> ${found.addressDetail || '-'}</p>
-                        <p><b>Jumlah Paket:</b> ${found.qty} Pcs</p>
-                        <p><b>Total Pembayaran:</b> <span class="text-emerald-400 font-bold">Rp ${found.total.toLocaleString('id-ID')}</span></p>
-                        <p><b>Waktu Pesan:</b> <span class="text-slate-400 font-mono">${found.date}</span></p>
-                    </div>
+  const st = { kode: null, wa: null, data: null, timerId: null, pollId: null };
 
-                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-[11px] text-slate-300 flex items-start gap-2">
-                        <i class="fa-solid fa-circle-info text-blue-400 mt-0.5"></i>
-                        <span>${desc}</span>
-                    </div>
+  const say = (el, teks, tipe = "") => { el.textContent = teks; el.className = "msg " + tipe; };
+  const pesanError = (e) => {
+    const m = (e && e.message) || "";
+    for (const k in PESAN_ERR) if (m.includes(k)) return PESAN_ERR[k];
+    return "Terjadi kendala. Silakan coba lagi.";
+  };
+  const sembunyikan = (id, tampil) => $(id).classList.toggle("hidden", !tampil);
 
-                    <div class="pt-2">
-                        <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20menanyakan%20status%20pengiriman%20untuk%20ID%20Pesanan%20${found.orderId}" target="_blank" class="block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-center rounded-xl transition shadow-lg">
-                            <i class="fa-brands fa-whatsapp"></i> Konfirmasi via WhatsApp Admin
-                        </a>
-                    </div>
-                </div>
-            `;
-        }
-    </script>
+  /* ===== CARI PESANAN ===== */
+  $("fCari").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const kode = $("kode").value.trim().toUpperCase();
+    const wa = $("wa").value.trim();
+
+    if (!/^RV-[A-Z0-9]{8}$/.test(kode)) return say($("msgCari"), "Format kode pesanan tidak valid.", "err");
+    if (!/^62\d{8,13}$/.test(wa)) return say($("msgCari"), "Nomor WhatsApp harus diawali 62 dan berisi 10 sampai 15 angka.", "err");
+
+    const btn = $("btnCari");
+    btn.disabled = true;
+    say($("msgCari"), "Mencari pesanan...");
+
+    const { data, error } = await sb.rpc("lacak_pesanan", { p_kode: kode, p_no_wa: wa });
+    btn.disabled = false;
+
+    if (error || !data || !data.length) {
+      st.kode = null;
+      st.wa = null;
+      sembunyikan("cDetail", false);
+      return say($("msgCari"), "Pesanan tidak ditemukan. Periksa kode dan nomor WhatsApp Anda.", "err");
+    }
+
+    st.kode = kode;
+    st.wa = wa;
+    say($("msgCari"), "");
+    tampilkan(data[0]);
+    clearInterval(st.pollId);
+    st.pollId = setInterval(segarkan, REFRESH_MS);
+  });
+
+  async function segarkan() {
+    if (!st.kode || !st.wa) return;
+    const { data, error } = await sb.rpc("lacak_pesanan", { p_kode: st.kode, p_no_wa: st.wa });
+    if (!error && data && data.length) tampilkan(data[0]);
+  }
+
+  /* ===== TAMPILKAN DETAIL ===== */
+  function tampilkan(r) {
+    st.data = r;
+    sembunyikan("cDetail", true);
+
+    $("dKode").textContent = r.kode_pesanan;
+    $("dNama").textContent = r.nama_pemesan;
+    $("dPaket").textContent = r.paket;
+    $("dJumlah").textContent = r.jumlah + " pcs";
+    $("dTotal").textContent = rp.format(r.total);
+    $("dTipe").textContent = r.tipe === "ready" ? "Ready" : "Pre-order";
+    $("dWaktu").textContent = new Date(r.created_at).toLocaleString("id-ID");
+
+    const pill = $("dStatus");
+    pill.textContent = LABEL[r.status] || r.status;
+    pill.className = "pill" + (r.status === "dibatalkan" || r.status === "refund_diajukan" ? " bad" : (r.status === "selesai" || r.status === "refund_selesai" ? " good" : ""));
+
+    const masihBayar = r.status === "menunggu_pembayaran" && r.batas_bayar && new Date(r.batas_bayar) > new Date();
+    const bisaBatal = ["menunggu_pembayaran", "preorder", "bukti_diterima", "diaktivasi", "dikirim"].includes(r.status);
+    const bisaRefund = r.status === "refund_diajukan" && !r.refund_diunggah;
+
+    sembunyikan("sBayar", masihBayar && !r.bukti_diunggah_at);
+    sembunyikan("sPre", r.status === "preorder");
+    sembunyikan("sBatal", bisaBatal);
+    sembunyikan("sRefund", bisaRefund || r.status === "refund_diajukan");
+    sembunyikan("fRefundFile", bisaRefund);
+    sembunyikan("btnRefund", bisaRefund);
+    sembunyikan("sSelesai", ["selesai", "refund_selesai", "dibatalkan"].includes(r.status));
+    $("dAlasan").textContent = r.alasan_refund ? "Alasan: " + r.alasan_refund : "";
+
+    if (r.status === "bukti_diterima") say($("msgDetail"), "Bukti transfer Anda sudah kami terima dan sedang diverifikasi.", "ok");
+    else if (r.status === "refund_diajukan" && r.refund_diunggah) say($("msgDetail"), "Bukti refund Anda sudah kami terima dan sedang diperiksa.", "ok");
+    else say($("msgDetail"), "");
+
+    $("pesanSelesai").textContent =
+      r.status === "selesai" ? "Terima kasih. Pesanan Anda telah selesai. Semoga usaha Anda semakin lancar."
+      : r.status === "refund_selesai" ? "Refund Anda telah diproses sesuai data transaksi."
+      : "Pesanan ini telah dibatalkan.";
+
+    clearInterval(st.timerId);
+    if (masihBayar && !r.bukti_diunggah_at) {
+      mulaiTimer(new Date(r.batas_bayar).getTime());
+    } else if (r.status === "menunggu_pembayaran" && r.batas_bayar && !masihBayar) {
+      $("dTimer").textContent = "00:00";
+      say($("msgDetail"), "Waktu pembayaran habis. Pesanan dibatalkan otomatis.", "err");
+    }
+  }
+
+  /* ===== TIMER ===== */
+  function mulaiTimer(tenggat) {
+    const tick = () => {
+      const sisa = tenggat - Date.now();
+      if (sisa <= 0) {
+        clearInterval(st.timerId);
+        $("dTimer").textContent = "00:00";
+        sembunyikan("sBayar", false);
+        segarkan();
+        return;
+      }
+      const m = Math.floor(sisa / 60000);
+      const d = Math.floor((sisa % 60000) / 1000);
+      $("dTimer").textContent = String(m).padStart(2, "0") + ":" + String(d).padStart(2, "0");
+    };
+    tick();
+    st.timerId = setInterval(tick, 1000);
+  }
+
+  /* ===== UNGGAH BUKTI TRANSFER ===== */
+  function cekFile(input) {
+    const f = input.files[0];
+    if (!f) return { error: "Pilih file bukti transfer terlebih dahulu." };
+    if (!TIPE_BUKTI[f.type]) return { error: "Format harus JPG, PNG, WEBP, atau PDF." };
+    if (f.size > MAKS_BUKTI) return { error: "Ukuran file melebihi 20 MB." };
+    return { file: f };
+  }
+
+  $("btnBukti").addEventListener("click", async () => {
+    const c = cekFile($("bukti"));
+    if (c.error) return say($("msgBukti"), c.error, "err");
+
+    const btn = $("btnBukti");
+    btn.disabled = true;
+    say($("msgBukti"), "Mengunggah bukti transfer...");
+
+    const path = `${st.kode}/${Date.now()}.${TIPE_BUKTI[c.file.type]}`;
+    const up = await sb.storage.from("bukti-bayar").upload(path, c.file, { contentType: c.file.type, upsert: false });
+    if (up.error) {
+      btn.disabled = false;
+      return say($("msgBukti"), "Gagal mengunggah bukti. Periksa koneksi lalu coba lagi.", "err");
+    }
+
+    const { error } = await sb.rpc("kirim_bukti", { p_kode: st.kode, p_no_wa: st.wa, p_path: path });
+    btn.disabled = false;
+    if (error) return say($("msgBukti"), pesanError(error), "err");
+
+    clearInterval(st.timerId);
+    say($("msgBukti"), "Bukti transfer berhasil dikirim.", "ok");
+    segarkan();
+  });
+
+  /* ===== BATALKAN PESANAN ===== */
+  $("btnBatal").addEventListener("click", async () => {
+    const s = st.data ? st.data.status : "";
+    const pesan = (s === "menunggu_pembayaran" || s === "preorder")
+      ? "Batalkan pesanan ini?"
+      : "Pesanan ini sudah dibayar. Pembatalan akan diarahkan ke pengajuan refund. Lanjutkan?";
+    if (!confirm(pesan)) return;
+
+    const alasan = prompt("Alasan pembatalan (opsional):", "") || "";
+    const btn = $("btnBatal");
+    btn.disabled = true;
+
+    const { data, error } = await sb.rpc("batalkan_pesanan", { p_kode: st.kode, p_no_wa: st.wa, p_alasan: alasan.slice(0, 250) });
+    btn.disabled = false;
+    if (error) return say($("msgDetail"), pesanError(error), "err");
+
+    if (data === "refund_diajukan") {
+      say($("msgDetail"), "Pengajuan refund dibuat. Silakan lampirkan bukti transfer di bawah.", "ok");
+    } else {
+      say($("msgDetail"), "Pesanan berhasil dibatalkan.", "ok");
+    }
+    clearInterval(st.timerId);
+    segarkan();
+  });
+
+  /* ===== KIRIM BUKTI REFUND ===== */
+  $("btnRefund").addEventListener("click", async () => {
+    const c = cekFile($("buktiRefund"));
+    if (c.error) return say($("msgRefund"), c.error, "err");
+
+    const btn = $("btnRefund");
+    btn.disabled = true;
+    say($("msgRefund"), "Mengunggah bukti refund...");
+
+    const path = `refund/${st.kode}/${Date.now()}.${TIPE_BUKTI[c.file.type]}`;
+    const up = await sb.storage.from("bukti-bayar").upload(path, c.file, { contentType: c.file.type, upsert: false });
+    if (up.error) {
+      btn.disabled = false;
+      return say($("msgRefund"), "Gagal mengunggah bukti. Periksa koneksi lalu coba lagi.", "err");
+    }
+
+    const { error } = await sb.rpc("lampirkan_bukti_refund", { p_kode: st.kode, p_no_wa: st.wa, p_path: path });
+    btn.disabled = false;
+    if (error) return say($("msgRefund"), pesanError(error), "err");
+
+    say($("msgRefund"), "Bukti refund berhasil dikirim.", "ok");
+    segarkan();
+  });
+
+  /* ===== INISIALISASI ===== */
+  $("kode").addEventListener("input", (e) => { e.target.value = e.target.value.toUpperCase(); });
+
+  const params = new URLSearchParams(location.search);
+  const kodeAwal = params.get("kode");
+  if (kodeAwal) $("kode").value = kodeAwal.toUpperCase().slice(0, 20);
+})();
+</script>
 </body>
 </html>
+
