@@ -17,70 +17,49 @@
             background-size: 300% 300%;
             animation: googleGlow 5s ease infinite;
         }
-
         @keyframes borderShimmer {
             0% { border-color: rgba(66, 133, 244, 0.4); box-shadow: 0 0 15px rgba(66, 133, 244, 0.1); }
-            33% { border-color: rgba(234, 67, 53, 0.6); box-shadow: 0 0 25px rgba(234, 67, 53, 0.2); }
-            66% { border-color: rgba(251, 188, 5, 0.6); box-shadow: 0 0 25px rgba(251, 188, 5, 0.2); }
+            50% { border-color: rgba(234, 67, 53, 0.7); box-shadow: 0 0 25px rgba(234, 67, 53, 0.25); }
             100% { border-color: rgba(52, 168, 83, 0.4); box-shadow: 0 0 15px rgba(52, 168, 83, 0.1); }
         }
-        .shimmer-card { animation: borderShimmer 6s infinite ease-in-out; }
-
+        .shimmer-card { animation: borderShimmer 5s infinite ease-in-out; }
         @keyframes starGlow {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(251, 188, 5, 0.5)); }
-            50% { transform: scale(1.15); filter: drop-shadow(0 0 18px rgba(251, 188, 5, 0.95)); }
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(251, 188, 5, 0.4)); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 16px rgba(251, 188, 5, 0.9)); }
         }
         .star-glow { animation: starGlow 2.5s ease-in-out infinite; }
-
-        @keyframes btnSweep {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        .shimmer-btn { position: relative; overflow: hidden; }
-        .shimmer-btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-            animation: btnSweep 3s infinite;
-        }
-
         .glass-card {
-            background: rgba(15, 23, 42, 0.96);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.85);
+            background: rgba(15, 23, 42, 0.97);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
         }
-
-        /* Loading Screen Overlay */
-        #loadingScreen {
+        #loadingOverlay {
             position: fixed; inset: 0; background: #020617; z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.4s ease;
         }
         .spinner {
-            width: 50px; height: 50px; border: 4px solid rgba(66, 133, 244, 0.2);
+            width: 45px; height: 45px; border: 4px solid rgba(66, 133, 244, 0.2);
             border-top: 4px solid #4285F4; border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-3 md:p-6 selection:bg-blue-500 selection:text-white">
 
-    <!-- Loading Overlay Premium -->
-    <div id="loadingScreen">
-        <div class="spinner mb-4"></div>
-        <p class="text-xs font-mono text-blue-400 tracking-widest uppercase animate-pulse">Memuat Sistem NFC Makassar...</p>
+    <div id="loadingOverlay">
+        <div class="spinner mb-3"></div>
+        <p class="text-[11px] font-mono text-blue-400 tracking-wider uppercase animate-pulse">Memuat Sistem...</p>
     </div>
 
-    <!-- Header Nav (Hanya Pusat Bantuan & TikTok Resmi, Tanpa Admin) -->
+    <!-- Header Links -->
     <div class="w-full max-w-xl flex justify-between items-center mb-2 relative z-20">
-        <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20berkonsultasi%20mengenai%20pemesanan%20kartu%20NFC%20Google%20Review." target="_blank" class="px-3.5 py-2 bg-slate-900/90 hover:bg-slate-800 text-blue-400 border border-blue-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-lg">
+        <a href="https://wa.me/6289504749648?text=Halo%20Admin,%20saya%20ingin%20berkonsultasi%20mengenai%20pemesanan%20kartu%20NFC%20Google%20Review." target="_blank" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-blue-400 border border-blue-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-md">
             <i class="fa-solid fa-headset text-emerald-400"></i> <span>Pusat Bantuan & Konsultasi</span>
         </a>
-        <a href="https://tiktok.com/@id.card_aff" target="_blank" class="px-3.5 py-2 bg-slate-900/90 hover:bg-slate-800 text-pink-400 border border-pink-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-lg">
+        <a href="https://tiktok.com/@id.card_aff" target="_blank" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-pink-400 border border-pink-500/30 rounded-2xl text-[11px] font-bold transition flex items-center gap-2 shadow-md">
             <i class="fa-brands fa-tiktok"></i> <span>@id.card_aff</span>
         </a>
     </div>
@@ -89,28 +68,28 @@
     <main class="max-w-xl w-full glass-card rounded-3xl overflow-hidden space-y-6 relative z-10 my-2">
         <div class="h-2.5 google-bar"></div>
 
-        <div class="p-6 md:p-8 space-y-6 pt-4">
-            <!-- Banner & Info Stok -->
+        <div class="p-5 md:p-8 space-y-6">
+            <!-- Header & Info -->
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[11px] font-bold uppercase tracking-wider shadow-inner">
-                    <i class="fa-solid fa-location-dot text-rose-500"></i> Khusus Layanan Kilat Area Kota Makassar
-                </div>
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[11px] font-bold uppercase tracking-wider">
+                    <i class="fa-solid fa-location-dot text-rose-500"></i> Layanan Kilat Area Kota Makassar
+                </span>
 
-                <!-- Gambar Produk Utama -->
-                <div class="relative w-full h-56 md:h-64 bg-slate-900 rounded-2xl border-2 shimmer-card overflow-hidden shadow-2xl flex items-center justify-center group">
-                    <img src="nfc-card.jpg" alt="Kartu NFC Google Review" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                <!-- Produk Image -->
+                <div class="relative w-full h-52 md:h-60 bg-slate-900 rounded-2xl border-2 shimmer-card overflow-hidden shadow-2xl flex items-center justify-center">
+                    <img src="nfc-card.jpg" alt="Kartu NFC Google Review" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex items-end p-4">
                         <div class="w-full flex justify-between items-end">
-                            <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Teknologi Tap-In NFC & QR</span>
-                            <span id="liveStockBadge" class="text-[10px] bg-blue-600/90 text-white px-3 py-1 rounded-md font-mono font-bold shadow-lg">Stok Ready: 15 Pcs</span>
+                            <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Tap NFC & QR Code</span>
+                            <span id="liveStockBadge" class="text-[10px] bg-blue-600 text-white px-3 py-1 rounded-md font-mono font-bold shadow">Stok Ready: 15 Pcs</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Banner Toko (Otomatis/Manual) -->
-                <div id="storeStatusBanner" class="hidden p-3.5 rounded-2xl text-xs font-semibold border text-center"></div>
+                <!-- Status Banner (Otomatis / Manual) -->
+                <div id="storeStatusBanner" class="hidden p-3.5 rounded-2xl text-xs font-semibold border text-center leading-relaxed"></div>
 
-                <!-- Slogan Memukau & Copywriting Marketing -->
+                <!-- Slogan & Copywriting -->
                 <div class="space-y-3">
                     <div class="flex justify-center items-center gap-1.5 text-amber-400 text-xl py-1">
                         <i class="fa-solid fa-star star-glow"></i>
@@ -122,74 +101,74 @@
                     <h1 class="text-xl md:text-2xl font-extrabold text-white tracking-tight leading-snug">
                         Dominasi Ulasan Bintang 5 Google Maps Toko Anda dalam Sekali Sentuhan (*Tap*)
                     </h1>
-                    <p class="text-xs md:text-sm text-slate-300 leading-relaxed px-1">
+                    <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
                         Tingkatkan reputasi digital, bangun kepercayaan pelanggan secara instan, dan dorong algoritma Local SEO bisnis Anda di Kota Makassar ke level tertinggi tanpa hambatan teknis.
                     </p>
                 </div>
             </div>
 
             <!-- Form Pemesanan -->
-            <div id="orderFormSection" class="space-y-4">
-                <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-3 shadow-inner">
-                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Pilih Paket & Kuantitas Kartu NFC</label>
+            <div id="orderForm" class="space-y-4">
+                <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-3 shadow-inner">
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Pilih Paket Kartu NFC</label>
                     <div class="grid grid-cols-3 gap-2">
-                        <button type="button" onclick="setPkg(1)" id="pkg1" class="pkg-btn p-3 rounded-xl border border-blue-500 bg-blue-500/15 text-center transition cursor-pointer hover:border-blue-400 shadow">
+                        <button type="button" onclick="setPkg(1)" id="pkg1" class="pkg-btn p-3 rounded-xl border border-blue-500 bg-blue-500/15 text-center transition cursor-pointer">
                             <span class="block text-xs font-bold text-white">1 Pcs</span>
                             <span class="text-[10px] text-blue-400 font-semibold">Rp 100rb</span>
                         </button>
-                        <button type="button" onclick="setPkg(3)" id="pkg3" class="pkg-btn p-3 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700">
+                        <button type="button" onclick="setPkg(3)" id="pkg3" class="pkg-btn p-3 rounded-xl border border-slate-800 bg-slate-950 text-center transition cursor-pointer">
                             <span class="block text-xs font-bold text-white">3 Pcs</span>
                             <span class="text-[10px] text-slate-400 font-semibold">Rp 300rb</span>
                         </button>
-                        <button type="button" onclick="setPkg(5)" id="pkg5" class="pkg-btn p-3 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700">
+                        <button type="button" onclick="setPkg(5)" id="pkg5" class="pkg-btn p-3 rounded-xl border border-slate-800 bg-slate-950 text-center transition cursor-pointer">
                             <span class="block text-xs font-bold text-white">5 Pcs</span>
                             <span class="text-[10px] text-slate-400 font-semibold">Rp 500rb</span>
                         </button>
                     </div>
 
-                    <div class="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
+                    <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs">
                         <span class="font-bold text-slate-300 uppercase">Jumlah Kustom (Pcs):</span>
                         <div class="flex items-center gap-2">
-                            <button type="button" onclick="adjustQty(-1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition cursor-pointer">-</button>
-                            <input type="number" id="customQty" value="1" min="1" max="100" oninput="calcTotal()" class="w-16 text-center py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold text-xs">
-                            <button type="button" onclick="adjustQty(1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition cursor-pointer">+</button>
+                            <button type="button" onclick="adjustQty(-1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg">-</button>
+                            <input type="number" id="customQty" value="1" min="1" max="100" oninput="calcTotal()" class="w-16 text-center py-1 bg-slate-900 border border-slate-700 rounded-lg text-white font-mono font-bold text-xs">
+                            <button type="button" onclick="adjustQty(1)" class="w-8 h-8 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg">+</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs">
+                <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs">
                     <div>
                         <label class="block text-slate-400 mb-1 font-medium">Nama Lengkap Pemesan</label>
-                        <input type="text" id="name" required placeholder="Masukkan nama lengkap" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                        <input type="text" id="name" required placeholder="Masukkan nama lengkap" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1 font-medium">Nomor WhatsApp Aktif</label>
-                        <input type="tel" id="whatsapp" required placeholder="Contoh: 081234567890" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                        <input type="tel" id="whatsapp" required placeholder="Contoh: 081234567890" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1 font-medium">Nama Resmi Usaha / Toko</label>
-                        <input type="text" id="businessName" required placeholder="Contoh: Cafe Kopi Makassar" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                        <input type="text" id="businessName" required placeholder="Contoh: Cafe Kopi Makassar" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1 font-medium">Tautan Profil Google Maps Usaha</label>
-                        <input type="url" id="mapsLink" required placeholder="Tempel tautan Google Maps tempat usaha" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500">
+                        <input type="url" id="mapsLink" required placeholder="Tempel tautan Google Maps tempat usaha" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1 font-medium">Tautan Titik Pengantaran (Sharelok Kurir)</label>
-                        <input type="url" id="sharelokLink" required placeholder="Tempel tautan sharelok koordinat kurir" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500">
+                        <input type="url" id="sharelokLink" required placeholder="Tempel tautan sharelok koordinat kurir" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1 font-medium">Patokan Alamat / Catatan Kurir</label>
-                        <textarea id="addressDetail" rows="2" placeholder="Warna cat bangunan, dekat patokan tertentu..." class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"></textarea>
+                        <textarea id="addressDetail" rows="2" placeholder="Warna cat bangunan, dekat patokan tertentu..." class="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"></textarea>
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1 font-medium">Estimasi Jarak Pengantaran dalam Kota Makassar (KM)</label>
-                        <input type="number" id="distance" value="3" min="1" max="30" oninput="calcTotal()" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
+                        <input type="number" id="distance" value="3" min="1" max="30" oninput="calcTotal()" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500">
                         <span class="text-[10px] text-slate-400 mt-1 block">*Tarif Kurir: ≤5km = Rp 5rb | 6-12km = Rp 10rb | >12km = Rp 15rb</span>
                     </div>
                 </div>
 
-                <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs font-medium">
+                <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs font-medium">
                     <div class="flex justify-between text-slate-400">
                         <span>Subtotal Kartu (<span id="sumQty">1</span> Pcs):</span>
                         <span id="sumSubtotal" class="text-white font-bold">Rp 100.000</span>
@@ -204,40 +183,40 @@
                     </div>
                 </div>
 
-                <button type="button" id="proceedBtn" onclick="goToPayment()" class="w-full py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-blue-500/25 cursor-pointer uppercase tracking-wider shimmer-btn">
+                <button type="button" id="proceedBtn" onclick="goToPayment()" class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl text-xs transition shadow-lg cursor-pointer uppercase tracking-wider">
                     Lanjut ke Pembayaran QRIS
                 </button>
             </div>
 
-            <!-- Step 2: QRIS Payment -->
+            <!-- Payment Section -->
             <div id="paymentSection" class="hidden space-y-4 text-center">
-                <div class="bg-slate-950/90 p-5 rounded-2xl border border-slate-800 space-y-3">
+                <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 space-y-3">
                     <h2 class="text-sm font-bold text-white">Selesaikan Pembayaran QRIS</h2>
                     <p class="text-xs text-slate-400">Pindai kode QRIS di bawah menggunakan aplikasi mobile banking atau e-wallet apa pun.</p>
-                    <div class="bg-white p-3.5 rounded-2xl inline-block shadow-2xl">
+                    <div class="bg-white p-3 rounded-2xl inline-block shadow-xl">
                         <img src="qris.jpg" alt="QRIS Resmi" class="w-48 h-48 mx-auto object-contain rounded-lg">
                     </div>
                     <p class="text-xs text-amber-400 font-bold">Total Transfer: <span id="qrisTotal" class="text-white text-sm">Rp 105.000</span></p>
                 </div>
-                <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 text-left text-xs space-y-2">
+                <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 text-left text-xs space-y-2">
                     <label class="block font-bold text-slate-300 uppercase">Unggah Bukti Transfer Resmi</label>
                     <input type="file" id="proofFile" accept="image/*" class="w-full text-xs text-slate-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white cursor-pointer">
                 </div>
                 <div class="flex gap-2">
-                    <button type="button" onclick="backToForm()" class="w-1/3 py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs cursor-pointer">Kembali</button>
-                    <button type="button" onclick="submitOrder()" class="w-2/3 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs shadow-lg font-bold cursor-pointer shimmer-btn">Konfirmasi & Kirim Pesanan</button>
+                    <button type="button" onclick="backToForm()" class="w-1/3 py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs">Kembali</button>
+                    <button type="button" onclick="submitOrder()" class="w-2/3 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs shadow-lg font-bold">Konfirmasi Pesanan</button>
                 </div>
             </div>
 
-            <!-- Step 3: Success -->
-            <div id="successSection" class="hidden bg-slate-950/90 p-6 rounded-2xl border border-slate-800 text-center space-y-4">
-                <div class="w-14 h-14 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl border border-emerald-500/30 shadow-lg">
+            <!-- Success Section -->
+            <div id="successSection" class="hidden bg-slate-900/90 p-6 rounded-2xl border border-slate-800 text-center space-y-4">
+                <div class="w-14 h-14 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl border border-emerald-500/30">
                     <i class="fa-solid fa-check"></i>
                 </div>
                 <h2 class="text-lg font-bold text-white">Pesanan Berhasil Disimpan!</h2>
                 <p class="text-xs text-slate-300">ID Pesanan Anda: <code id="resultId" class="text-blue-400 font-mono font-bold"></code></p>
-                <p class="text-[11px] text-slate-400">Silakan kirimkan detail pesanan ke WhatsApp admin agar kurir segera memproses pengantaran.</p>
-                <a id="waConfirmBtn" href="#" target="_blank" class="block w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg shimmer-btn">
+                <p class="text-[11px] text-slate-400">Silakan kirimkan konfirmasi pesanan ke WhatsApp admin agar kurir segera memproses pengantaran.</p>
+                <a id="waConfirmBtn" href="#" target="_blank" class="block w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-lg">
                     <i class="fa-brands fa-whatsapp text-sm"></i> Kirim Konfirmasi ke WhatsApp Admin
                 </a>
             </div>
@@ -255,10 +234,10 @@
 
         window.onload = function() {
             setTimeout(() => {
-                let loadEl = document.getElementById('loadingScreen');
-                loadEl.style.opacity = '0';
-                setTimeout(() => loadEl.style.display = 'none', 500);
-            }, 600);
+                let overlay = document.getElementById('loadingOverlay');
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 400);
+            }, 500);
 
             let stockVal = localStorage.getItem('nfc_stock');
             let stock = stockVal !== null ? parseInt(stockVal) : 15;
@@ -290,22 +269,22 @@
             currentQty = qty;
             document.getElementById('customQty').value = qty;
             document.querySelectorAll('.pkg-btn').forEach(b => {
-                b.className = "pkg-btn p-3 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700";
+                b.className = "pkg-btn p-3 rounded-xl border border-slate-800 bg-slate-950 text-center transition cursor-pointer";
             });
-            let active = document.getElementById(`pkg${qty}`);
-            if (active) {
-                active.className = "pkg-btn p-3 rounded-xl border border-blue-500 bg-blue-500/15 text-center transition cursor-pointer hover:border-blue-400 shadow";
+            let target = document.getElementById(`pkg${qty}`);
+            if (target) {
+                target.className = "pkg-btn p-3 rounded-xl border border-blue-500 bg-blue-500/15 text-center transition cursor-pointer";
             }
             calcTotal();
         }
 
-        function adjustQty(val) {
-            currentQty += val;
+        function adjustQty(amount) {
+            currentQty += amount;
             if (currentQty < 1) currentQty = 1;
             if (currentQty > 100) currentQty = 100;
             document.getElementById('customQty').value = currentQty;
             document.querySelectorAll('.pkg-btn').forEach(b => {
-                b.className = "pkg-btn p-3 rounded-xl border border-slate-800 bg-slate-900 text-center transition cursor-pointer hover:border-slate-700";
+                b.className = "pkg-btn p-3 rounded-xl border border-slate-800 bg-slate-950 text-center transition cursor-pointer";
             });
             calcTotal();
         }
@@ -338,13 +317,13 @@
                 return;
             }
 
-            document.getElementById('orderFormSection').classList.add('hidden');
+            document.getElementById('orderForm').classList.add('hidden');
             document.getElementById('paymentSection').classList.remove('hidden');
         }
 
         function backToForm() {
             document.getElementById('paymentSection').classList.add('hidden');
-            document.getElementById('orderFormSection').classList.remove('hidden');
+            document.getElementById('orderForm').classList.remove('hidden');
         }
 
         function submitOrder() {
