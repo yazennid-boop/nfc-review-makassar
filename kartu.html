@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
+<meta name="referrer" content="no-referrer">
+<title>ReviewCard Makassar</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/halaman.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="index.html">
+    <span class="dot b"></span><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span>ReviewCard Makassar</span>
+  </a>
+</header>
+
+<main class="wrap">
+  <section class="card center" aria-live="polite">
+    <h1 id="judul" style="font-family:'Playfair Display',Georgia,serif;font-size:1.5rem">Memeriksa kartu...</h1>
+    <p id="pesan" class="muted">Mohon tunggu sebentar.</p>
+    <p class="small"><a id="linkManual" class="hidden" href="#">Jika tidak berpindah otomatis, ketuk di sini</a></p>
+    <div id="aksi" class="aksi-row hidden">
+      <a class="btn" id="btnUtama" href="aktivasi.html">Aktivasi Kartu</a>
+      <a class="btn ghost" href="index.html">Beranda</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; <span id="tahun"></span> ReviewCard Makassar. Pemesanan dan pembayaran hanya melalui website resmi ini.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(() => {
+  "use strict";
+
+  const CONFIG = {
+    supabaseUrl: "https://rbxkasjljehbejkehslr.supabase.co",
+    supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieGthc2psamVoYmVqa2Voc2xyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NDQxMDMsImV4cCI6MjEwNzEyMDEwM30.HlAFJArWgzbvFjorcPgMVCrSBjXJdijsfUOMHHkfyRQ",
+  };
+
+  const ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const $ = (id) => document.getElementById(id);
+  const sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+
+  function tampil(judul, pesan, aktivasiUrl) {
+    $("judul").textContent = judul;
+    $("pesan").textContent = pesan;
+    if (aktivasiUrl) {
+      $("btnUtama").href = aktivasiUrl;
+      $("aksi").classList.remove("hidden");
+    }
+  }
+
+  const idKartu = new URLSearchParams(location.search).get("id");
+
+  if (!idKartu || !ID_RE.test(idKartu)) {
+    tampil(
+      "Kartu tidak dikenali",
+      "Tautan ini tidak lengkap. Jika kartu baru, silakan ketuk Aktivasi Kartu untuk mengaktifkannya.",
+      "aktivasi.html"
+    );
+  } else {
+    (async () => {
+      const { data, error } = await sb.rpc("kartu_publik", { p_id: idKartu });
+      const k = data && data[0];
+
+      if (error) {
+        return tampil("Terjadi kendala", "Periksa koneksi internet, lalu muat ulang halaman.");
+      }
+      if (!k || !k.ada) {
+        return tampil("Kartu tidak ditemukan", "Kartu ini belum terdaftar. Silakan hubungi admin untuk bantuan.");
+      }
+
+      if (k.aktif && k.link_google && /^https:\/\//i.test(k.link_google)) {
+        $("judul").textContent = "Mengalihkan ke ulasan Google";
+        $("pesan").textContent = k.nama_usaha
+          ? "Anda akan diarahkan ke halaman ulasan " + k.nama_usaha + "."
+          : "Anda akan diarahkan ke halaman ulasan Google.";
+        const tautan = $("linkManual");
+        tautan.href = k.link_google;
+        tautan.classList.remove("hidden");
+        location.replace(k.link_google);
+        return;
+      }
+
+      if (!k.sudah_dibayar) {
+        return tampil(
+          "Kartu belum dapat diaktifkan",
+          "Pembayaran untuk kartu ini belum diverifikasi. Silakan cek status pesanan Anda."
+        );
+      }
+
+      tampil(
+        "Kartu belum diaktifkan",
+        "Aktifkan kartu Anda terlebih dahulu agar halaman ulasan Google dapat dibuka.",
+        "aktivasi.html?id=" + idKartu
+      );
+    })();
+  }
+
+  $("tahun").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="description" content="Kelola kartu Google Review: ubah data usaha, ganti PIN, pulihkan PIN, atau reset kartu.">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Kelola Kartu | ReviewCard Makassar</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/halaman.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="index.html">
+    <span class="dot b"></span><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span>ReviewCard Makassar</span>
+  </a>
+  <nav class="nav" aria-label="Navigasi">
+    <a href="index.html">Beranda</a>
+    <a href="aktivasi.html">Aktivasi</a>
+    <a href="kelola-kartu.html" class="on" aria-current="page">Kelola Kartu</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <span class="eyebrow">Kelola Kartu</span>
+    <h1>Kelola kartu Anda</h1>
+    <p>Ubah data usaha, ganti PIN, atau kosongkan kartu untuk dijual ulang. Gunakan tautan pribadi kartu agar cukup memasukkan PIN.</p>
+  </section>
+
+  <section class="card" aria-labelledby="judulVideo">
+    <h2 id="judulVideo">Panduan reset dan lupa PIN (video)</h2>
+    <div class="video-box v34">
+      <video controls playsinline preload="none" aria-label="Panduan reset kartu dan lupa PIN">
+        <source src="assets/video-reset-kartu.mp4" type="video/mp4">
+        Browser Anda tidak mendukung pemutar video.
+      </video>
+    </div>
+    <p class="muted small">Video berdurasi sekitar 2 menit. Tekan Play untuk menonton.</p>
+  </section>
+
+  <section class="card" id="langkahId" aria-labelledby="judulId">
+    <h2 id="judulId">Buka kartu Anda</h2>
+    <p class="muted small">Gunakan tautan pribadi yang Anda terima saat aktivasi. Dengan tautan ini, Anda cukup memasukkan PIN. Jika tidak memilikinya, masukkan nomor pesanan dan nomor WhatsApp pemesan.</p>
+    <form id="formId" autocomplete="off" novalidate>
+      <div class="field">
+        <label for="idNomor">Nomor pesanan</label>
+        <input type="text" id="idNomor" placeholder="RV-XXXXXXXX" maxlength="11" autocapitalize="characters" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="idWa">Nomor WhatsApp pemesan</label>
+        <input type="tel" id="idWa" placeholder="628xxxxxxxxxx" maxlength="16" inputmode="numeric" autocomplete="off">
+      </div>
+      <button type="submit" class="btn wide" id="btnId">Buka kelola kartu</button>
+      <p class="msg" id="msgId" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section class="card hidden" id="panelKelola" aria-label="Pengelolaan kartu">
+
+    <div class="card" style="box-shadow:none;padding:0;border:0;gap:10px">
+      <h2>Status kartu</h2>
+      <div id="infoKartu" class="notice" role="status" aria-live="polite"></div>
+      <div class="kotak-info">
+        <div><span>Nama usaha</span><b id="sNama">-</b></div>
+        <div><span>Status kartu</span><b id="sStatus">-</b></div>
+        <div><span>PIN</span><b id="sPin">-</b></div>
+      </div>
+      <a class="btn ghost wide hidden" id="linkAktivasiUlang" href="aktivasi.html">Aktivasi ulang kartu</a>
+    </div>
+
+    <div class="card" style="box-shadow:none;padding:0;border:0;gap:12px">
+      <h2>Ubah nama usaha dan link</h2>
+      <form id="formData" autocomplete="off" novalidate>
+        <div class="field">
+          <label for="dPin">PIN Anda *</label>
+          <input type="password" id="dPin" class="pin" inputmode="numeric" maxlength="4" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="dNama">Nama usaha atau toko *</label>
+          <input type="text" id="dNama" maxlength="80" autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="dLinkToko">Link toko (Google Maps usaha) *</label>
+          <input type="url" id="dLinkToko" maxlength="200" inputmode="url" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="dLinkUlasan">Link ulasan Google *</label>
+          <input type="url" id="dLinkUlasan" maxlength="200" inputmode="url" autocomplete="off">
+        </div>
+        <button type="submit" class="btn wide" id="btnData">Simpan perubahan</button>
+        <p class="msg" id="msgData" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div class="card" style="box-shadow:none;padding:0;border:0;gap:12px">
+      <h2>Ganti PIN</h2>
+      <form id="formPin" autocomplete="off" novalidate>
+        <div class="field">
+          <label for="pLama">PIN saat ini *</label>
+          <input type="password" id="pLama" class="pin" inputmode="numeric" maxlength="4" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="pBaru">PIN baru (4 digit) *</label>
+          <input type="password" id="pBaru" class="pin" inputmode="numeric" maxlength="4" autocomplete="new-password">
+        </div>
+        <div class="field">
+          <label for="pUlang">Ulangi PIN baru *</label>
+          <input type="password" id="pUlang" class="pin" inputmode="numeric" maxlength="4" autocomplete="new-password">
+        </div>
+        <button type="submit" class="btn wide" id="btnPin">Ganti PIN</button>
+        <p class="msg" id="msgPin" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div class="card" style="box-shadow:none;padding:0;border:0;gap:12px">
+      <h2>Lupa PIN</h2>
+      <p class="muted small">Jika lupa PIN, hubungi admin dan sebutkan ID kartu yang tercantum di pesan admin. Admin akan memverifikasi pemesan, lalu memberikan kode reset. Pemulihan tidak memerlukan nomor HP.</p>
+      <a class="btn ghost wide" id="btnLupa" href="#" target="_blank" rel="noopener noreferrer">Hubungi admin untuk pemulihan PIN</a>
+      <details class="panel">
+        <summary>Sudah menerima kode reset dari admin?</summary>
+        <div class="isi">
+          <form id="formKodeReset" autocomplete="off" novalidate>
+            <div class="field">
+              <label for="kKode">Kode reset dari admin *</label>
+              <input type="text" id="kKode" maxlength="8" autocapitalize="characters" spellcheck="false" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="kPinBaru">PIN baru (4 digit) *</label>
+              <input type="password" id="kPinBaru" class="pin" inputmode="numeric" maxlength="4" autocomplete="new-password">
+            </div>
+            <div class="field">
+              <label for="kPinUlang">Ulangi PIN baru *</label>
+              <input type="password" id="kPinUlang" class="pin" inputmode="numeric" maxlength="4" autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn wide" id="btnKodeReset">Buat PIN baru</button>
+            <p class="msg" id="msgKodeReset" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" style="box-shadow:none;padding:0;border:0;gap:12px">
+      <h2>Reset kartu untuk dijual ulang</h2>
+      <div class="warn">
+        <strong>PERHATIAN</strong>
+        Reset akan menghapus nama usaha, link toko, link ulasan, dan PIN. Setelah itu kartu harus diaktifkan kembali dari awal. Tindakan ini tidak dapat dibatalkan.
+      </div>
+      <form id="formReset" autocomplete="off" novalidate>
+        <div class="field">
+          <label for="rPin">PIN Anda *</label>
+          <input type="password" id="rPin" class="pin" inputmode="numeric" maxlength="4" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="rKonfirmasi">Ketik RESET untuk melanjutkan *</label>
+          <input type="text" id="rKonfirmasi" maxlength="5" autocapitalize="characters" autocomplete="off" spellcheck="false">
+        </div>
+        <button type="submit" class="btn danger wide" id="btnReset">Reset kartu</button>
+        <p class="msg" id="msgReset" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+  </section>
+
+  <section class="card" aria-labelledby="judulBantu">
+    <h2 id="judulBantu">Butuh bantuan?</h2>
+    <a class="btn ghost wide" id="btnBantuan" href="#" target="_blank" rel="noopener noreferrer">Hubungi Admin</a>
+    <div class="warn">
+      <strong>PERINGATAN KEAMANAN</strong>
+      Admin tidak pernah meminta PIN melalui chat, telepon, atau email. Jangan bagikan PIN atau tautan pribadi kartu kepada siapa pun.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; <span id="tahun"></span> ReviewCard Makassar. Pemesanan dan pembayaran hanya melalui website resmi ini.</p>
+  <p>Dibuat oleh <a href="https://www.tiktok.com/@raymond.builds" target="_blank" rel="noopener noreferrer">@raymond.builds</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(() => {
+  "use strict";
+
+  const CONFIG = {
+    supabaseUrl: "https://rbxkasjljehbejkehslr.supabase.co",
+    supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieGthc2psamVoYmVqa2Voc2xyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NDQxMDMsImV4cCI6MjEwNzEyMDEwM30.HlAFJArWgzbvFjorcPgMVCrSBjXJdijsfUOMHHkfyRQ",
+    adminWA: "6289504749648",
+  };
+
+  const LINK_TOKO = /^https:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps|www\.google\.com\/maps|maps\.google\.com)/i;
+  const LINK_ULASAN = /^https:\/\/(g\.page|www\.google\.com|search\.google\.com|maps\.app\.goo\.gl|goo\.gl)\//i;
+  const ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+  const PESAN = {
+    DIUBAH: ["Data kartu berhasil diperbarui.", "ok"],
+    PIN_DIGANTI: ["PIN berhasil diganti. Simpan PIN baru Anda dengan aman.", "ok"],
+    PIN_DIRESET: ["PIN baru berhasil dibuat. Silakan gunakan PIN baru untuk pengelolaan berikutnya.", "ok"],
+    KARTU_DIRESET: ["Kartu telah dikosongkan. Aktifkan kembali kartu melalui halaman Aktivasi.", "ok"],
+    PIN_FORMAT_SALAH: ["PIN harus tepat 4 digit angka.", "err"],
+    PIN_TERLALU_MUDAH: ["PIN terlalu mudah ditebak. Gunakan angka lain.", "err"],
+    PIN_SALAH: ["PIN yang Anda masukkan salah.", "err"],
+    PIN_SAMA: ["PIN baru tidak boleh sama dengan PIN lama.", "err"],
+    PIN_BELUM_DIBUAT: ["PIN belum dibuat. Aktifkan kartu terlebih dahulu.", "err"],
+    TERKUNCI: ["Kartu sementara dikunci karena beberapa kali PIN salah. Coba lagi setelah waktu kunci berakhir.", "err"],
+    HUBUNGI_ADMIN: ["Kartu perlu diverifikasi admin. Silakan hubungi admin.", "err"],
+    BELUM_DIBAYAR: ["Kartu belum dapat dikelola karena pembayaran belum diverifikasi.", "err"],
+    NAMA_USAHA_WAJIB: ["Nama usaha wajib diisi.", "err"],
+    LINK_TOKO_TIDAK_VALID: ["Link toko harus berasal dari Google Maps.", "err"],
+    LINK_ULASAN_TIDAK_VALID: ["Link ulasan harus berasal dari Google, diawali https://g.page/ atau https://search.google.com/.", "err"],
+    BATAS_UBAH_TERCAPAI: ["Batas perubahan kartu sudah tercapai. Silakan hubungi admin.", "err"],
+    KODE_RESET_TIDAK_VALID: ["Kode reset salah atau sudah kedaluwarsa. Hubungi admin untuk kode baru.", "err"],
+    KONFIRMASI_SALAH: ["Ketik kata RESET dengan benar untuk melanjutkan.", "err"],
+    KARTU_TIDAK_DITEMUKAN: ["Kartu tidak ditemukan. Periksa kembali tautan Anda.", "err"],
+  };
+
+  const sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+
+  const $ = (id) => document.getElementById(id);
+  const tulis = (id, teks, tipe = "") => { $(id).textContent = teks; $(id).className = "msg " + tipe; };
+  const tampilHasil = (id, kode) => {
+    const h = PESAN[kode] || ["Terjadi kendala. Silakan coba lagi.", "err"];
+    tulis(id, h[0], h[1]);
+    return h[1] === "ok";
+  };
+  const kendala = (id) => tulis(id, "Terjadi kendala. Periksa koneksi lalu coba lagi.", "err");
+
+  let kartuId = null;
+
+  function aturFormulir(formId, aktif) {
+    for (const el of $(formId).querySelectorAll("input,button")) el.disabled = !aktif;
+  }
+
+  function aturTautanAdmin() {
+    const pesan = kartuId
+      ? "Halo Admin, saya lupa PIN kartu Google Review. ID kartu saya: " + kartuId + ". Mohon bantuan pemulihan. Terima kasih."
+      : "Halo Admin, saya butuh bantuan terkait kartu Google Review.";
+    $("btnLupa").href = "https://wa.me/" + CONFIG.adminWA + "?text=" + encodeURIComponent(pesan);
+    $("btnBantuan").href = "https://wa.me/" + CONFIG.adminWA + "?text=" + encodeURIComponent("Halo Admin, saya butuh bantuan terkait kartu Google Review.");
+  }
+
+  async function muatStatus() {
+    const { data, error } = await sb.rpc("kartu_publik", { p_id: kartuId });
+    const k = data && data[0];
+
+    if (error || !k || !k.ada) {
+      kartuId = null;
+      $("panelKelola").classList.add("hidden");
+      $("langkahId").classList.remove("hidden");
+      return tulis("msgId", PESAN.KARTU_TIDAK_DITEMUKAN[0], "err");
+    }
+
+    $("panelKelola").classList.remove("hidden");
+    $("sNama").textContent = k.nama_usaha || "-";
+    $("sStatus").textContent = k.aktif ? "Aktif" : "Belum aktif";
+    $("sPin").textContent = k.ada_pin ? "Sudah dibuat" : "Belum dibuat";
+    $("linkAktivasiUlang").href = "aktivasi.html?id=" + kartuId;
+    $("linkAktivasiUlang").classList.toggle("hidden", !(k.sudah_dibayar && !k.aktif));
+    aturTautanAdmin();
+
+    const info = $("infoKartu");
+    let bisaKelola = true;
+
+    if (!k.sudah_dibayar) {
+      info.className = "notice warn";
+      info.textContent = PESAN.BELUM_DIBAYAR[0];
+      bisaKelola = false;
+    } else if (!k.ada_pin) {
+      info.className = "notice";
+      info.textContent = "PIN belum dibuat. Aktifkan kartu melalui halaman Aktivasi.";
+      bisaKelola = false;
+    } else if (k.butuh_admin) {
+      info.className = "notice warn";
+      info.textContent = "Kartu ini dikunci untuk keamanan dan memerlukan verifikasi admin. Gunakan kode reset dari admin, atau hubungi admin.";
+      bisaKelola = false;
+    } else if (k.terkunci) {
+      info.className = "notice warn";
+      info.textContent = "Kartu sementara dikunci karena beberapa kali PIN salah. Coba lagi setelah waktu kunci berakhir.";
+      bisaKelola = false;
+    } else {
+      info.className = "notice ok";
+      info.textContent = "Kartu dapat dikelola. Masukkan PIN Anda untuk setiap perubahan.";
+    }
+
+    aturFormulir("formData", bisaKelola);
+    aturFormulir("formPin", bisaKelola);
+    aturFormulir("formReset", bisaKelola);
+  }
+
+  async function mulaiDenganId(id) {
+    kartuId = id;
+    $("langkahId").classList.add("hidden");
+    await muatStatus();
+  }
+
+  $("formId").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nomor = $("idNomor").value.trim().toUpperCase();
+    const wa = $("idWa").value.trim();
+
+    if (!/^RV-[A-Z0-9]{8}$/.test(nomor)) return tulis("msgId", "Format nomor pesanan tidak valid, contoh RV-1A2B3C4D.", "err");
+    if (!/^62\d{8,13}$/.test(wa)) return tulis("msgId", "Nomor WhatsApp harus diawali 62 dan berisi 10 sampai 15 angka.", "err");
+
+    const btn = $("btnId");
+    btn.disabled = true;
+    tulis("msgId", "Memeriksa data...", "");
+    const { data, error } = await sb.rpc("cari_kartu_pesanan", { p_kode: nomor, p_no_wa: wa });
+    btn.disabled = false;
+
+    if (error) return kendala("msgId");
+    if (!data) return tulis("msgId", "Data tidak ditemukan, atau pembayaran belum diverifikasi. Gunakan tautan pribadi kartu, atau hubungi admin.", "err");
+
+    $("idNomor").value = "";
+    $("idWa").value = "";
+    tulis("msgId", "");
+    await mulaiDenganId(data);
+  });
+
+  $("formData").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const pin = $("dPin").value;
+    const nama = $("dNama").value.trim();
+    const linkToko = $("dLinkToko").value.trim();
+    const linkUlasan = $("dLinkUlasan").value.trim();
+    $("dPin").value = "";
+
+    if (!/^[0-9]{4}$/.test(pin)) return tulis("msgData", PESAN.PIN_FORMAT_SALAH[0], "err");
+    if (nama.length < 2) return tulis("msgData", PESAN.NAMA_USAHA_WAJIB[0], "err");
+    if (!LINK_TOKO.test(linkToko)) return tulis("msgData", PESAN.LINK_TOKO_TIDAK_VALID[0], "err");
+    if (!LINK_ULASAN.test(linkUlasan)) return tulis("msgData", PESAN.LINK_ULASAN_TIDAK_VALID[0], "err");
+
+    const btn = $("btnData");
+    btn.disabled = true;
+    tulis("msgData", "Menyimpan...", "");
+    const { data, error } = await sb.rpc("simpan_kartu", {
+      p_id: kartuId, p_pin: pin, p_nama: nama, p_link_toko: linkToko, p_link_google: linkUlasan,
+    });
+    btn.disabled = false;
+
+    if (error) return kendala("msgData");
+    if (tampilHasil("msgData", data)) {
+      $("formData").reset();
+      await muatStatus();
+    }
+  });
+
+  $("formPin").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const lama = $("pLama").value;
+    const baru = $("pBaru").value;
+    const ulang = $("pUlang").value;
+    $("pLama").value = "";
+    $("pBaru").value = "";
+    $("pUlang").value = "";
+
+    if (!/^[0-9]{4}$/.test(lama)) return tulis("msgPin", "PIN saat ini harus tepat 4 digit angka.", "err");
+    if (!/^[0-9]{4}$/.test(baru)) return tulis("msgPin", PESAN.PIN_FORMAT_SALAH[0], "err");
+    if (baru !== ulang) return tulis("msgPin", "Konfirmasi PIN baru tidak sama. Silakan ulangi.", "err");
+
+    const btn = $("btnPin");
+    btn.disabled = true;
+    tulis("msgPin", "Memproses...", "");
+    const { data, error } = await sb.rpc("ganti_pin", {
+      p_id: kartuId, p_pin_lama: lama, p_pin_baru: baru,
+    });
+    btn.disabled = false;
+
+    if (error) return kendala("msgPin");
+    if (tampilHasil("msgPin", data)) {
+      $("formPin").reset();
+      await muatStatus();
+    }
+  });
+
+  $("formKodeReset").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const kode = $("kKode").value.trim().toUpperCase();
+    const baru = $("kPinBaru").value;
+    const ulang = $("kPinUlang").value;
+    $("kKode").value = "";
+    $("kPinBaru").value = "";
+    $("kPinUlang").value = "";
+
+    if (!/^[A-Z0-9]{8}$/.test(kode)) return tulis("msgKodeReset", "Kode reset harus 8 karakter, sesuai yang diberikan admin.", "err");
+    if (!/^[0-9]{4}$/.test(baru)) return tulis("msgKodeReset", PESAN.PIN_FORMAT_SALAH[0], "err");
+    if (baru !== ulang) return tulis("msgKodeReset", "Konfirmasi PIN baru tidak sama. Silakan ulangi.", "err");
+
+    const btn = $("btnKodeReset");
+    btn.disabled = true;
+    tulis("msgKodeReset", "Memproses...", "");
+    const { data, error } = await sb.rpc("pakai_kode_reset", {
+      p_id: kartuId, p_kode: kode, p_pin_baru: baru,
+    });
+    btn.disabled = false;
+
+    if (error) return kendala("msgKodeReset");
+    if (tampilHasil("msgKodeReset", data)) await muatStatus();
+  });
+
+  $("formReset").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const pin = $("rPin").value;
+    const konfirmasi = $("rKonfirmasi").value.trim().toUpperCase();
+    $("rPin").value = "";
+    $("rKonfirmasi").value = "";
+
+    if (!/^[0-9]{4}$/.test(pin)) return tulis("msgReset", PESAN.PIN_FORMAT_SALAH[0], "err");
+    if (konfirmasi !== "RESET") return tulis("msgReset", PESAN.KONFIRMASI_SALAH[0], "err");
+    if (!confirm("Reset kartu? Nama usaha, link, dan PIN akan dihapus dan tidak dapat dibatalkan.")) return;
+
+    const btn = $("btnReset");
+    btn.disabled = true;
+    tulis("msgReset", "Memproses...", "");
+    const { data, error } = await sb.rpc("reset_kartu", {
+      p_id: kartuId, p_pin: pin, p_konfirmasi: konfirmasi,
+    });
+    btn.disabled = false;
+
+    if (error) return kendala("msgReset");
+    if (tampilHasil("msgReset", data)) await muatStatus();
+  });
+
+  $("tahun").textContent = new Date().getFullYear();
+  aturTautanAdmin();
+
+  const idUrl = new URLSearchParams(location.search).get("id");
+  if (idUrl && ID_RE.test(idUrl)) mulaiDenganId(idUrl);
+})();
+</script>
+</body>
+</html>
