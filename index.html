@@ -3,28 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<meta name="description" content="Kartu Google Review NFC dan QR Code di Makassar. Tingkatkan kepercayaan pelanggan dengan satu sentuhan.">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="description" content="Kartu Google Review NFC dan QR Code di Makassar. Tempel HP atau pindai QR, ulasan Google langsung terbuka.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <title>Kartu Google Review NFC | Makassar</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --blue:#4285F4;--red:#EA4335;--yellow:#FBBC05;--green:#34A853;
-  --ink:#1f2330;--muted:#6b7280;--bg:#fafbff;--card:#fff;--line:#e7eaf3;
-  --shadow:0 18px 50px -22px rgba(31,35,48,.28);
-}
+:root{--blue:#4285F4;--red:#EA4335;--yellow:#FBBC05;--green:#34A853;--ink:#1f2330;--muted:#6b7280;--bg:#fafbff;--card:#fff;--line:#e7eaf3;--shadow:0 18px 50px -22px rgba(31,35,48,.28)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;min-height:100vh;min-height:100dvh;padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
 img{max-width:100%;height:auto;display:block}
-button,input,textarea{font:inherit}
+button,input,textarea,select{font:inherit}
 .hidden{display:none!important}
 .muted{color:var(--muted)}
 .small{font-size:.85rem}
 section[id]{scroll-margin-top:70px}
 
-/* ---------- Loader premium ---------- */
+/* Loader */
 #loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:var(--bg);transition:opacity .6s ease,visibility .6s ease}
 #loader.selesai{opacity:0;visibility:hidden}
 .ld-box{display:grid;justify-items:center;gap:14px;text-align:center;padding:20px}
@@ -37,11 +33,12 @@ section[id]{scroll-margin-top:70px}
 .ld-bar{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--green));transform-origin:left;animation:ldBar 8s ease-out forwards}
 @keyframes ldBar{from{transform:scaleX(0)}to{transform:scaleX(.9)}}
 
-/* ---------- Skeleton (placeholder berkilau) ---------- */
+/* Skeleton */
 .skel{display:inline-block;border-radius:8px;background:linear-gradient(90deg,#eef1f8 0%,#ffffff 50%,#eef1f8 100%);background-size:200% 100%;animation:skelMove 1.4s ease-in-out infinite;color:transparent}
 @keyframes skelMove{from{background-position:200% 0}to{background-position:-200% 0}}
 .paket-skel{display:block;height:118px;border-radius:16px}
 
+/* Topbar */
 .topbar{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px max(5vw,16px);background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .logo{display:flex;align-items:center;gap:5px;font-weight:600;font-size:1rem;white-space:nowrap}
 .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
@@ -50,23 +47,26 @@ section[id]{scroll-margin-top:70px}
 .nav a{text-decoration:none;color:var(--blue);font-weight:600;font-size:.85rem;padding:7px 14px;border:1.5px solid var(--blue);border-radius:999px;white-space:nowrap}
 .nav a:hover{background:var(--blue);color:#fff}
 
-.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:none;cursor:pointer;font-weight:600;font-size:1rem;color:#fff;padding:14px 30px;border-radius:999px;background:linear-gradient(120deg,var(--blue),var(--green),var(--yellow),var(--red),var(--blue));background-size:300% 300%;animation:gradMove 6s ease infinite;box-shadow:0 10px 25px -10px rgba(66,133,244,.7);transition:transform .2s,opacity .2s}
+/* Tombol */
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:none;cursor:pointer;font-weight:600;font-size:1rem;color:#fff;padding:14px 30px;border-radius:999px;background:linear-gradient(120deg,var(--blue),var(--green),var(--yellow),var(--red),var(--blue));background-size:300% 300%;animation:gradMove 6s ease infinite;box-shadow:0 10px 25px -10px rgba(66,133,244,.7);transition:transform .2s,opacity .2s;text-align:center}
 .btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-100%);animation:sweep 3.2s ease-in-out infinite}
 .btn:hover{transform:translateY(-2px)}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .btn.wide{width:100%}
 .btn.ghost{background:#fff;color:var(--blue);border:1.5px solid var(--blue);box-shadow:none;animation:none}
 .btn.ghost::after{display:none}
+.btn-sm{padding:12px 18px;border-radius:12px;border:none;background:var(--ink);color:#fff;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-sm:disabled{opacity:.5}
 @keyframes gradMove{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @keyframes sweep{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
 
+/* Hero */
 .hero{text-align:center;padding:clamp(40px,8vw,80px) 5vw 24px}
 .eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .hero h1{font-family:"Playfair Display",Georgia,serif;font-size:clamp(2rem,7vw,4rem);line-height:1.1;margin-bottom:14px}
 .shimmer{background:linear-gradient(110deg,var(--blue) 0%,var(--blue) 20%,#fff 35%,var(--red) 45%,var(--yellow) 60%,var(--green) 75%,var(--blue) 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 4s linear infinite}
 @keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
 .slogan{max-width:600px;margin:0 auto 22px;color:var(--muted)}
-
 .stars{display:flex;justify-content:center;gap:6px;margin-bottom:26px;font-size:clamp(1.6rem,6vw,2.2rem)}
 .stars span{display:inline-block;color:var(--yellow);opacity:0;transform:scale(.2) rotate(-40deg);animation:starIn .6s cubic-bezier(.2,1.4,.4,1) forwards,starGlow 2.4s ease-in-out infinite;animation-delay:var(--d),calc(var(--d) + .6s)}
 .stars span:nth-child(2){color:var(--green)}
@@ -76,7 +76,6 @@ section[id]{scroll-margin-top:70px}
 @keyframes starIn{0%{opacity:0;transform:scale(.2) rotate(-40deg)}70%{opacity:1;transform:scale(1.25) rotate(8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
 @keyframes starGlow{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 8px currentColor)}}
 .hero-cta{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-
 .banner{max-width:720px;margin:20px auto 0;padding:16px 20px;border-radius:16px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);position:relative;overflow:hidden}
 .banner::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--green))}
 .banner strong{display:block;margin-bottom:4px}
@@ -84,6 +83,8 @@ section[id]{scroll-margin-top:70px}
 .chip{display:inline-block;margin-top:14px;padding:6px 16px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:.9rem}
 .chip strong{color:var(--green)}
 
+/* Produk */
+.wrap{max-width:1080px;margin:0 auto;padding:clamp(36px,6vw,64px) 5vw}
 .product{position:relative;max-width:820px;margin:28px auto 0;padding:6px;border-radius:24px;background:var(--card);box-shadow:var(--shadow);isolation:isolate;overflow:hidden}
 .product::before{content:"";position:absolute;inset:-2px;z-index:-1;border-radius:26px;background:conic-gradient(var(--blue),var(--red),var(--yellow),var(--green),var(--blue));animation:spin 8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -92,6 +93,7 @@ section[id]{scroll-margin-top:70px}
 @keyframes shineMove{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
 .product figcaption{padding:12px 8px 6px;color:var(--muted);font-size:.92rem;text-align:center}
 
+/* Treadmill */
 .ticker-wrap{margin:34px 0 0;padding:14px 0;overflow:hidden;background:var(--card);border-block:1px solid var(--line)}
 .ticker{display:flex;width:max-content;animation:tick 40s linear infinite;white-space:nowrap}
 .ticker:hover{animation-play-state:paused}
@@ -105,12 +107,13 @@ section[id]{scroll-margin-top:70px}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .ticker.rev{animation:tickRev 45s linear infinite}
 @keyframes tickRev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.promo-wrap{margin-top:12px;background:linear-gradient(90deg,#fff7e6,#ffffff 50%,#eef6ff)}
+.promo-tk .tk b{color:var(--red);font-weight:700}
 .slogan-wrap{margin-top:12px}
 
-section.wrap{max-width:1080px;margin:0 auto;padding:clamp(36px,6vw,64px) 5vw}
+/* Judul dan fitur */
 .title{font-family:"Playfair Display",Georgia,serif;font-size:clamp(1.5rem,4.5vw,2.1rem);text-align:center;margin-bottom:8px}
 .title-sub{text-align:center;color:var(--muted);max-width:620px;margin:0 auto 28px}
-
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:18px}
 .feature{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 20px;text-align:center;transition:transform .3s,box-shadow .3s}
 .feature:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
@@ -119,6 +122,7 @@ section.wrap{max-width:1080px;margin:0 auto;padding:clamp(36px,6vw,64px) 5vw}
 .ico{width:50px;height:50px;margin:0 auto;border-radius:14px;display:grid;place-items:center;color:#fff;font-size:1.3rem}
 .ico.b{background:var(--blue)}.ico.r{background:var(--red)}.ico.y{background:var(--yellow)}.ico.g{background:var(--green)}
 
+/* Q&A */
 .qna{max-width:760px;margin:0 auto;display:grid;gap:10px}
 .qna details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
 .qna summary{cursor:pointer;font-weight:600;list-style:none}
@@ -127,16 +131,25 @@ section.wrap{max-width:1080px;margin:0 auto;padding:clamp(36px,6vw,64px) 5vw}
 .qna details[open] summary::after{content:"−"}
 .qna details p{margin-top:10px;color:var(--muted);font-size:.93rem}
 
+/* Akses cepat */
+.aksi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;max-width:900px;margin:0 auto}
+.aksi{display:grid;gap:6px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;transition:transform .25s,box-shadow .25s}
+.aksi:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.aksi b{font-size:1rem;color:var(--blue)}
+.aksi span{font-size:.88rem;color:var(--muted)}
+
+/* Bantuan */
 .help{max-width:720px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;text-align:center;display:grid;gap:14px;box-shadow:var(--shadow)}
 .warn{border-left:4px solid var(--red);background:#fff5f4;padding:14px 16px;border-radius:12px;font-size:.88rem;color:#7a2a24;text-align:left}
 .warn strong{display:block;margin-bottom:4px;color:var(--red)}
 
+/* Pemesanan */
 .booking{max-width:720px;margin:0 auto;background:var(--card);border-radius:24px;padding:clamp(22px,4vw,34px);box-shadow:var(--shadow);position:relative;overflow:hidden}
 .booking::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--green));background-size:200% 100%;animation:gradMove 5s linear infinite}
 fieldset{border:none;min-width:0}
 fieldset:disabled{opacity:.55}
-.h3{font-size:1.05rem;margin:4px 0 12px}
-
+.h3{font-size:1.05rem;margin:18px 0 12px}
+.h3:first-child{margin-top:4px}
 .paket-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px;margin-bottom:16px}
 .paket{text-align:center;border:1.5px solid var(--line);border-radius:16px;padding:16px 10px;background:#fff;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .2s;color:var(--ink)}
 .paket:hover{transform:translateY(-2px)}
@@ -145,7 +158,6 @@ fieldset:disabled{opacity:.55}
 .paket .qty-n{font-family:"Playfair Display",Georgia,serif;font-size:1.6rem;margin:4px 0}
 .paket .hrg{font-size:.82rem;color:var(--muted)}
 .paket .hrg s{margin-right:4px}
-
 .custom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;border:1.5px dashed var(--line);border-radius:16px;padding:14px;margin-bottom:18px}
 .custom.on{border-color:var(--blue);border-style:solid}
 .qty{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
@@ -153,34 +165,36 @@ fieldset:disabled{opacity:.55}
 .qty button:hover{background:#e6ebf8}
 .qty input{width:70px;height:44px;border:none;text-align:center;font-weight:600;outline:none;-moz-appearance:textfield}
 .qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-
 .promo{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
 .promo input{flex:1 1 180px}
+.pilihan-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px}
+.pilihan{position:relative;display:block;border:1.5px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;background:#fff;transition:border-color .2s,box-shadow .2s}
+.pilihan input{position:absolute;opacity:0;pointer-events:none}
+.pilihan b{display:block;font-size:.95rem}
+.pilihan span{display:block;font-size:.8rem;color:var(--muted);margin-top:4px}
+.pilihan.on{border-color:var(--blue);box-shadow:0 0 0 4px rgba(66,133,244,.15)}
 .field{display:grid;gap:6px;margin-bottom:12px}
 .field label{font-size:.88rem;font-weight:500}
-input[type=text],input[type=tel],input[type=file],textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+input[type=text],input[type=tel],input[type=file],input[type=password],textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
 input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(66,133,244,.15)}
 textarea{resize:vertical;min-height:70px}
-.btn-sm{padding:12px 18px;border-radius:12px;border:none;background:var(--ink);color:#fff;font-weight:600;cursor:pointer;white-space:nowrap}
-.btn-sm:disabled{opacity:.5}
-
+.cek{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted);cursor:pointer;margin-top:4px}
+.cek input{width:18px;height:18px}
 .rincian{background:#f7f9fd;border-radius:14px;padding:14px 16px;margin:16px 0;display:grid;gap:6px;font-size:.93rem}
 .rincian div{display:flex;justify-content:space-between;gap:10px}
 .rincian .total{font-size:1.1rem;padding-top:8px;border-top:1px dashed var(--line)}
 .rincian .total strong{color:var(--ink)}
-
-.tutorial{margin:14px 0;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.tutorial{margin:10px 0 14px;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
 .tutorial summary{cursor:pointer;font-weight:600;font-size:.92rem}
 .tutorial div{margin-top:10px;font-size:.9rem;color:var(--muted);display:grid;gap:8px}
 .tutorial b{color:var(--ink)}
-
 .agree{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;color:var(--muted);margin:10px 0 16px}
 .agree input{width:18px;height:18px;margin-top:3px;flex:none}
-
 .msg{min-height:1.3em;font-size:.9rem;margin-top:8px}
 .msg.ok{color:var(--green);font-weight:600}
 .msg.err{color:var(--red)}
 
+/* Tampilan pembayaran dan terima kasih */
 .view{max-width:720px;margin:0 auto;padding:clamp(28px,6vw,56px) 5vw}
 .card{background:var(--card);border-radius:24px;padding:clamp(22px,4vw,34px);box-shadow:var(--shadow);border:1px solid var(--line);display:grid;gap:14px;position:relative;overflow:hidden}
 .card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--green));background-size:200% 100%;animation:gradMove 5s linear infinite}
@@ -189,22 +203,27 @@ textarea{resize:vertical;min-height:70px}
 .timer{display:flex;justify-content:space-between;align-items:center;background:#fff7e6;border:1px solid #ffe0a3;border-radius:14px;padding:12px 16px}
 .timer strong{font-size:1.5rem;font-variant-numeric:tabular-nums;color:var(--red)}
 .qris{max-width:300px;width:100%;margin:0 auto;border-radius:16px;border:1px solid var(--line)}
-.total-besar{font-size:1.25rem}
+.blok-pin{border:1.5px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:10px;background:#fbfcff}
+.blok-pin h3{font-size:1rem}
+.pin{letter-spacing:.5em;text-align:center;font-size:1.4rem;font-weight:700}
 .check{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:2rem;color:#fff;background:linear-gradient(120deg,var(--blue),var(--green));animation:pop .6s cubic-bezier(.2,1.5,.4,1)}
 @keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
 .status-pill{display:inline-block;padding:8px 16px;border-radius:999px;background:#eef6ff;color:var(--blue);font-weight:600;font-size:.92rem}
 .praise{font-style:italic;color:var(--muted)}
+.aksi-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 
-footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);margin-top:20px}
-
-.promo-wrap{margin-top:12px;background:linear-gradient(90deg,#fff7e6,#ffffff 50%,#eef6ff)}
-.promo-tk .tk b{color:var(--red);font-weight:700}
+/* Ikuti kami */
 .sosmed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;max-width:720px;margin:0 auto}
 .sosmed{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;text-decoration:none;color:var(--ink);transition:transform .25s,box-shadow .25s}
 .sosmed:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
 .sosmed .logo-s{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#000;color:#fff;font-weight:700;font-size:.85rem;flex:none}
 .sosmed b{display:block;font-weight:600}
 .sosmed small{color:var(--muted)}
+
+/* Footer */
+footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);margin-top:20px;display:grid;gap:6px}
+footer a{color:var(--blue);font-weight:600;text-decoration:none}
+footer a:hover{text-decoration:underline}
 
 @media (max-width:560px){
   .topbar{padding:10px 14px}
@@ -213,6 +232,7 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
   .promo .btn-sm{width:100%}
   .custom{justify-content:center;text-align:center}
   .qty input{width:60px}
+  .pilihan-grid{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -238,10 +258,11 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
   </div>
   <nav class="nav">
     <a href="status.html">Cek Status</a>
-    <a href="#bantuan">Bantuan</a>
+    <a href="blog.html">Blog</a>
   </nav>
 </header>
 
+<!-- ============ BERANDA ============ -->
 <div id="vBeranda">
 
   <section class="hero" id="beranda">
@@ -313,36 +334,58 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     <p class="title-sub">Hal-hal yang sering ditanyakan sebelum memesan.</p>
     <div class="qna">
       <details open>
-        <summary>Apa itu kartu Google Review NFC?</summary>
-        <p>Kartu fisik yang bisa ditempel dengan HP atau dipindai QR Code-nya untuk langsung membuka halaman ulasan Google usaha Anda.</p>
+        <summary>Apa manfaat kartu Google Review bagi usaha saya?</summary>
+        <p>Ulasan Google bertambah tanpa pelanggan harus mencari nama usaha secara manual. Ulasan yang banyak dan positif membantu calon pelanggan memilih usaha Anda.</p>
       </details>
       <details>
-        <summary>Apa manfaatnya untuk usaha saya?</summary>
-        <p>Jumlah ulasan bertambah tanpa pelanggan harus mencari usaha Anda secara manual. Ulasan yang banyak dan positif membantu calon pelanggan memilih Anda.</p>
+        <summary>Bagaimana pelanggan memberi ulasan?</summary>
+        <p>Cukup tempelkan HP ke kartu atau pindai QR Code dengan kamera. Halaman ulasan Google langsung terbuka dalam hitungan detik.</p>
       </details>
       <details>
-        <summary>Apa keunggulannya?</summary>
-        <p>Tanpa aplikasi tambahan, tampilan profesional, dan dapat digunakan oleh hampir semua HP. Cocok dipasang di meja kasir, kemasan produk, atau area tunggu.</p>
+        <summary>Apakah pelanggan perlu mengunduh aplikasi?</summary>
+        <p>Tidak perlu. Kartu bekerja dengan HP yang sudah ada, tanpa aplikasi tambahan.</p>
       </details>
       <details>
-        <summary>Bagaimana cara menggunakannya?</summary>
-        <p>Ada dua cara. Pertama, tempelkan HP ke kartu. Kedua, pindai QR Code dengan kamera HP. Keduanya otomatis membuka halaman ulasan Google usaha Anda.</p>
+        <summary>Apa bedanya aktivasi langsung dan aktivasi sendiri?</summary>
+        <p>Aktivasi langsung: kami mengaktifkan kartu untuk Anda setelah pembayaran diverifikasi, cukup dengan nama usaha dan link toko. Aktivasi sendiri: Anda mengaktifkan kartu sendiri di halaman Aktivasi Kartu, dengan video panduan.</p>
       </details>
       <details>
-        <summary>Apa beda paket dan jumlah lain?</summary>
-        <p>Paket adalah susunan jumlah yang sudah kami tetapkan. Jumlah lain memungkinkan Anda menentukan sendiri jumlah pcs yang dibutuhkan.</p>
+        <summary>Bagaimana cara membuat PIN kartu?</summary>
+        <p>PIN 4 digit dibuat sendiri. Pada aktivasi langsung, PIN dibuat di halaman pembayaran. Pada aktivasi sendiri, PIN dibuat saat Anda mengaktifkan kartu.</p>
       </details>
+      <details>
+        <summary>Bagaimana jika lupa PIN atau nomor WhatsApp tidak aktif?</summary>
+        <p>Buka halaman Kelola Kartu, pilih Lupa PIN, lalu hubungi admin. Pemulihan dilakukan dengan verifikasi nomor pesanan dan nama pemesan, tanpa perlu nomor HP.</p>
+      </details>
+      <details>
+        <summary>Apakah kartu bisa dipindahkan ke bisnis lain?</summary>
+        <p>Bisa. Gunakan menu Reset Kartu di halaman Kelola Kartu dengan PIN dan konfirmasi. Setelah reset, kartu dapat diaktifkan kembali dari awal.</p>
+      </details>
+      <details>
+        <summary>Apakah data saya aman?</summary>
+        <p>Ya. PIN disimpan dalam bentuk hash satu arah yang tidak dapat dibaca siapa pun, termasuk admin. Admin tidak pernah meminta PIN melalui chat, telepon, atau email.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="wrap" id="sudah">
+    <h2 class="title">Sudah Punya Kartu?</h2>
+    <p class="title-sub">Aktifkan kartu, kelola PIN, atau pelajari cara reset dan pemulihan.</p>
+    <div class="aksi-grid">
+      <a class="aksi" href="aktivasi.html"><b>Aktivasi Kartu</b><span>Aktifkan kartu dengan PIN 4 digit dan panduan video.</span></a>
+      <a class="aksi" href="kelola-kartu.html"><b>Kelola Kartu</b><span>Ganti PIN, ubah nama usaha atau link, atau lupa PIN.</span></a>
+      <a class="aksi" href="blog.html"><b>Blog dan Panduan</b><span>Cara reset kartu, contoh tampilan kartu, dan tips ulasan.</span></a>
     </div>
   </section>
 
   <section class="wrap" id="bantuan">
     <div class="help">
       <h2 class="title" style="margin:0">Pusat Bantuan</h2>
-      <p class="muted">Ada data yang salah atau butuh bantuan? Hubungi admin kami melalui WhatsApp.</p>
+      <p class="muted">Ada data yang salah, nomor tidak aktif, atau lupa PIN? Hubungi admin kami melalui WhatsApp.</p>
       <a id="btnBantuan" class="btn" href="#" target="_blank" rel="noopener noreferrer">Hubungi Admin</a>
       <div class="warn">
         <strong>PERINGATAN</strong>
-        Pengajuan refund hanya dapat dilakukan melalui menu Cek Status. Lampirkan bukti transfer yang sesuai. Pengajuan tanpa bukti transfer yang sesuai tidak akan kami proses.
+        Admin tidak pernah meminta PIN melalui chat, telepon, atau email. Pengajuan refund hanya dapat dilakukan melalui menu Cek Status, dengan bukti transfer yang sesuai.
       </div>
     </div>
   </section>
@@ -353,13 +396,13 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
 
     <div class="booking">
       <fieldset id="fsForm">
+
         <h3 class="h3">1. Pilih paket atau jumlah</h3>
         <div class="paket-grid" id="paketGrid">
           <div class="skel paket-skel"></div>
           <div class="skel paket-skel"></div>
           <div class="skel paket-skel"></div>
         </div>
-
         <div class="custom" id="customBox">
           <div>
             <strong>Jumlah lain</strong>
@@ -387,86 +430,138 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
         </div>
 
         <form id="formPesan" novalidate>
-          <h3 class="h3">3. Data pengiriman</h3>
 
-          <details class="tutorial">
-            <summary>Cara mendapatkan link lokasi dan link usaha</summary>
-            <div>
-              <p><b>Link lokasi tujuan pengantaran:</b> buka Google Maps, tekan lama pada lokasi tujuan sampai muncul pin merah, pilih <b>Bagikan</b>, lalu pilih <b>Salin tautan</b>. Tempel tautan tersebut pada kolom Link lokasi.</p>
-              <p><b>Link usaha:</b> cari nama usaha Anda di Google Maps, tekan ikon usaha yang ingin diaktifkan, pastikan koordinatnya sudah tepat, pilih <b>Bagikan</b>, lalu pilih <b>Salin tautan</b>.</p>
-              <p>Tampilan menu dapat sedikit berbeda tergantung versi aplikasi Google Maps Anda.</p>
+          <h3 class="h3">3. Apakah Anda ingin kartu diaktifkan langsung oleh kami? *</h3>
+          <div class="pilihan-grid">
+            <label class="pilihan" id="opsiLangsung">
+              <input type="radio" name="jalur" value="langsung" id="jalurLangsung">
+              <b>Ya, aktifkan langsung</b>
+              <span>Kami mengaktifkan kartu untuk Anda. Isi nama usaha dan link toko.</span>
+            </label>
+            <label class="pilihan" id="opsiMandiri">
+              <input type="radio" name="jalur" value="mandiri" id="jalurMandiri">
+              <b>Tidak, saya aktivasi sendiri</b>
+              <span>Anda mengaktifkan kartu sendiri dengan PIN dan video panduan.</span>
+            </label>
+          </div>
+
+          <div id="blokData" class="hidden">
+            <h3 class="h3">4. Data pemesan dan pengiriman</h3>
+
+            <div class="field">
+              <label for="nama">Nama pemesan *</label>
+              <input type="text" id="nama" maxlength="60" autocomplete="name">
             </div>
-          </details>
+            <div class="field">
+              <label for="noWA">Nomor WhatsApp *</label>
+              <input type="tel" id="noWA" placeholder="628xxxxxxxxxx" maxlength="16" inputmode="numeric" autocomplete="tel">
+            </div>
 
-          <div class="field">
-            <label for="nama">Nama pemesan *</label>
-            <input type="text" id="nama" maxlength="60" autocomplete="name" required>
-          </div>
-          <div class="field">
-            <label for="namaUsaha">Nama usaha atau toko</label>
-            <input type="text" id="namaUsaha" maxlength="80" autocomplete="organization">
-          </div>
-          <div class="field">
-            <label for="noWA">Nomor WhatsApp *</label>
-            <input type="tel" id="noWA" placeholder="628xxxxxxxxxx" maxlength="16" inputmode="numeric" autocomplete="tel" required>
-          </div>
-          <div class="field">
-            <label for="linkUsaha">Link usaha (Google Maps)</label>
-            <input type="text" id="linkUsaha" placeholder="https://maps.app.goo.gl/..." maxlength="200" inputmode="url">
-          </div>
-          <div class="field">
-            <label for="linkLokasi">Link lokasi pengantaran (Google Maps) *</label>
-            <input type="text" id="linkLokasi" placeholder="https://maps.app.goo.gl/..." maxlength="200" inputmode="url" required>
-          </div>
-          <div class="field">
-            <label for="patokan">Patokan alamat *</label>
-            <textarea id="patokan" maxlength="250" placeholder="Contoh: depan Masjid Al-Ikhlas, pagar hitam, lantai 2" required></textarea>
+            <div id="blokLangsung" class="hidden">
+              <div class="field">
+                <label for="namaUsaha">Nama usaha atau toko *</label>
+                <input type="text" id="namaUsaha" maxlength="80" autocomplete="organization">
+              </div>
+              <div class="field">
+                <label for="linkToko">Link toko (Google Maps usaha) *</label>
+                <input type="text" id="linkToko" placeholder="https://maps.app.goo.gl/..." maxlength="200" inputmode="url" autocomplete="off">
+              </div>
+              <details class="tutorial">
+                <summary>Cara mendapatkan link toko</summary>
+                <div>
+                  <p>Cari nama usaha Anda di Google Maps, tekan ikon usaha, pastikan lokasinya sudah tepat, lalu pilih <b>Bagikan</b> dan <b>Salin tautan</b>.</p>
+                </div>
+              </details>
+            </div>
+
+            <div class="field">
+              <label for="linkLokasi">Link lokasi pengantaran (Google Maps) *</label>
+              <input type="text" id="linkLokasi" placeholder="https://maps.app.goo.gl/..." maxlength="200" inputmode="url" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="patokan">Patokan alamat *</label>
+              <textarea id="patokan" maxlength="250" placeholder="Contoh: depan Masjid Al-Ikhlas, pagar hitam, lantai 2"></textarea>
+            </div>
+            <details class="tutorial">
+              <summary>Cara mendapatkan link lokasi pengantaran</summary>
+              <div>
+                <p>Buka Google Maps, tekan lama pada lokasi tujuan sampai muncul pin merah, pilih <b>Bagikan</b>, lalu pilih <b>Salin tautan</b>.</p>
+              </div>
+            </details>
+
+            <label class="agree">
+              <input type="checkbox" id="setuju">
+              <span>Saya memahami bahwa pesanan diproses sesuai data dan bukti transfer yang sesuai, serta aturan refund yang berlaku.</span>
+            </label>
+
+            <div class="warn" style="margin-bottom:14px">
+              <strong>PERINGATAN PENTING</strong>
+              Apabila data tidak sesuai dengan data yang ditampilkan, mohon maaf, kami tidak akan memproses pesanan Anda. Apabila biaya atau bukti transfer teridentifikasi manipulasi, kami tidak akan memproses. Pembayaran hanya melalui QRIS yang tampil di website resmi ini.
+            </div>
+
+            <button type="submit" class="btn wide" id="btnPesan">Lanjut ke Pembayaran</button>
           </div>
 
-          <label class="agree">
-            <input type="checkbox" id="setuju">
-            <span>Saya memahami bahwa pesanan diproses sesuai data dan bukti transfer yang sesuai, serta aturan refund yang berlaku.</span>
-          </label>
-
-          <div class="warn" style="margin-bottom:14px">
-            <strong>PERINGATAN PENTING</strong>
-            Apabila data tidak sesuai dengan data yang ditampilkan, mohon maaf, kami tidak akan memproses pesanan Anda. Apabila biaya atau bukti transfer teridentifikasi manipulasi, kami tidak akan memproses. Kami hanya memproses sesuai bukti transfer dan data real-time yang kami dapatkan. Di luar itu, kami di luar tanggung jawab kami.
-          </div>
-
-          <button type="submit" class="btn wide" id="btnPesan">Lanjut ke Pembayaran</button>
           <p class="msg" id="msgForm" role="alert"></p>
         </form>
       </fieldset>
     </div>
   </section>
+
+  <section class="wrap hidden" id="ikuti" aria-label="Ikuti kami">
+    <h2 class="title">Ikuti Kami</h2>
+    <p class="title-sub">Info promo terbaru dan aktivitas kami ada di media sosial resmi.</p>
+    <div class="sosmed-grid" id="sosmedGrid"></div>
+  </section>
 </div>
 
+<!-- ============ PEMBAYARAN ============ -->
 <section class="view hidden" id="vBayar">
   <div class="card">
     <h2>Selesaikan Pembayaran</h2>
     <p>Kode pesanan: <strong id="bKode">-</strong></p>
+    <p class="muted small">Pilihan Anda: <strong id="bJalur">-</strong></p>
     <div class="timer">
       <span>Sisa waktu pembayaran</span>
       <strong id="timer">05:00</strong>
     </div>
     <p class="total-besar">Total: <strong id="bTotal">-</strong></p>
     <img class="qris" src="assets/qris.jpg" alt="Kode QRIS untuk pembayaran">
-    <p class="muted small">Scan QRIS, transfer sesuai total yang tertera, lalu unggah bukti transfer di bawah. Format JPG, PNG, WEBP, atau PDF, maksimal 20 MB.</p>
+    <p class="muted small">Scan QRIS dan transfer sesuai total yang tertera. Pembayaran hanya melalui QRIS ini.</p>
 
-    <div class="field">
+    <div id="blokPin" class="blok-pin hidden">
+      <h3>Buat PIN kartu (4 digit)</h3>
+      <p class="muted small">PIN digunakan untuk mengaktifkan dan mengelola kartu Anda. Jangan bagikan PIN kepada siapa pun. Admin tidak pernah meminta PIN.</p>
+      <form id="formPin" autocomplete="off" novalidate>
+        <div class="field">
+          <label for="pinBaru">PIN 4 digit *</label>
+          <input type="password" id="pinBaru" class="pin" inputmode="numeric" maxlength="4" autocomplete="new-password">
+        </div>
+        <div class="field">
+          <label for="pinUlang">Ulangi PIN *</label>
+          <input type="password" id="pinUlang" class="pin" inputmode="numeric" maxlength="4" autocomplete="new-password">
+        </div>
+        <label class="cek"><input type="checkbox" id="tampilPin"> Tampilkan PIN</label>
+        <button type="submit" class="btn wide" id="btnPin">Simpan PIN</button>
+        <p class="msg" id="msgPin" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div id="blokBukti" class="field">
       <label for="bukti">Bukti transfer *</label>
       <input type="file" id="bukti" accept="image/jpeg,image/png,image/webp,application/pdf">
+      <button type="button" class="btn wide" id="btnKirimBukti">Kirim Bukti Transfer</button>
     </div>
-    <button type="button" class="btn wide" id="btnKirimBukti">Kirim Bukti Transfer</button>
     <p class="msg" id="msgBayar" role="alert"></p>
 
     <div class="warn">
       <strong>PERINGATAN PENTING</strong>
-      Waktu pembayaran 5 menit. Jika waktu habis, pesanan dibatalkan otomatis. Apabila data tidak sesuai dengan data yang ditampilkan, kami tidak akan memproses pesanan Anda. Apabila bukti transfer teridentifikasi manipulasi, kami tidak akan memproses.
+      Waktu pembayaran 5 menit. Jika waktu habis, pesanan dibatalkan otomatis. Pembayaran hanya melalui QRIS di website resmi ini. Admin tidak pernah meminta transfer ke rekening pribadi.
     </div>
   </div>
 </section>
 
+<!-- ============ TERIMA KASIH ============ -->
 <section class="view hidden" id="vTerima">
   <div class="card center">
     <div class="check" aria-hidden="true">&#10003;</div>
@@ -475,23 +570,20 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     <span class="status-pill" id="tStatus">-</span>
     <p id="tPesan" class="muted"></p>
     <p class="praise">Semoga usaha Anda semakin lancar dan dipercaya pelanggan. Setiap ulasan positif membawa usaha Anda lebih dekat ke pelanggan baru.</p>
-    <a class="btn ghost" href="status.html">Lacak Pesanan</a>
+    <div class="aksi-row">
+      <a class="btn ghost" href="status.html" id="linkLacak">Lacak Pesanan</a>
+      <a class="btn ghost hidden" href="aktivasi.html" id="linkAktivasi">Aktivasi Kartu</a>
+    </div>
     <div class="warn" style="text-align:left;width:100%">
       <strong>PERINGATAN PENTING</strong>
-      Apabila data tidak sesuai dengan data yang ditampilkan, mohon maaf, kami tidak akan memproses pesanan Anda. Apabila biaya atau bukti transfer teridentifikasi manipulasi, kami tidak akan memproses. Kami hanya memproses sesuai bukti transfer dan data real-time yang kami dapatkan. Di luar itu, kami di luar tanggung jawab kami. Terima kasih atas perhatian Anda.
+      Apabila data tidak sesuai dengan data yang ditampilkan, mohon maaf, kami tidak akan memproses pesanan Anda. Apabila biaya atau bukti transfer teridentifikasi manipulasi, kami tidak akan memproses. Kami tidak pernah meminta PIN melalui chat, telepon, atau email.
     </div>
   </div>
 </section>
 
-<section class="wrap hidden" id="ikuti" aria-label="Ikuti kami">
-  <h2 class="title">Ikuti Kami</h2>
-  <p class="title-sub">Info promo terbaru dan aktivitas kami ada di media sosial resmi.</p>
-  <div class="sosmed-grid" id="sosmedGrid"></div>
-  <p class="muted small" style="text-align:center;margin-top:18px">Pembayaran hanya melalui QRIS yang tampil di website ini.</p>
-</section>
-
 <footer>
-  <p>&copy; <span id="tahun"></span> ReviewCard Makassar. Semua hak dilindungi.</p>
+  <p>Dibuat oleh <a href="https://www.tiktok.com/@raymond.builds" target="_blank" rel="noopener noreferrer">@raymond.builds</a></p>
+  <p>&copy; <span id="tahun"></span> ReviewCard Makassar. Semua hak dilindungi. Pemesanan dan pembayaran hanya melalui website resmi ini.</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -524,7 +616,7 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     preorder: "Pre-order, menunggu stok ready",
     menunggu_pembayaran: "Menunggu pembayaran",
     bukti_diterima: "Bukti diterima, sedang diverifikasi",
-    diaktivasi: "Sedang diaktivasi, akan diantar",
+    diaktivasi: "Sedang diaktivasi",
     dikirim: "Sedang dikirim",
     selesai: "Selesai",
     dibatalkan: "Dibatalkan",
@@ -534,14 +626,31 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
 
   const PESAN_ERR = {
     TOKO_TUTUP_MANUAL: "Mohon maaf, toko sedang tidak menerima pesanan.",
-    PROMO_TIDAK_VALID: "Kode promo tidak valid.",
+    JALUR_TIDAK_VALID: "Pilihan aktivasi belum valid. Silakan pilih ulang.",
     NAMA_TIDAK_VALID: "Nama pemesan minimal 3 karakter.",
     NOMOR_WA_TIDAK_VALID: "Nomor WhatsApp harus diawali 62 dan berisi 10 sampai 15 angka.",
-    LINK_LOKASI_TIDAK_VALID: "Link lokasi harus berasal dari Google Maps.",
-    LINK_USAHA_TIDAK_VALID: "Link usaha harus berasal dari Google Maps.",
+    LINK_LOKASI_TIDAK_VALID: "Link lokasi pengantaran harus berasal dari Google Maps.",
+    PATOKAN_TIDAK_VALID: "Patokan alamat minimal 10 karakter.",
+    NAMA_USAHA_WAJIB: "Nama usaha wajib diisi untuk aktivasi langsung.",
+    LINK_TOKO_WAJIB: "Link toko wajib diisi untuk aktivasi langsung, dari Google Maps.",
+    LINK_TOKO_TIDAK_VALID: "Link toko harus berasal dari Google Maps.",
+    PROMO_TIDAK_VALID: "Kode promo tidak valid atau sudah berakhir.",
     JUMLAH_TIDAK_VALID: "Jumlah pesanan tidak valid.",
     PAKET_TIDAK_VALID: "Paket yang dipilih tidak valid.",
+  };
+
+  const PESAN_PIN = {
+    PIN_FORMAT_SALAH: "PIN harus tepat 4 digit angka.",
+    PIN_TERLALU_MUDAH: "PIN terlalu mudah ditebak. Gunakan angka lain.",
+    PIN_TIDAK_BISA_DIBUAT: "Waktu pembayaran sudah habis atau pesanan tidak lagi menunggu pembayaran.",
+    PESANAN_TIDAK_DITEMUKAN: "Pesanan tidak ditemukan. Periksa kembali data Anda.",
+    PIN_TIDAK_DIPERLUKAN: "Pesanan ini tidak memerlukan PIN pada tahap pembayaran.",
+  };
+
+  const PESAN_BUKTI = {
+    PIN_BELUM_DIBUAT: "Buat PIN 4 digit terlebih dahulu sebelum mengunggah bukti.",
     TIDAK_DAPAT_MEMBAYAR: "Waktu pembayaran sudah habis atau pesanan tidak dapat dibayar.",
+    BUKTI_TIDAK_VALID: "Berkas bukti tidak valid. Silakan unggah ulang.",
   };
 
   const st = {
@@ -553,17 +662,28 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     promo: null,
     kode: null,
     noWA: null,
+    jalur: null,
     total: 0,
     batas: null,
     timerId: null,
     pollId: null,
   };
 
-  const tampilPesan = (el, teks, tipe = "") => { el.textContent = teks; el.className = "msg " + tipe; };
+  const tulis = (id, teks, tipe = "") => {
+    const el = $(id);
+    el.textContent = teks;
+    el.className = "msg " + tipe;
+  };
+
   const pesanError = (e) => {
     const m = (e && e.message) || "";
     for (const k in PESAN_ERR) if (m.includes(k)) return PESAN_ERR[k];
     return "Terjadi kendala. Silakan coba lagi.";
+  };
+
+  const tampilView = (id) => {
+    for (const v of ["vBeranda", "vBayar", "vTerima"]) $(v).classList.toggle("hidden", v !== id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   /* ===== LOADER ===== */
@@ -610,24 +730,23 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     $("stokTampil").classList.remove("skel");
     $("stokTampil").textContent = s.stok_ready;
     const banner = $("banner");
-    const fs = $("fsForm");
     const btn = $("btnPesan");
 
     if (s.status_toko === "tutup_manual") {
       banner.classList.remove("hidden");
       $("bannerJudul").textContent = "Mohon maaf, toko sedang sibuk";
-      $("bannerIsi").textContent = "Saat ini kami sedang melayani pesanan yang sudah masuk dan belum dapat menerima pesanan baru hari ini. Terima kasih atas kesabaran dan pengertian Anda. Silakan kembali lagi nanti.";
-      fs.disabled = true;
+      $("bannerIsi").textContent = "Saat ini kami sedang melayani pesanan yang sudah masuk dan belum dapat menerima pesanan baru. Terima kasih atas kesabaran dan pengertian Anda. Silakan kembali lagi nanti.";
+      $("fsForm").disabled = true;
       btn.textContent = "Lanjut ke Pembayaran";
     } else if (s.status_toko === "tutup_otomatis") {
       banner.classList.remove("hidden");
       $("bannerJudul").textContent = "Mohon maaf, produk sedang tidak ready";
       $("bannerIsi").textContent = "Stok kami sedang habis. Anda tetap dapat memesan melalui Pre-order. Pesanan akan kami prioritaskan saat stok ready, dan pembayaran dilakukan setelah stok tersedia. Mohon maaf atas ketidaknyamanannya.";
-      fs.disabled = false;
+      $("fsForm").disabled = false;
       btn.textContent = "Pesan Pre-order";
     } else {
       banner.classList.add("hidden");
-      fs.disabled = false;
+      $("fsForm").disabled = false;
       btn.textContent = "Lanjut ke Pembayaran";
     }
   }
@@ -713,35 +832,51 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
 
   /* ===== PROMO ===== */
   $("kodePromo").addEventListener("input", () => {
-    if (st.promo) { st.promo = null; tampilPesan($("msgPromo"), ""); renderHarga(); }
+    if (st.promo) { st.promo = null; tulis("msgPromo", ""); renderHarga(); }
   });
 
   $("btnPromo").addEventListener("click", async () => {
     const kode = $("kodePromo").value.trim().toUpperCase();
     if (!kode) {
       st.promo = null;
-      tampilPesan($("msgPromo"), "Masukkan kode promo terlebih dahulu.", "err");
+      tulis("msgPromo", "Masukkan kode promo terlebih dahulu.", "err");
       renderHarga();
       return;
     }
     const { data, error } = await sb.rpc("cek_promo", { p_kode: kode });
     if (error || data !== true) {
       st.promo = null;
-      tampilPesan($("msgPromo"), "Kode promo tidak valid.", "err");
+      tulis("msgPromo", "Kode promo tidak valid atau sudah berakhir.", "err");
     } else {
       st.promo = kode;
-      tampilPesan($("msgPromo"), "Kode promo berhasil diterapkan.", "ok");
+      tulis("msgPromo", "Kode promo berhasil diterapkan.", "ok");
     }
     renderHarga();
   });
 
+  /* ===== PILIHAN JALUR ===== */
+  function terapkanJalur() {
+    const r = document.querySelector('input[name="jalur"]:checked');
+    const v = r ? r.value : "";
+    $("opsiLangsung").classList.toggle("on", v === "langsung");
+    $("opsiMandiri").classList.toggle("on", v === "mandiri");
+    $("blokData").classList.toggle("hidden", v === "");
+    $("blokLangsung").classList.toggle("hidden", v !== "langsung");
+  }
+
+  for (const r of document.querySelectorAll('input[name="jalur"]')) {
+    r.addEventListener("change", terapkanJalur);
+  }
+
   /* ===== VALIDASI FORM ===== */
   function ambilForm() {
+    const r = document.querySelector('input[name="jalur"]:checked');
     return {
+      jalur: r ? r.value : "",
       nama: $("nama").value.trim(),
-      usaha: $("namaUsaha").value.trim(),
       wa: $("noWA").value.trim(),
-      linkUsaha: $("linkUsaha").value.trim(),
+      usaha: $("namaUsaha").value.trim(),
+      linkToko: $("linkToko").value.trim(),
       linkLokasi: $("linkLokasi").value.trim(),
       patokan: $("patokan").value.trim(),
       setuju: $("setuju").checked,
@@ -749,13 +884,26 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
   }
 
   function validasi(f) {
+    if (!f.jalur) return "Pilih apakah Anda ingin kartu diaktifkan langsung oleh kami.";
     if (f.nama.length < 3) return "Nama pemesan minimal 3 karakter.";
     if (!/^62\d{8,13}$/.test(f.wa)) return "Nomor WhatsApp harus diawali 62 dan berisi 10 sampai 15 angka.";
+    if (f.jalur === "langsung") {
+      if (f.usaha.length < 2) return "Nama usaha wajib diisi untuk aktivasi langsung.";
+      if (!REGEX_MAPS.test(f.linkToko)) return "Link toko wajib diisi dan harus berasal dari Google Maps.";
+    }
     if (!REGEX_MAPS.test(f.linkLokasi)) return "Link lokasi pengantaran harus berasal dari Google Maps.";
-    if (f.linkUsaha && !REGEX_MAPS.test(f.linkUsaha)) return "Link usaha harus berasal dari Google Maps.";
     if (f.patokan.length < 10) return "Patokan alamat minimal 10 karakter agar kurir mudah menemukan lokasi.";
     if (!f.setuju) return "Mohon centang persetujuan terlebih dahulu.";
     return null;
+  }
+
+  function resetFormulir() {
+    $("formPesan").reset();
+    st.promo = null;
+    $("kodePromo").value = "";
+    tulis("msgPromo", "");
+    renderHarga();
+    terapkanJalur();
   }
 
   /* ===== PESAN ===== */
@@ -763,62 +911,74 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     e.preventDefault();
     const f = ambilForm();
     const salah = validasi(f);
-    if (salah) { tampilPesan($("msgForm"), salah, "err"); return; }
+    if (salah) return tulis("msgForm", salah, "err");
 
     const p = st.pilihan;
     const btn = $("btnPesan");
     btn.disabled = true;
-    tampilPesan($("msgForm"), "Memproses pesanan...", "");
+    tulis("msgForm", "Memproses pesanan...", "");
 
     const { data, error } = await sb.rpc("buat_pesanan", {
       p_nama: f.nama,
-      p_nama_usaha: f.usaha || null,
+      p_nama_usaha: f.jalur === "langsung" ? f.usaha : null,
       p_no_wa: f.wa,
-      p_link_usaha: f.linkUsaha || null,
+      p_link_usaha: f.jalur === "langsung" ? f.linkToko : null,
       p_link_lokasi: f.linkLokasi,
       p_patokan: f.patokan,
       p_kode_paket: p.tipe === "paket" ? p.kode : null,
       p_jumlah: p.tipe === "custom" ? p.jumlah : null,
       p_kode_promo: st.promo,
+      p_jalur: f.jalur,
     });
 
     btn.disabled = false;
     if (error || !data || !data.length) {
-      tampilPesan($("msgForm"), pesanError(error), "err");
-      return;
+      return tulis("msgForm", pesanError(error), "err");
     }
 
     const row = data[0];
     st.kode = row.kode_pesanan;
     st.noWA = f.wa;
+    st.jalur = f.jalur;
     st.total = row.total;
-    tampilPesan($("msgForm"), "");
+    tulis("msgForm", "");
+    resetFormulir();
 
     if (row.tipe === "ready") {
       const r = await ambilStatus();
       st.batas = r && r.batas_bayar ? r.batas_bayar : new Date(Date.now() + DURASI_BAYAR_MS).toISOString();
       tampilBayar();
     } else {
-      tampilTerima(false);
+      tampilTerima("preorder");
     }
   });
 
-  /* ===== TAMPILAN HALAMAN ===== */
-  function tampilView(id) {
-    for (const v of ["vBeranda", "vBayar", "vTerima"]) {
-      $(v).classList.toggle("hidden", v !== id);
-    }
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
+  /* ===== HALAMAN PEMBAYARAN ===== */
   function tampilBayar() {
+    const langsung = st.jalur === "langsung";
     $("bKode").textContent = st.kode;
     $("bTotal").textContent = rp.format(st.total);
-    $("btnKirimBukti").disabled = false;
-    $("bukti").disabled = false;
-    tampilPesan($("msgBayar"), "");
+    $("bJalur").textContent = langsung ? "Aktivasi langsung oleh kami" : "Aktivasi sendiri oleh Anda";
+
+    $("blokPin").classList.toggle("hidden", !langsung);
+    $("formPin").classList.remove("hidden");
+    $("pinBaru").value = "";
+    $("pinUlang").value = "";
+    tulis("msgPin", "");
+
+    for (const id of ["btnPin", "pinBaru", "pinUlang"]) $(id).disabled = !langsung;
+    for (const id of ["btnKirimBukti", "bukti"]) $(id).disabled = langsung;
+
+    tulis("msgBayar", langsung
+      ? "Buat PIN 4 digit terlebih dahulu. Unggah bukti transfer aktif setelah PIN tersimpan."
+      : "Lakukan pembayaran, lalu unggah bukti transfer di bawah.", "");
+
     mulaiTimer(new Date(st.batas).getTime());
     tampilView("vBayar");
+  }
+
+  function nonaktifkanBayar() {
+    for (const id of ["btnPin", "pinBaru", "pinUlang", "btnKirimBukti", "bukti"]) $(id).disabled = true;
   }
 
   function mulaiTimer(tenggat) {
@@ -828,9 +988,8 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
       if (sisa <= 0) {
         clearInterval(st.timerId);
         $("timer").textContent = "00:00";
-        $("btnKirimBukti").disabled = true;
-        $("bukti").disabled = true;
-        tampilPesan($("msgBayar"), "Waktu pembayaran habis. Pesanan dibatalkan otomatis. Silakan lakukan pemesanan ulang.", "err");
+        nonaktifkanBayar();
+        tulis("msgBayar", "Waktu pembayaran habis. Pesanan dibatalkan otomatis. Silakan lakukan pemesanan ulang.", "err");
         return;
       }
       const m = Math.floor(sisa / 60000);
@@ -841,43 +1000,107 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     st.timerId = setInterval(tick, 1000);
   }
 
+  /* ===== PIN (jalur langsung) ===== */
+  ["pinBaru", "pinUlang"].forEach((id) => {
+    $(id).addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4);
+    });
+  });
+
+  $("tampilPin").addEventListener("change", (e) => {
+    const tipe = e.target.checked ? "text" : "password";
+    $("pinBaru").type = tipe;
+    $("pinUlang").type = tipe;
+  });
+
+  $("formPin").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const pin = $("pinBaru").value;
+    const ulang = $("pinUlang").value;
+    $("pinBaru").value = "";
+    $("pinUlang").value = "";
+
+    if (!/^[0-9]{4}$/.test(pin)) return tulis("msgPin", PESAN_PIN.PIN_FORMAT_SALAH, "err");
+    if (pin !== ulang) return tulis("msgPin", "Konfirmasi PIN tidak sama. Silakan ulangi.", "err");
+
+    const btn = $("btnPin");
+    btn.disabled = true;
+    tulis("msgPin", "Menyimpan PIN...", "");
+
+    const { data, error } = await sb.rpc("set_pin", { p_kode: st.kode, p_no_wa: st.noWA, p_pin: pin });
+    btn.disabled = false;
+
+    if (error) return tulis("msgPin", "Terjadi kendala. Silakan coba lagi.", "err");
+
+    if (data === "PIN_TERSIMPAN") {
+      $("formPin").classList.add("hidden");
+      tulis("msgPin", "PIN berhasil disimpan. Simpan PIN Anda dengan aman.", "ok");
+      $("btnKirimBukti").disabled = false;
+      $("bukti").disabled = false;
+      tulis("msgBayar", "Silakan unggah bukti transfer.", "ok");
+      return;
+    }
+
+    if (data === "PIN_SUDAH_ADA") {
+      $("formPin").classList.add("hidden");
+      tulis("msgPin", "PIN untuk pesanan ini sudah tersimpan. Gunakan PIN yang sudah Anda buat.", "ok");
+      $("btnKirimBukti").disabled = false;
+      $("bukti").disabled = false;
+      return;
+    }
+
+    tulis("msgPin", PESAN_PIN[data] || "Terjadi kendala. Silakan coba lagi.", "err");
+  });
+
   /* ===== KIRIM BUKTI ===== */
   $("btnKirimBukti").addEventListener("click", async () => {
     const file = $("bukti").files[0];
-    if (!file) return tampilPesan($("msgBayar"), "Pilih file bukti transfer terlebih dahulu.", "err");
-    if (!TIPE_BUKTI[file.type]) return tampilPesan($("msgBayar"), "Format harus JPG, PNG, WEBP, atau PDF.", "err");
-    if (file.size > MAKS_BUKTI) return tampilPesan($("msgBayar"), "Ukuran file melebihi 20 MB.", "err");
+    if (!file) return tulis("msgBayar", "Pilih file bukti transfer terlebih dahulu.", "err");
+    if (!TIPE_BUKTI[file.type]) return tulis("msgBayar", "Format harus JPG, PNG, WEBP, atau PDF.", "err");
+    if (file.size > MAKS_BUKTI) return tulis("msgBayar", "Ukuran file melebihi 20 MB.", "err");
 
     const btn = $("btnKirimBukti");
     btn.disabled = true;
-    tampilPesan($("msgBayar"), "Mengunggah bukti transfer...", "");
+    tulis("msgBayar", "Mengunggah bukti transfer...", "");
 
     const path = `${st.kode}/${Date.now()}.${TIPE_BUKTI[file.type]}`;
     const up = await sb.storage.from("bukti-bayar").upload(path, file, { contentType: file.type, upsert: false });
     if (up.error) {
       btn.disabled = false;
-      return tampilPesan($("msgBayar"), "Gagal mengunggah bukti. Periksa koneksi lalu coba lagi.", "err");
+      return tulis("msgBayar", "Gagal mengunggah bukti. Periksa koneksi lalu coba lagi.", "err");
     }
 
-    const { error } = await sb.rpc("kirim_bukti", { p_kode: st.kode, p_no_wa: st.noWA, p_path: path });
-    if (error) {
-      btn.disabled = false;
-      return tampilPesan($("msgBayar"), pesanError(error), "err");
-    }
+    const { data, error } = await sb.rpc("kirim_bukti", { p_kode: st.kode, p_no_wa: st.noWA, p_path: path });
+    btn.disabled = false;
 
-    clearInterval(st.timerId);
-    tampilTerima(true);
+    if (error) return tulis("msgBayar", "Terjadi kendala. Silakan coba lagi.", "err");
+    if (data === "BUKTI_DITERIMA") {
+      clearInterval(st.timerId);
+      return tampilTerima("bayar");
+    }
+    tulis("msgBayar", PESAN_BUKTI[data] || "Terjadi kendala. Silakan coba lagi.", "err");
   });
 
   /* ===== TERIMA KASIH ===== */
-  async function tampilTerima(sudahBayar) {
+  function tampilTerima(mode) {
+    const langsung = st.jalur === "langsung";
     $("tKode").textContent = st.kode;
-    $("tJudul").textContent = sudahBayar ? "Terima kasih telah membayar" : "Terima kasih telah memesan";
-    $("tPesan").textContent = sudahBayar
-      ? "Pembayaran Anda sedang kami verifikasi sesuai bukti transfer dan data real-time. Pesanan Anda akan diproses untuk aktivasi dan pengantaran."
-      : "Pesanan pre-order Anda sudah tercatat dan akan diprioritaskan saat stok ready. Pembayaran dilakukan setelah stok tersedia, dan dapat dilanjutkan melalui menu Cek Status.";
+
+    if (mode === "bayar") {
+      $("tJudul").textContent = "Terima kasih telah membayar";
+      $("tPesan").textContent = langsung
+        ? "Pembayaran Anda sedang kami verifikasi. Setelah diverifikasi, kami akan mengaktifkan kartu Anda. Simpan PIN Anda dengan aman."
+        : "Pembayaran Anda sedang kami verifikasi. Setelah diverifikasi, aktifkan kartu Anda melalui halaman Aktivasi Kartu dengan PIN 4 digit yang Anda buat sendiri.";
+    } else {
+      $("tJudul").textContent = "Terima kasih telah memesan";
+      $("tPesan").textContent = "Pesanan pre-order Anda sudah tercatat dan akan diprioritaskan saat stok siap. Pembayaran dilakukan setelah stok tersedia, dan kami akan menginformasikannya kepada Anda.";
+    }
+
+    $("linkAktivasi").classList.toggle("hidden", langsung);
+    $("tStatus").textContent = "-";
     tampilView("vTerima");
-    await perbaruiStatusTerima();
+
+    perbaruiStatusTerima();
     clearInterval(st.pollId);
     st.pollId = setInterval(perbaruiStatusTerima, 30000);
   }
@@ -923,7 +1146,7 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     ticker.append(...buat(), ...buat());
   }
 
-  /* ===== PROMO BERJANGKA (treadmill) ===== */
+  /* ===== TREADMILL PROMO ===== */
   const fmtTanggal = (iso) =>
     new Date(iso).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
 
@@ -934,7 +1157,7 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     kode.textContent = p.kode;
     const info = document.createElement("em");
     const sampai = p.berakhir ? "berlaku s.d. " + fmtTanggal(p.berakhir) : "tanpa batas waktu";
-    info.textContent = `hemat ${rp.format(p.diskon_paket)}/pcs paket · ${rp.format(p.diskon_normal)}/pcs custom · ${sampai}`;
+    info.textContent = `hemat ${rp.format(p.diskon_paket)}/pcs paket · ${rp.format(p.diskon_normal)}/pcs jumlah lain · ${sampai}`;
     span.append(kode, document.createTextNode(" · "), info);
     if (p.keterangan) span.append(document.createTextNode(" · " + p.keterangan));
     return span;
@@ -964,7 +1187,7 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     t.append(...bagian(), ...bagian());
   }
 
-  /* ===== SOSMED (Ikuti Kami) ===== */
+  /* ===== IKUTI KAMI ===== */
   async function muatSosmed() {
     const { data, error } = await sb.from("sosmed")
       .select("platform,akun,url").eq("aktif", true).order("urutan");
@@ -1004,11 +1227,14 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
     $("tahun").textContent = new Date().getFullYear();
     $("btnBantuan").href =
       `https://wa.me/${CONFIG.adminWA}?text=` +
-      encodeURIComponent("Halo Admin, saya butuh bantuan terkait pesanan Kartu Google Review. Kode pesanan saya: ");
+      encodeURIComponent("Halo Admin, saya butuh bantuan terkait pesanan atau kartu Google Review.");
 
-    // Loader tampil sampai data awal siap, atau berhenti paksa setelah batas waktu
+    terapkanJalur();
+    renderHarga();
+
     Promise.allSettled([muatToko(), muatPaket(), muatAktivitas(), muatPromo(), muatSosmed()])
       .then(() => selesaiLoader());
+
     setTimeout(() => {
       if (!loaderSelesai) {
         $("ldPesan").textContent = "Koneksi lambat, data sedang dimuat...";
@@ -1021,7 +1247,6 @@ footer{text-align:center;padding:26px 5vw;color:var(--muted);font-size:.85rem;bo
       .on("postgres_changes", { event: "*", schema: "public", table: "paket" }, muatPaket)
       .subscribe();
 
-    // Stok cadangan: cek ulang stok setiap 30 detik jika realtime terputus
     setInterval(muatToko, 30000);
     setInterval(muatAktivitas, 60000);
     setInterval(muatPromo, 60000);
