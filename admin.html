@@ -2,80 +2,72 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Admin | ReviewCard Makassar</title>
 <style>
-:root{
-  --blue:#4285F4;--red:#EA4335;--yellow:#FBBC05;--green:#34A853;
-  --ink:#1f2330;--muted:#6b7280;--bg:#f5f7fb;--card:#fff;--line:#e5e9f2;
-}
+:root{--blue:#4285F4;--red:#EA4335;--yellow:#FBBC05;--green:#34A853;--ink:#1f2330;--muted:#6b7280;--bg:#f5f7fb;--card:#fff;--line:#e5e9f2}
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;min-height:100vh;min-height:100dvh;padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);overflow-x:hidden}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;min-height:100vh;overflow-x:hidden}
 .hidden{display:none!important}
 .muted{color:var(--muted)}
 .small{font-size:.85rem}
-
-.lock{min-height:100dvh;display:grid;place-items:center;padding:20px}
-.lock-card{width:100%;max-width:370px;background:var(--card);border-radius:20px;padding:32px 26px;text-align:center;display:grid;gap:12px;position:relative;overflow:hidden;box-shadow:0 20px 50px -24px rgba(31,35,48,.35)}
-.lock-card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--green));background-size:200% 100%;animation:flow 5s linear infinite}
-@keyframes flow{from{background-position:0 0}to{background-position:200% 0}}
-.lock-icon{font-size:2rem}
-.lock-card h1{font-size:1.4rem}
-input,select{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);min-width:0;width:100%}
+input,select,textarea{font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);width:100%;min-width:0}
 input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(66,133,244,.18)}
-button{font:inherit;font-weight:600;cursor:pointer;padding:10px 16px;border-radius:10px;border:none;background:var(--ink);color:#fff;transition:opacity .2s;white-space:nowrap}
-button:hover{opacity:.85}
+button{font:inherit;font-weight:600;cursor:pointer;padding:10px 14px;border-radius:10px;border:none;background:var(--ink);color:#fff;white-space:nowrap}
 button:disabled{opacity:.5;cursor:not-allowed}
 button.danger{background:var(--red)}
-button.ghost{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
 button.ok{background:var(--green)}
+button.ghost{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
 .msg{min-height:1.3em;font-size:.9rem}
 .msg.err{color:var(--red)}
 .msg.ok{color:var(--green)}
-
+.lock{min-height:100vh;display:grid;place-items:center;padding:20px}
+.lock-card{width:100%;max-width:370px;background:#fff;border-radius:20px;padding:30px 26px;display:grid;gap:12px;text-align:center;border-top:5px solid var(--blue);box-shadow:0 20px 50px -24px rgba(31,35,48,.35)}
 .dash{max-width:960px;margin:0 auto;padding:14px;display:grid;gap:14px}
-.bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;background:var(--card);padding:14px 18px;border-radius:16px;border:1px solid var(--line);position:sticky;top:0;z-index:10}
-.bar strong{font-size:1.05rem}
-.bar-actions{display:flex;gap:8px;flex-wrap:wrap}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;position:relative;overflow:hidden}
-.card h2{font-size:1.05rem}
+.bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:16px;border:1px solid var(--line);position:sticky;top:0;z-index:10}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .row>*{flex:0 1 auto}
-.row input{flex:1 1 140px;max-width:220px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px}
+.card h2{font-size:1.05rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
 .stat{border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
 .stat b{display:block;font-size:1.4rem}
 .stat span{font-size:.8rem;color:var(--muted)}
-.pill{display:inline-block;padding:4px 12px;border-radius:999px;background:#eef6ff;color:var(--blue);font-weight:600;font-size:.85rem}
+.pill{display:inline-block;padding:4px 12px;border-radius:999px;background:#eef6ff;color:var(--blue);font-weight:600;font-size:.82rem}
 .pill.tutup{background:#fff0ee;color:var(--red)}
+.pill.ok{background:#eaf7ef;color:var(--green)}
 .list{display:grid;gap:12px}
-.item{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:8px}
+.item{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px}
 .item-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;align-items:center}
 .item a{color:var(--blue);font-size:.9rem}
-.filter{max-width:260px}
-.paket-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:8px}
+.kv{display:grid;gap:6px;font-size:.92rem}
+.kv div{display:grid;grid-template-columns:120px 1fr;gap:8px}
+.kv span{color:var(--muted)}
+.kv b{font-weight:600;overflow-wrap:anywhere}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
 .grid2 label{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}
-
+.paket-row,.promo-row{display:grid;gap:8px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.paket-row{grid-template-columns:1fr auto auto;align-items:center}
+.filter{max-width:260px}
+.catatan-kecil{font-size:.85rem;color:var(--muted)}
 @media (max-width:560px){
   .bar{position:static}
   .paket-row{grid-template-columns:1fr}
-  .row input{max-width:none}
+  .kv div{grid-template-columns:1fr}
   .row>button{flex:1 1 auto}
 }
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 
 <section id="layarKunci" class="lock">
   <form id="fLogin" class="lock-card" autocomplete="off">
-    <div class="lock-icon" aria-hidden="true">&#128274;</div>
-    <h1>Area Admin</h1>
+    <div aria-hidden="true" style="font-size:2rem">&#128274;</div>
+    <h1 style="font-size:1.4rem">Area Admin</h1>
     <p class="muted small">Masukkan password untuk membuka dashboard.</p>
     <input type="password" id="pw" placeholder="Password" required maxlength="128" autocomplete="current-password">
     <button type="submit" id="btnLogin">Masuk</button>
@@ -84,9 +76,10 @@ button.ok{background:var(--green)}
 </section>
 
 <main id="dashboard" class="dash hidden">
+
   <header class="bar">
     <strong>Dashboard Admin</strong>
-    <div class="bar-actions">
+    <div class="row">
       <button id="btnNotif" type="button" class="ghost">Aktifkan notifikasi</button>
       <button id="btnKeluar" type="button" class="danger">Keluar</button>
     </div>
@@ -110,7 +103,7 @@ button.ok{background:var(--green)}
       <button id="btnBuka" type="button" class="ok">Buka toko</button>
       <button id="btnTutup" type="button" class="danger">Tutup manual</button>
     </div>
-    <p class="muted small">Stok nol akan menutup toko otomatis. Stok yang diisi kembali akan membuka toko otomatis.</p>
+    <p class="catatan-kecil">Stok nol menutup toko otomatis. Stok yang diisi kembali membuka toko otomatis.</p>
     <div class="row">
       <input id="stokInput" type="number" min="0" max="10000" step="1" inputmode="numeric" aria-label="Jumlah stok ready">
       <button id="btnStok" type="button">Simpan stok</button>
@@ -123,7 +116,7 @@ button.ok{background:var(--green)}
     <div class="grid2">
       <label>Harga satuan (Rp)<input id="hHarga" type="number" min="0" step="1000" inputmode="numeric"></label>
       <label>Diskon kode paket (Rp per pcs)<input id="hDiskonPaket" type="number" min="0" step="1000" inputmode="numeric"></label>
-      <label>Diskon kode custom (Rp per pcs)<input id="hDiskonNormal" type="number" min="0" step="1000" inputmode="numeric"></label>
+      <label>Diskon kode jumlah lain (Rp per pcs)<input id="hDiskonNormal" type="number" min="0" step="1000" inputmode="numeric"></label>
     </div>
     <div class="row"><button id="btnHarga" type="button">Simpan harga</button></div>
     <p id="msgHarga" class="msg"></p>
@@ -136,7 +129,7 @@ button.ok{background:var(--green)}
 
   <section class="card">
     <h2>Kode promo</h2>
-    <p class="muted small">Kode yang aktif dan belum berakhir tampil di treadmill beranda. Kosongkan masa berlaku untuk tanpa batas waktu.</p>
+    <p class="catatan-kecil">Kode aktif dan belum berakhir tampil di treadmill beranda. Kosongkan masa berlaku untuk tanpa batas waktu.</p>
     <div class="grid2">
       <label>Kode<input id="kodeBaru" type="text" maxlength="40" placeholder="Contoh REVIEW20" autocomplete="off" autocapitalize="characters"></label>
       <label>Keterangan (opsional)<input id="ketBaru" type="text" maxlength="80" placeholder="Contoh: Promo Lebaran"></label>
@@ -149,7 +142,7 @@ button.ok{background:var(--green)}
 
   <section class="card">
     <h2>Sosmed</h2>
-    <p class="muted small">Sosmed yang aktif tampil di bagian "Ikuti Kami" beranda.</p>
+    <p class="catatan-kecil">Sosmed yang aktif tampil di bagian "Ikuti Kami" beranda. Jangan campurkan akun pembuat kartu di sini.</p>
     <div class="grid2">
       <label>Platform<input id="sosPlatform" type="text" maxlength="30" placeholder="TikTok"></label>
       <label>Nama akun<input id="sosAkun" type="text" maxlength="60" placeholder="@id.card_aff"></label>
@@ -167,44 +160,68 @@ button.ok{background:var(--green)}
         <option value="">Semua status</option>
       </select>
     </div>
+    <p class="catatan-kecil">Aktivasi langsung: salin data aktivasi, proses di sistem admin, lalu ubah status menjadi <b>diaktivasi</b>. Nama usaha dengan persetujuan testimoni akan tampil otomatis di treadmill.</p>
     <div id="daftarPesanan" class="list"></div>
   </section>
 
   <section class="card">
     <h2>Riwayat</h2>
-    <p class="muted small">Menghapus riwayat hanya menghapus pesanan berstatus selesai, dibatalkan, dan refund selesai. Pesanan yang masih berjalan tidak ikut terhapus.</p>
+    <p class="catatan-kecil">Hanya menghapus pesanan berstatus selesai, dibatalkan, dan refund selesai. Pesanan yang masih berjalan tidak ikut terhapus.</p>
     <div class="row"><button id="btnHapusRiwayat" type="button" class="danger">Hapus semua riwayat</button></div>
     <p id="msgRiwayat" class="msg"></p>
   </section>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 (() => {
   "use strict";
-
   if (window.top !== window.self) { document.body.textContent = ""; return; }
 
+  const SITE = "https://yazennid-boop.github.io/nfc-review-makassar/";
   const CFG = {
-    supabaseUrl: "https://rbxkasjljehbejkehslr.supabase.co",
-    supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieGthc2psamVoYmVqa2Voc2xyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NDQxMDMsImV4cCI6MjEwNzEyMDEwM30.HlAFJArWgzbvFjorcPgMVCrSBjXJdijsfUOMHHkfyRQ",
-    adminEmail: "yazennid@gmail.com",
-    idleMinutes: 10,
+    url: "https://rbxkasjljehbejkehslr.supabase.co",
+    key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieGthc2psamVoYmVqa2Voc2xyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NDQxMDMsImV4cCI6MjEwNzEyMDEwM30.HlAFJArWgzbvFjorcPgMVCrSBjXJdijsfUOMHHkfyRQ",
+    email: "yazennid@gmail.com",
+    idleMenit: 10,
   };
 
-  const sb = window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseAnonKey, {
+  const sb = window.supabase.createClient(CFG.url, CFG.key, {
     auth: { persistSession: false, autoRefreshToken: true, detectSessionInUrl: false },
   });
 
   const $ = (id) => document.getElementById(id);
   const rp = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 });
+  const AKTIVITAS = ["click", "keydown", "mousemove", "touchstart", "scroll"];
 
   const STATUS = [
     "preorder", "menunggu_pembayaran", "bukti_diterima", "diaktivasi", "dikirim",
     "selesai", "dibatalkan", "refund_diajukan", "refund_selesai",
   ];
   const LABEL_TOKO = { buka: "Buka", tutup_manual: "Tutup manual", tutup_otomatis: "Tutup otomatis (stok habis)" };
-  const AKTIVITAS = ["click", "keydown", "mousemove", "touchstart", "scroll"];
+  const LABEL_STATUS = {
+    preorder: "Pre-order, menunggu stok ready",
+    menunggu_pembayaran: "Menunggu pembayaran",
+    bukti_diterima: "Bukti diterima, sedang diverifikasi",
+    diaktivasi: "Sedang diaktivasi",
+    dikirim: "Sedang dikirim",
+    selesai: "Selesai",
+    dibatalkan: "Dibatalkan",
+    refund_diajukan: "Refund sedang diajukan",
+    refund_selesai: "Refund selesai",
+  };
+  const TEKS_STATUS = {
+    preorder: "Pesanan Anda sudah tercatat dan akan diprioritaskan saat stok tersedia. Pembayaran dilakukan setelah stok siap, dan kami akan menginformasikannya kepada Anda.",
+    menunggu_pembayaran: "Pesanan Anda telah kami terima. Silakan selesaikan pembayaran melalui QRIS di website dalam batas waktu 5 menit.",
+    bukti_diterima: "Bukti transfer Anda telah kami terima dan sedang diverifikasi sesuai data transaksi.",
+    diaktivasi: "Pembayaran Anda telah diverifikasi. Kartu sedang kami aktifkan.",
+    dikirim: "Pesanan Anda sedang dalam pengiriman ke alamat tujuan.",
+    selesai: "Pesanan Anda telah selesai. Terima kasih telah mempercayai ReviewCard Makassar.",
+    dibatalkan: "Pesanan Anda telah dibatalkan. Jika pembayaran sudah dilakukan, silakan ajukan refund melalui menu Cek Status.",
+    refund_diajukan: "Pengajuan refund Anda telah kami terima. Silakan lampirkan bukti transfer melalui menu Cek Status.",
+    refund_selesai: "Refund Anda telah kami proses sesuai data transaksi.",
+  };
 
   let gagal = 0;
   let kunciSampai = 0;
@@ -213,46 +230,139 @@ button.ok{background:var(--green)}
   let sesiAktif = false;
   let filter = "";
 
-  const say = (el, teks, tipe = "") => { el.textContent = teks; el.className = "msg " + tipe; };
-  const catatan = (teks) => { const p = document.createElement("p"); p.className = "muted small"; p.textContent = teks; return p; };
-
-  function keLokal(iso) {
+  /* ---------- Utilitas ---------- */
+  const el = (tag, cls, teks) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (teks !== undefined) n.textContent = teks;
+    return n;
+  };
+  const catatan = (teks) => el("p", "catatan-kecil", teks);
+  const say = (id, teks, tipe = "") => { $(id).textContent = teks; $(id).className = "msg " + tipe; };
+  const btn = (teks, kelas, aksi) => {
+    const b = el("button", kelas, teks);
+    b.type = "button";
+    b.addEventListener("click", aksi);
+    return b;
+  };
+  const tautan = (teks, href) => {
+    if (!href || !/^https:\/\//i.test(href)) return el("span", "muted", "-");
+    const a = document.createElement("a");
+    a.textContent = teks;
+    a.href = href;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    return a;
+  };
+  const baris = (label, isi) => {
+    const d = el("div");
+    d.append(el("span", "", label));
+    if (isi instanceof Node) d.append(isi);
+    else d.append(el("b", "", String(isi ?? "-")));
+    return d;
+  };
+  const jam = (iso) => new Date(iso).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+  const keLokal = (iso) => {
     if (!iso) return "";
     const d = new Date(iso);
-    const offset = d.getTimezoneOffset() * 60000;
-    return new Date(d - offset).toISOString().slice(0, 16);
+    return new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  };
+
+  async function salin(teks, tombol) {
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(teks);
+      ok = true;
+    } catch (_) {
+      const ta = document.createElement("textarea");
+      ta.value = teks;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.append(ta);
+      ta.select();
+      try { ok = document.execCommand("copy"); } catch (_e) { ok = false; }
+      ta.remove();
+    }
+    const asli = tombol.textContent;
+    tombol.textContent = ok ? "Tersalin" : "Gagal menyalin";
+    setTimeout(() => { tombol.textContent = asli; }, 1800);
   }
 
-  /* ===== LOGIN ===== */
+  /* ---------- Teks salinan ---------- */
+  function pesanWA(o, jenis) {
+    const teks = [`Yth. ${o.nama_pemesan},`, ""];
+    if (jenis === "aktivasi") {
+      teks.push(
+        `Kami informasikan pemeriksaan aktivasi kartu untuk pesanan ${o.kode_pesanan}.`,
+        `Status saat ini: ${LABEL_STATUS[o.status] || o.status}.`,
+        "",
+        "Jika kartu sudah diaktifkan, tempelkan HP ke kartu atau pindai QR Code untuk memastikan halaman ulasan Google terbuka.",
+        "Jika belum, ikuti panduan video pada halaman berikut:",
+        `${SITE}aktivasi.html`
+      );
+    } else if (jenis === "bayar") {
+      teks.push(
+        `Pesanan ${o.kode_pesanan} masih menunggu pembayaran sebesar ${rp.format(o.total)}.`,
+        "Silakan selesaikan pembayaran melalui QRIS di website resmi sebelum batas waktu, lalu unggah bukti transfer.",
+        `${SITE}status.html`
+      );
+    } else {
+      teks.push(
+        `Berikut status pesanan ${o.kode_pesanan}:`,
+        `Paket  : ${o.paket} (${o.jumlah} pcs)`,
+        `Total  : ${rp.format(o.total)}`,
+        `Status : ${LABEL_STATUS[o.status] || o.status}`,
+        "",
+        TEKS_STATUS[o.status] || "",
+        "",
+        "Cek status pesanan Anda di:",
+        `${SITE}status.html`
+      );
+    }
+    teks.push("", "Admin tidak pernah meminta PIN melalui chat, telepon, atau email.", "", "Terima kasih.", "ReviewCard Makassar");
+    return teks.join("\n");
+  }
+
+  function dataAktivasi(o) {
+    return [
+      "DATA AKTIVASI KARTU",
+      `Kode pesanan : ${o.kode_pesanan}`,
+      `Paket        : ${o.paket} (${o.jumlah} pcs)`,
+      `Nama usaha   : ${o.nama_usaha || "-"}`,
+      `Link toko    : ${o.link_usaha || "-"}`,
+      `Nama penerima: ${o.nama_pemesan}`,
+      `No. WhatsApp : ${o.no_wa}`,
+      `Link lokasi  : ${o.link_lokasi}`,
+      `Patokan      : ${o.patokan_alamat || "-"}`,
+      `Testimoni    : ${o.setuju_testimoni ? "Disetujui" : "Tidak"}`,
+    ].join("\n");
+  }
+
+  /* ---------- Login dan sesi ---------- */
   $("fLogin").addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const sisa = kunciSampai - Date.now();
-    if (sisa > 0) {
-      say($("msgLogin"), `Tunggu ${Math.ceil(sisa / 1000)} detik sebelum mencoba lagi.`, "err");
-      return;
-    }
+    if (sisa > 0) return say("msgLogin", `Tunggu ${Math.ceil(sisa / 1000)} detik sebelum mencoba lagi.`, "err");
 
     const pw = $("pw").value;
     $("pw").value = "";
-    if (!pw || pw.length > 128) { say($("msgLogin"), "Login gagal.", "err"); return; }
+    if (!pw || pw.length > 128) return say("msgLogin", "Login gagal.", "err");
 
     $("btnLogin").disabled = true;
-    const { error } = await sb.auth.signInWithPassword({ email: CFG.adminEmail, password: pw });
+    const { error } = await sb.auth.signInWithPassword({ email: CFG.email, password: pw });
     $("btnLogin").disabled = false;
 
     if (error) {
       gagal++;
       if (gagal >= 3) kunciSampai = Date.now() + Math.min(60000, 2000 * 2 ** (gagal - 3));
-      say($("msgLogin"), "Login gagal. Periksa kembali password Anda.", "err");
-      return;
+      return say("msgLogin", "Login gagal. Periksa kembali password Anda.", "err");
     }
 
     const { data: ok, error: errAdmin } = await sb.rpc("is_admin");
     if (errAdmin || ok !== true) {
       await sb.auth.signOut();
-      say($("msgLogin"), "Login gagal.", "err");
-      return;
+      return say("msgLogin", "Login gagal.", "err");
     }
 
     gagal = 0;
@@ -263,10 +373,11 @@ button.ok{background:var(--green)}
     sesiAktif = true;
     $("layarKunci").classList.add("hidden");
     $("dashboard").classList.remove("hidden");
-    say($("msgLogin"), "");
+    say("msgLogin", "");
     aktifkanIdle();
     pasangRealtime();
     perbaruiLabelNotif();
+    isiFilter();
     muatSemua();
     muatSosmed();
   }
@@ -277,28 +388,27 @@ button.ok{background:var(--green)}
     for (const ev of AKTIVITAS) document.removeEventListener(ev, resetIdle);
     if (channel) { await sb.removeChannel(channel); channel = null; }
     await sb.auth.signOut();
-    $("daftarPesanan").replaceChildren();
-    $("daftarPaket").replaceChildren();
-    $("daftarPromo").replaceChildren();
-    $("daftarSosmed").replaceChildren();
+    for (const id of ["daftarPesanan", "daftarPaket", "daftarPromo", "daftarSosmed"]) $(id).replaceChildren();
     $("stokInput").value = "";
     $("dashboard").classList.add("hidden");
     $("layarKunci").classList.remove("hidden");
-    say($("msgLogin"), alasan || "Anda telah keluar. Masukkan password untuk membuka kembali.");
+    say("msgLogin", alasan || "Anda telah keluar. Masukkan password untuk membuka kembali.");
   }
 
   $("btnKeluar").addEventListener("click", () => keluar());
 
   sb.auth.onAuthStateChange((event) => {
-    if (event === "SIGNED_OUT" && sesiAktif) keluar("Sesi berakhir. Masukkan password untuk membuka kembali.");
+    if (event === "SIGNED_OUT" && sesiAktif) {
+      keluar("Sesi berakhir. Masukkan password untuk membuka kembali.");
+    }
   });
 
-  /* ===== KUNCI OTOMATIS ===== */
+  /* ---------- Kunci otomatis ---------- */
   function resetIdle() {
     clearTimeout(idleTimer);
     idleTimer = setTimeout(
       () => keluar("Sesi berakhir karena tidak ada aktivitas. Masukkan password untuk membuka kembali."),
-      CFG.idleMinutes * 60 * 1000
+      CFG.idleMenit * 60 * 1000
     );
   }
 
@@ -307,35 +417,31 @@ button.ok{background:var(--green)}
     for (const ev of AKTIVITAS) document.addEventListener(ev, resetIdle, { passive: true });
   }
 
-  /* ===== MUAT DATA ===== */
+  /* ---------- Muat data ---------- */
   async function muatSemua() {
+    if (!sesiAktif) return;
     const [t, p, pk, pr] = await Promise.all([
       sb.from("pengaturan").select("*").eq("id", 1).single(),
       sb.from("pesanan").select("*").order("created_at", { ascending: false }).limit(200),
       sb.from("paket").select("*").order("urutan"),
       sb.from("kode_promo").select("*").order("kode"),
     ]);
-
     if (t.error || p.error || pk.error || pr.error) {
-      keluar("Sesi tidak valid. Silakan masuk kembali.");
-      return;
+      return keluar("Sesi tidak valid. Silakan masuk kembali.");
     }
-
     renderToko(t.data);
     renderRingkasan(p.data || []);
     renderPaket(pk.data || []);
     renderPromo(pr.data || []);
     renderPesanan(p.data || []);
-    isiFilter();
   }
 
-  /* ===== TOKO ===== */
+  /* ---------- Toko ---------- */
   function renderToko(s) {
     const pill = $("statusToko");
     pill.textContent = LABEL_TOKO[s.status_toko] || s.status_toko;
     pill.classList.toggle("tutup", s.status_toko !== "buka");
     $("sStok").textContent = s.stok_ready;
-
     if (document.activeElement !== $("stokInput")) $("stokInput").value = s.stok_ready;
     if (document.activeElement !== $("hHarga")) {
       $("hHarga").value = s.harga_satuan;
@@ -355,7 +461,7 @@ button.ok{background:var(--green)}
   async function setToko(patch) {
     const { error } = await sb.from("pengaturan").update(patch).eq("id", 1);
     if (error) alert("Gagal menyimpan. Periksa koneksi.");
-    await muatSemua();
+    muatSemua();
   }
 
   $("btnBuka").addEventListener("click", () => setToko({ status_toko: "buka" }));
@@ -366,11 +472,10 @@ button.ok{background:var(--green)}
   $("btnStok").addEventListener("click", async () => {
     const n = Number($("stokInput").value);
     if (!Number.isInteger(n) || n < 0 || n > 10000) {
-      say($("msgStok"), "Stok harus bilangan bulat antara 0 dan 10.000.", "err");
-      return;
+      return say("msgStok", "Stok harus bilangan bulat antara 0 dan 10.000.", "err");
     }
     await setToko({ stok_ready: n });
-    say($("msgStok"), "Stok tersimpan.", "ok");
+    say("msgStok", "Stok tersimpan.", "ok");
   });
 
   $("btnHarga").addEventListener("click", async () => {
@@ -378,30 +483,22 @@ button.ok{background:var(--green)}
     const dp = Number($("hDiskonPaket").value);
     const dn = Number($("hDiskonNormal").value);
     if (![h, dp, dn].every((x) => Number.isInteger(x) && x >= 0)) {
-      say($("msgHarga"), "Semua nilai harus bilangan bulat, tidak boleh negatif.", "err");
-      return;
+      return say("msgHarga", "Semua nilai harus bilangan bulat, tidak boleh negatif.", "err");
     }
-    if (dp > h || dn > h) {
-      say($("msgHarga"), "Diskon tidak boleh melebihi harga satuan.", "err");
-      return;
-    }
+    if (dp > h || dn > h) return say("msgHarga", "Diskon tidak boleh melebihi harga satuan.", "err");
     await setToko({ harga_satuan: h, diskon_kode_paket: dp, diskon_kode_normal: dn });
-    say($("msgHarga"), "Harga tersimpan.", "ok");
+    say("msgHarga", "Harga tersimpan.", "ok");
   });
 
-  /* ===== PAKET ===== */
+  /* ---------- Paket ---------- */
   function renderPaket(list) {
     const wrap = $("daftarPaket");
     wrap.replaceChildren();
-    if (!list.length) { wrap.append(catatan("Belum ada paket.")); return; }
+    if (!list.length) return wrap.append(catatan("Belum ada paket."));
 
     for (const p of list) {
-      const row = document.createElement("div");
-      row.className = "paket-row";
-
-      const nm = document.createElement("span");
-      nm.textContent = `${p.nama} (${p.kode})`;
-
+      const row = el("div", "paket-row");
+      const nm = el("span", "", `${p.nama} (${p.kode})`);
       const input = document.createElement("input");
       input.type = "number";
       input.min = "1";
@@ -410,102 +507,70 @@ button.ok{background:var(--green)}
       input.style.maxWidth = "110px";
       input.setAttribute("aria-label", `Jumlah pcs ${p.nama}`);
 
-      const act = document.createElement("div");
-      act.className = "row";
-      const simpan = document.createElement("button");
-      simpan.type = "button";
-      simpan.textContent = "Simpan";
-      simpan.addEventListener("click", async () => {
-        const n = Number(input.value);
-        if (!Number.isInteger(n) || n < 1 || n > 500) { alert("Jumlah pcs harus 1 sampai 500."); return; }
-        const { error } = await sb.from("paket").update({ jumlah: n }).eq("kode", p.kode);
-        if (error) alert("Gagal menyimpan paket.");
-        muatSemua();
-      });
-      const aktif = document.createElement("button");
-      aktif.type = "button";
-      aktif.className = p.aktif ? "ghost" : "";
-      aktif.textContent = p.aktif ? "Nonaktifkan" : "Aktifkan";
-      aktif.addEventListener("click", async () => {
-        const { error } = await sb.from("paket").update({ aktif: !p.aktif }).eq("kode", p.kode);
-        if (error) alert("Gagal mengubah paket.");
-        muatSemua();
-      });
-      act.append(simpan, aktif);
-
+      const act = el("div", "row");
+      act.append(
+        btn("Simpan", "", async () => {
+          const n = Number(input.value);
+          if (!Number.isInteger(n) || n < 1 || n > 500) return alert("Jumlah pcs harus 1 sampai 500.");
+          const { error } = await sb.from("paket").update({ jumlah: n }).eq("kode", p.kode);
+          if (error) alert("Gagal menyimpan paket.");
+          muatSemua();
+        }),
+        btn(p.aktif ? "Nonaktifkan" : "Aktifkan", p.aktif ? "ghost" : "", async () => {
+          const { error } = await sb.from("paket").update({ aktif: !p.aktif }).eq("kode", p.kode);
+          if (error) alert("Gagal mengubah paket.");
+          muatSemua();
+        })
+      );
       row.append(nm, input, act);
       wrap.append(row);
     }
   }
 
-  /* ===== KODE PROMO ===== */
+  /* ---------- Kode promo ---------- */
   function renderPromo(list) {
     const wrap = $("daftarPromo");
     wrap.replaceChildren();
-    if (!list.length) { wrap.append(catatan("Belum ada kode promo.")); return; }
+    if (!list.length) return wrap.append(catatan("Belum ada kode promo."));
 
     const kini = Date.now();
     for (const k of list) {
       const lewat = k.berakhir && new Date(k.berakhir).getTime() <= kini;
       const label = !k.aktif ? "Nonaktif" : lewat ? "Kedaluwarsa" : "Aktif";
 
-      const row = document.createElement("div");
-      row.className = "item";
-
-      const head = document.createElement("div");
-      head.className = "item-head";
-      const nm = document.createElement("strong");
-      nm.textContent = k.kode;
-      const badge = document.createElement("span");
-      badge.className = "pill" + (label === "Aktif" ? "" : " tutup");
-      badge.textContent = label;
-      head.append(nm, badge);
-
-      const info = document.createElement("p");
-      info.className = "muted small";
-      info.textContent = (k.keterangan ? k.keterangan + " · " : "") +
-        (k.berakhir ? "berakhir " + new Date(k.berakhir).toLocaleString("id-ID") : "tanpa batas waktu");
-
-      const atur = document.createElement("div");
-      atur.className = "row";
+      const row = el("div", "promo-row");
+      const head = el("div", "item-head");
+      head.append(el("strong", "", k.kode), el("span", "pill" + (label === "Aktif" ? "" : " tutup"), label));
+      const info = el("p", "catatan-kecil",
+        (k.keterangan ? k.keterangan + " · " : "") +
+        (k.berakhir ? "berakhir " + new Date(k.berakhir).toLocaleString("id-ID") : "tanpa batas waktu"));
 
       const tgl = document.createElement("input");
       tgl.type = "datetime-local";
       tgl.value = keLokal(k.berakhir);
-      tgl.setAttribute("aria-label", `Masa berlaku kode ${k.kode}`);
+      tgl.setAttribute("aria-label", `Masa berlaku ${k.kode}`);
 
-      const simpanTgl = document.createElement("button");
-      simpanTgl.type = "button";
-      simpanTgl.textContent = "Simpan masa berlaku";
-      simpanTgl.addEventListener("click", async () => {
-        const berakhir = tgl.value ? new Date(tgl.value).toISOString() : null;
-        const { error } = await sb.from("kode_promo").update({ berakhir }).eq("kode", k.kode);
-        if (error) alert("Gagal menyimpan masa berlaku.");
-        muatSemua();
-      });
-
-      const toggle = document.createElement("button");
-      toggle.type = "button";
-      toggle.className = "ghost";
-      toggle.textContent = k.aktif ? "Nonaktifkan" : "Aktifkan";
-      toggle.addEventListener("click", async () => {
-        const { error } = await sb.from("kode_promo").update({ aktif: !k.aktif }).eq("kode", k.kode);
-        if (error) alert("Gagal mengubah kode.");
-        muatSemua();
-      });
-
-      const hapus = document.createElement("button");
-      hapus.type = "button";
-      hapus.className = "danger";
-      hapus.textContent = "Hapus";
-      hapus.addEventListener("click", async () => {
-        if (!confirm(`Hapus kode ${k.kode}?`)) return;
-        const { error } = await sb.from("kode_promo").delete().eq("kode", k.kode);
-        if (error) alert("Gagal menghapus kode.");
-        muatSemua();
-      });
-
-      atur.append(tgl, simpanTgl, toggle, hapus);
+      const atur = el("div", "row");
+      atur.append(
+        tgl,
+        btn("Simpan masa berlaku", "", async () => {
+          const berakhir = tgl.value ? new Date(tgl.value).toISOString() : null;
+          const { error } = await sb.from("kode_promo").update({ berakhir }).eq("kode", k.kode);
+          if (error) alert("Gagal menyimpan masa berlaku.");
+          muatSemua();
+        }),
+        btn(k.aktif ? "Nonaktifkan" : "Aktifkan", "ghost", async () => {
+          const { error } = await sb.from("kode_promo").update({ aktif: !k.aktif }).eq("kode", k.kode);
+          if (error) alert("Gagal mengubah kode.");
+          muatSemua();
+        }),
+        btn("Hapus", "danger", async () => {
+          if (!confirm(`Hapus kode ${k.kode}?`)) return;
+          const { error } = await sb.from("kode_promo").delete().eq("kode", k.kode);
+          if (error) alert("Gagal menghapus kode.");
+          muatSemua();
+        })
+      );
       row.append(head, info, atur);
       wrap.append(row);
     }
@@ -517,86 +582,56 @@ button.ok{background:var(--green)}
     const tglVal = $("berakhirBaru").value;
 
     if (!/^[A-Z0-9-]{3,40}$/.test(kode)) {
-      say($("msgPromo"), "Kode hanya boleh huruf, angka, dan tanda minus, minimal 3 karakter.", "err");
-      return;
+      return say("msgPromo", "Kode hanya huruf, angka, dan tanda minus, minimal 3 karakter.", "err");
     }
-
     let berakhir = null;
     if (tglVal) {
       berakhir = new Date(tglVal).toISOString();
       if (new Date(berakhir).getTime() <= Date.now()) {
-        say($("msgPromo"), "Masa berlaku harus di masa depan.", "err");
-        return;
+        return say("msgPromo", "Masa berlaku harus di masa depan.", "err");
       }
     }
 
-    const { error } = await sb.from("kode_promo").insert({
-      kode, aktif: true, keterangan: ket || null, berakhir,
-    });
+    const { error } = await sb.from("kode_promo").insert({ kode, aktif: true, keterangan: ket || null, berakhir });
     if (error) {
-      say($("msgPromo"), error.code === "23505" ? "Kode tersebut sudah ada." : "Gagal menambah kode.", "err");
-      return;
+      return say("msgPromo", error.code === "23505" ? "Kode tersebut sudah ada." : "Gagal menambah kode.", "err");
     }
-
-    $("kodeBaru").value = "";
-    $("ketBaru").value = "";
-    $("berakhirBaru").value = "";
-    say($("msgPromo"), `Kode ${kode} ditambahkan.`, "ok");
+    ["kodeBaru", "ketBaru", "berakhirBaru"].forEach((id) => { $(id).value = ""; });
+    say("msgPromo", `Kode ${kode} ditambahkan.`, "ok");
     muatSemua();
   });
 
-  /* ===== SOSMED ===== */
+  /* ---------- Sosmed ---------- */
   async function muatSosmed() {
+    if (!sesiAktif) return;
     const { data, error } = await sb.from("sosmed").select("*").order("urutan").order("platform");
     const wrap = $("daftarSosmed");
     wrap.replaceChildren();
-
-    if (error) { say($("msgSosmed"), "Gagal memuat sosmed.", "err"); return; }
-    if (!data.length) { wrap.append(catatan("Belum ada sosmed.")); return; }
+    if (error) return say("msgSosmed", "Gagal memuat sosmed.", "err");
+    if (!data.length) return wrap.append(catatan("Belum ada sosmed."));
 
     for (const s of data) {
-      const row = document.createElement("div");
-      row.className = "item";
-
-      const head = document.createElement("div");
-      head.className = "item-head";
-      const nm = document.createElement("strong");
-      nm.textContent = s.platform + (s.akun ? " · " + s.akun : "");
-      const badge = document.createElement("span");
-      badge.className = "pill" + (s.aktif ? "" : " tutup");
-      badge.textContent = s.aktif ? "Tampil" : "Disembunyikan";
-      head.append(nm, badge);
-
-      const link = document.createElement("a");
-      link.href = s.url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent = s.url;
-
-      const act = document.createElement("div");
-      act.className = "row";
-      const toggle = document.createElement("button");
-      toggle.type = "button";
-      toggle.className = "ghost";
-      toggle.textContent = s.aktif ? "Sembunyikan" : "Tampilkan";
-      toggle.addEventListener("click", async () => {
-        const { error: e } = await sb.from("sosmed").update({ aktif: !s.aktif }).eq("id", s.id);
-        if (e) alert("Gagal mengubah sosmed.");
-        muatSosmed();
-      });
-      const hapus = document.createElement("button");
-      hapus.type = "button";
-      hapus.className = "danger";
-      hapus.textContent = "Hapus";
-      hapus.addEventListener("click", async () => {
-        if (!confirm(`Hapus ${s.platform}?`)) return;
-        const { error: e } = await sb.from("sosmed").delete().eq("id", s.id);
-        if (e) alert("Gagal menghapus sosmed.");
-        muatSosmed();
-      });
-      act.append(toggle, hapus);
-
-      row.append(head, link, act);
+      const row = el("div", "item");
+      const head = el("div", "item-head");
+      head.append(
+        el("strong", "", s.platform + (s.akun ? " · " + s.akun : "")),
+        el("span", "pill" + (s.aktif ? "" : " tutup"), s.aktif ? "Tampil" : "Disembunyikan")
+      );
+      const act = el("div", "row");
+      act.append(
+        btn(s.aktif ? "Sembunyikan" : "Tampilkan", "ghost", async () => {
+          const { error: e } = await sb.from("sosmed").update({ aktif: !s.aktif }).eq("id", s.id);
+          if (e) alert("Gagal mengubah sosmed.");
+          muatSosmed();
+        }),
+        btn("Hapus", "danger", async () => {
+          if (!confirm(`Hapus ${s.platform}?`)) return;
+          const { error: e } = await sb.from("sosmed").delete().eq("id", s.id);
+          if (e) alert("Gagal menghapus sosmed.");
+          muatSosmed();
+        })
+      );
+      row.append(head, tautan(s.url, s.url), act);
       wrap.append(row);
     }
   }
@@ -605,21 +640,17 @@ button.ok{background:var(--green)}
     const platform = $("sosPlatform").value.trim();
     const akun = $("sosAkun").value.trim();
     const url = $("sosUrl").value.trim();
-
-    if (platform.length < 2) { say($("msgSosmed"), "Isi nama platform.", "err"); return; }
-    if (!/^https:\/\/\S+$/.test(url)) { say($("msgSosmed"), "Link harus diawali https://", "err"); return; }
+    if (platform.length < 2) return say("msgSosmed", "Isi nama platform.", "err");
+    if (!/^https:\/\/\S+$/.test(url)) return say("msgSosmed", "Link harus diawali https://", "err");
 
     const { error } = await sb.from("sosmed").insert({ platform, akun: akun || null, url, aktif: true });
-    if (error) { say($("msgSosmed"), "Gagal menambah sosmed.", "err"); return; }
-
-    $("sosPlatform").value = "";
-    $("sosAkun").value = "";
-    $("sosUrl").value = "";
-    say($("msgSosmed"), `${platform} ditambahkan.`, "ok");
+    if (error) return say("msgSosmed", "Gagal menambah sosmed.", "err");
+    ["sosPlatform", "sosAkun", "sosUrl"].forEach((id) => { $(id).value = ""; });
+    say("msgSosmed", `${platform} ditambahkan.`, "ok");
     muatSosmed();
   });
 
-  /* ===== PESANAN ===== */
+  /* ---------- Pesanan ---------- */
   function isiFilter() {
     const sel = $("filterStatus");
     if (sel.options.length > 1) return;
@@ -632,115 +663,110 @@ button.ok{background:var(--green)}
     sel.addEventListener("change", () => { filter = sel.value; muatSemua(); });
   }
 
-  function tautan(label, href) {
-    const a = document.createElement("a");
-    if (/^https:\/\//i.test(href)) {
-      a.href = href;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-    }
-    a.textContent = label;
-    return a;
-  }
-
-  function tombolBukti(label, path) {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "ghost";
-    b.textContent = label;
-    b.addEventListener("click", async () => {
+  function tombolBukti(teks, path) {
+    return btn(teks, "ghost", async () => {
       const { data, error } = await sb.storage.from("bukti-bayar").createSignedUrl(path, 60);
-      if (error || !data) { alert("Gagal membuka bukti."); return; }
+      if (error || !data) return alert("Gagal membuka bukti.");
       window.open(data.signedUrl, "_blank", "noopener,noreferrer");
     });
-    return b;
   }
 
   function renderPesanan(list) {
     const wrap = $("daftarPesanan");
     wrap.replaceChildren();
-
     const tampil = filter ? list.filter((o) => o.status === filter) : list;
-    if (!tampil.length) { wrap.append(catatan("Tidak ada pesanan.")); return; }
+    if (!tampil.length) return wrap.append(catatan("Tidak ada pesanan."));
+    for (const o of tampil) wrap.append(kartuPesanan(o));
+  }
 
-    for (const o of tampil) {
-      const item = document.createElement("article");
-      item.className = "item";
+  function kartuPesanan(o) {
+    const langsung = o.jalur === "langsung";
+    const item = el("article", "item");
 
-      const head = document.createElement("div");
-      head.className = "item-head";
-      const kode = document.createElement("strong");
-      kode.textContent = o.kode_pesanan;
-      const waktu = document.createElement("span");
-      waktu.className = "muted small";
-      waktu.textContent = new Date(o.created_at).toLocaleString("id-ID");
-      head.append(kode, waktu);
+    const head = el("div", "item-head");
+    head.append(
+      el("strong", "", o.kode_pesanan),
+      el("span", "catatan-kecil", new Date(o.created_at).toLocaleString("id-ID"))
+    );
 
-      const detail = document.createElement("p");
-      detail.textContent =
-        `${o.nama_pemesan}${o.nama_usaha ? " · " + o.nama_usaha : ""} | ` +
-        `${o.jumlah} pcs | ${rp.format(o.total)} | ${o.tipe}`;
+    const badge = el("div", "row");
+    badge.append(el("span", "pill", langsung ? "Aktivasi langsung" : "Aktivasi sendiri"));
+    if (langsung) {
+      badge.append(el("span", o.setuju_testimoni ? "pill ok" : "pill tutup",
+        o.setuju_testimoni ? "Testimoni disetujui" : "Tanpa testimoni"));
+    }
+    badge.append(el("span", "pill", LABEL_STATUS[o.status] || o.status));
 
-      const info = document.createElement("p");
-      info.className = "muted small";
-      info.textContent = `WA: ${o.no_wa} | Patokan: ${o.patokan_alamat || "-"}`;
+    const info = el("div", "kv");
+    info.append(
+      baris("Penerima", o.nama_pemesan),
+      baris("WhatsApp", o.no_wa),
+      baris("Paket", `${o.paket} (${o.jumlah} pcs)`),
+      baris("Total", rp.format(o.total)),
+      baris("Patokan", o.patokan_alamat || "-"),
+      baris("Lokasi kirim", tautan("Buka lokasi", o.link_lokasi))
+    );
+    if (langsung) {
+      info.append(
+        baris("Nama usaha", o.nama_usaha || "-"),
+        baris("Link toko", tautan("Buka Google Maps", o.link_usaha))
+      );
+    }
 
-      const links = document.createElement("div");
-      links.className = "row small";
-      if (o.link_usaha) links.append(tautan("Link usaha", o.link_usaha));
-      if (o.link_lokasi) links.append(tautan("Link lokasi", o.link_lokasi));
-      links.append(tautan("Chat WA", `https://wa.me/${o.no_wa}`));
+    const aksi = el("div", "row");
+    const sel = document.createElement("select");
+    sel.setAttribute("aria-label", "Status pesanan");
+    for (const s of STATUS) {
+      const op = document.createElement("option");
+      op.value = s;
+      op.textContent = s.replaceAll("_", " ");
+      op.selected = s === o.status;
+      sel.append(op);
+    }
+    const tpl = document.createElement("select");
+    tpl.setAttribute("aria-label", "Jenis pesan WhatsApp");
+    for (const [v, t] of [["status", "Pesan status"], ["aktivasi", "Pemeriksaan aktivasi"], ["bayar", "Pengingat pembayaran"]]) {
+      const op = document.createElement("option");
+      op.value = v;
+      op.textContent = t;
+      tpl.append(op);
+    }
 
-      item.append(head, detail, info, links);
-
-      if (o.alasan_refund) {
-        const alasan = document.createElement("p");
-        alasan.className = "small";
-        alasan.textContent = "Alasan refund: " + o.alasan_refund;
-        item.append(alasan);
-      }
-
-      const aksi = document.createElement("div");
-      aksi.className = "row";
-      const sel = document.createElement("select");
-      sel.setAttribute("aria-label", "Status pesanan");
-      for (const s of STATUS) {
-        const op = document.createElement("option");
-        op.value = s;
-        op.textContent = s.replaceAll("_", " ");
-        if (s === o.status) op.selected = true;
-        sel.append(op);
-      }
-      const simpan = document.createElement("button");
-      simpan.type = "button";
-      simpan.textContent = "Simpan status";
-      simpan.addEventListener("click", async () => {
+    aksi.append(
+      sel,
+      btn("Simpan status", "", async () => {
         const { error } = await sb.from("pesanan")
           .update({ status: sel.value, updated_at: new Date().toISOString() })
           .eq("id", o.id);
         if (error) alert("Gagal mengubah status.");
         muatSemua();
-      });
-      aksi.append(sel, simpan);
-
-      if (o.bukti_path) aksi.append(tombolBukti("Bukti bayar", o.bukti_path));
-      if (o.refund_bukti_path) aksi.append(tombolBukti("Bukti refund", o.refund_bukti_path));
-
-      item.append(aksi);
-      wrap.append(item);
+      }),
+      tpl,
+      btn("Salin pesan WA", "ghost", (e) => salin(pesanWA(o, tpl.value), e.currentTarget)),
+      tautan("Chat WA", "https://wa.me/" + o.no_wa)
+    );
+    if (langsung) {
+      aksi.append(btn("Salin data aktivasi", "ok", (e) => salin(dataAktivasi(o), e.currentTarget)));
     }
+    if (o.bukti_path) aksi.append(tombolBukti("Bukti bayar", o.bukti_path));
+    if (o.refund_bukti_path) aksi.append(tombolBukti("Bukti refund", o.refund_bukti_path));
+
+    item.append(head, badge, info);
+    if (o.alasan_refund) item.append(el("p", "small", "Alasan refund: " + o.alasan_refund));
+    item.append(aksi);
+    return item;
   }
 
-  /* ===== HAPUS RIWAYAT ===== */
+  /* ---------- Riwayat ---------- */
   $("btnHapusRiwayat").addEventListener("click", async () => {
     if (!confirm("Hapus semua riwayat selesai, dibatalkan, dan refund selesai? Tindakan ini tidak dapat dibatalkan.")) return;
     const { data, error } = await sb.rpc("hapus_riwayat");
-    if (error) { say($("msgRiwayat"), "Gagal menghapus riwayat.", "err"); return; }
-    say($("msgRiwayat"), `${data} riwayat dihapus.`, "ok");
+    if (error) return say("msgRiwayat", "Gagal menghapus riwayat.", "err");
+    say("msgRiwayat", `${data} riwayat dihapus.`, "ok");
     muatSemua();
   });
 
-  /* ===== REALTIME & NOTIFIKASI ===== */
+  /* ---------- Realtime dan notifikasi ---------- */
   function pasangRealtime() {
     if (channel) return;
     channel = sb.channel("admin-live")
@@ -749,7 +775,7 @@ button.ok{background:var(--green)}
         muatSemua();
       })
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "pesanan" }, (p) => {
-        if (p.new.status === "refund_diajukan" && p.old.status !== "refund_diajukan") {
+        if (p.new.status === "refund_diajukan" && p.old && p.old.status !== "refund_diajukan") {
           kirimNotif("Pengajuan refund", `${p.new.nama_pemesan} | ${p.new.kode_pesanan}`);
         }
         muatSemua();
@@ -782,3 +808,4 @@ button.ok{background:var(--green)}
 </script>
 </body>
 </html>
+
