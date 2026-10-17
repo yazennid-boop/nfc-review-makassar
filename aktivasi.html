@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<meta name="description" content="Aktivasi kartu Google Review ReviewCard Makassar dengan PIN 4 digit dan panduan video.">
+<meta name="description" content="Panduan aktivasi kartu Google Review ReviewCard Makassar.">
 <meta name="robots" content="noindex, nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Aktivasi Kartu | ReviewCard Makassar</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,123 +31,48 @@
   <section class="hero">
     <span class="eyebrow">Aktivasi Kartu</span>
     <h1>Aktifkan kartu Anda</h1>
-    <p>Kartu ini dibuat dengan satu tujuan: membuat pelanggan memberi ulasan Google dalam kurang dari lima detik. Ikuti panduan berikut untuk mengaktifkannya.</p>
+    <p>Ikuti panduan video dan langkah berikut. Prosesnya hanya beberapa menit.</p>
   </section>
 
-  <section class="card" aria-labelledby="judulVideo">
-    <h2 id="judulVideo">Panduan aktivasi (video)</h2>
+  <section class="card" aria-labelledby="jVideo">
+    <h2 id="jVideo">1. Tonton panduan</h2>
     <div class="video-box v916">
       <video controls playsinline preload="none" aria-label="Panduan aktivasi kartu Google Review">
         <source src="assets/video-tutorial-aktivasi.mp4" type="video/mp4">
         Browser Anda tidak mendukung pemutar video.
       </video>
     </div>
-    <p class="muted small">Video berdurasi sekitar 1 menit. Tekan Play untuk menonton.</p>
+    <p class="muted small">Tekan Play untuk menonton. Video berdurasi sekitar 1 menit.</p>
   </section>
 
-  <section class="card" id="langkahVerifikasi" aria-labelledby="judulVerifikasi">
-    <h2 id="judulVerifikasi"><span class="langkah-no">1</span>Verifikasi pesanan</h2>
-    <p class="muted small">Masukkan nomor pesanan dan nomor WhatsApp yang Anda gunakan saat memesan. Langkah ini tidak diperlukan jika Anda membuka halaman ini dari tautan pribadi kartu.</p>
-    <form id="formCari" autocomplete="off" novalidate>
-      <div class="field">
-        <label for="nomor">Nomor pesanan *</label>
-        <input type="text" id="nomor" placeholder="RV-XXXXXXXX" maxlength="11" autocapitalize="characters" spellcheck="false">
-      </div>
-      <div class="field">
-        <label for="wa">Nomor WhatsApp pemesan *</label>
-        <input type="tel" id="wa" placeholder="628xxxxxxxxxx" maxlength="16" inputmode="numeric" autocomplete="off">
-      </div>
-      <button type="submit" class="btn wide" id="btnCari">Verifikasi</button>
-      <p class="msg" id="msgCari" role="status" aria-live="polite"></p>
-    </form>
+  <section class="card" aria-labelledby="jLangkah">
+    <h2 id="jLangkah">2. Ikuti langkah berikut</h2>
+    <ol class="langkah">
+      <li><b>Tempel HP</b> yang memiliki fitur NFC ke kartu, atau <b>pindai QR Code</b> di kartu menggunakan kamera HP.</li>
+      <li>Halaman aktivasi akan terbuka otomatis. Ikuti langkah sesuai video.</li>
+      <li><b>Buat PIN 4 digit.</b> Pilih angka yang mudah Anda ingat, dan jangan bagikan kepada siapa pun.</li>
+      <li><b>Isi nama usaha</b> sesuai nama toko yang tertera di Google Maps.</li>
+      <li><b>Isi nomor HP aktif.</b> Nomor ini membantu proses pemulihan PIN jika Anda lupa.</li>
+      <li>Tekan tombol <b>Aktifkan</b> atau <b>Simpan</b> sesuai tampilan di halaman, lalu tunggu konfirmasi.</li>
+    </ol>
   </section>
 
-  <section class="card hidden" id="langkahAtur" aria-labelledby="judulAtur">
-    <h2 id="judulAtur"><span class="langkah-no">2</span>Atur kartu Anda</h2>
-    <div id="infoKartu" class="notice" role="status" aria-live="polite"></div>
-    <form id="formAktif" autocomplete="off" novalidate>
-      <div class="field">
-        <label for="nama">Nama usaha atau toko *</label>
-        <input type="text" id="nama" maxlength="80" autocomplete="organization">
-      </div>
-      <div class="field">
-        <label for="linkToko">Link toko (Google Maps usaha) *</label>
-        <input type="url" id="linkToko" placeholder="https://maps.app.goo.gl/..." maxlength="200" inputmode="url" autocomplete="off">
-      </div>
-      <div class="field">
-        <label for="linkUlasan">Link ulasan Google *</label>
-        <input type="url" id="linkUlasan" placeholder="https://g.page/r/..." maxlength="200" inputmode="url" autocomplete="off">
-      </div>
-      <div class="field">
-        <label for="pin" id="labelPin">Buat PIN 4 digit *</label>
-        <input type="password" id="pin" class="pin" inputmode="numeric" maxlength="4" autocomplete="new-password">
-      </div>
-      <div class="field" id="blokPinUlang">
-        <label for="pinUlang">Ulangi PIN *</label>
-        <input type="password" id="pinUlang" class="pin" inputmode="numeric" maxlength="4" autocomplete="new-password">
-      </div>
-      <label class="cek"><input type="checkbox" id="tampilPin"> Tampilkan PIN</label>
-      <button type="submit" class="btn wide" id="btnAktif">Simpan dan aktifkan</button>
-      <p class="msg" id="msgAktif" role="status" aria-live="polite"></p>
-    </form>
-  </section>
-
-  <section class="card hidden" id="blokTautan" aria-labelledby="judulTautan">
-    <h2 id="judulTautan">Simpan tautan kelola kartu Anda</h2>
-    <p class="muted small">Tautan ini khusus untuk kartu Anda. Dengan tautan ini, Anda cukup memasukkan PIN untuk mengubah data, mengganti PIN, atau mereset kartu. Simpan di browser, dan jangan bagikan kepada siapa pun.</p>
-    <div class="kotak-tautan" id="tautanTeks"></div>
-    <button type="button" class="btn ghost wide" id="btnSalinTautan">Salin tautan</button>
-    <p class="msg" id="msgSalin" role="status" aria-live="polite"></p>
-  </section>
-
-  <section class="card" aria-labelledby="judulCara">
-    <h2 id="judulCara">Cara mendapatkan link</h2>
-    <details class="panel">
-      <summary>Link ulasan Google</summary>
-      <div class="isi">
-        <ol class="langkah">
-          <li>Buka <b>Google Bisnisku (Google Business Profile)</b> dengan akun pemilik usaha.</li>
-          <li>Pilih profil usaha yang ingin dihubungkan dengan kartu.</li>
-          <li>Pilih <b>Dapatkan lebih banyak ulasan</b>. Nama menu dapat sedikit berbeda di setiap versi aplikasi.</li>
-          <li>Salin tautan yang diawali <b>https://g.page/r/</b>, lalu tempel di kolom Link ulasan Google.</li>
-        </ol>
-      </div>
-    </details>
-    <details class="panel">
-      <summary>Link toko (Google Maps)</summary>
-      <div class="isi">
-        <ol class="langkah">
-          <li>Cari nama usaha Anda di Google Maps.</li>
-          <li>Tekan ikon usaha, lalu pastikan lokasinya sudah tepat.</li>
-          <li>Pilih <b>Bagikan</b>, lalu <b>Salin tautan</b>.</li>
-        </ol>
-      </div>
-    </details>
-  </section>
-
-  <section class="card" aria-labelledby="judulKeamanan">
-    <div class="warn">
-      <strong>PERINGATAN KEAMANAN</strong>
-      Admin tidak pernah meminta PIN melalui chat, telepon, atau email. Jangan bagikan PIN atau tautan pribadi kartu kepada siapa pun. Jika ada pihak yang memintanya, itu penipuan.
+  <section class="card" aria-labelledby="jCatatan">
+    <h2 id="jCatatan">Catatan</h2>
+    <p class="muted">Jika pesanan Anda memilih aktivasi langsung oleh kami, Anda tidak perlu melakukan langkah di atas. Kartu akan kami aktifkan setelah pembayaran diverifikasi.</p>
+    <p class="muted">Lupa PIN atau kata sandi, atau nomor HP tidak aktif? Buka halaman Kelola Kartu untuk panduan pemulihan.</p>
+    <div class="aksi-row">
+      <a class="btn ghost" href="kelola-kartu.html">Buka Kelola Kartu</a>
     </div>
-    <a class="btn ghost wide" id="btnAdmin" href="#" target="_blank" rel="noopener noreferrer">Hubungi Admin</a>
   </section>
 
-  <section class="card" aria-labelledby="judulQna">
-    <h2 id="judulQna">Tanya jawab</h2>
-    <div class="qna">
-      <details open>
-        <summary>Apa itu PIN kartu?</summary>
-        <p>PIN adalah angka 4 digit yang Anda buat sendiri. PIN digunakan untuk mengaktifkan dan mengelola kartu. PIN disimpan dalam bentuk hash, sehingga tidak dapat dibaca siapa pun, termasuk admin.</p>
-      </details>
-      <details>
-        <summary>Bagaimana jika tautan pribadi hilang?</summary>
-        <p>Gunakan langkah verifikasi pesanan di halaman ini, atau hubungi admin dengan nomor pesanan dan nama pemesan.</p>
-      </details>
-      <details>
-        <summary>Bisakah PIN diganti nanti?</summary>
-        <p>Bisa. Buka halaman Kelola Kartu menggunakan tautan pribadi, lalu pilih Ganti PIN dengan memasukkan PIN saat ini.</p>
-      </details>
+  <section class="card" aria-labelledby="jBantu">
+    <h2 id="jBantu">Butuh bantuan?</h2>
+    <p class="muted small">Jika kartu tidak bisa diaktifkan, hubungi admin melalui WhatsApp.</p>
+    <a class="btn ghost wide" id="btnAdmin" href="https://wa.me/6289504749648?text=Halo%20Admin%2C%20saya%20butuh%20bantuan%20aktivasi%20kartu%20Google%20Review." target="_blank" rel="noopener noreferrer">Hubungi Admin</a>
+    <div class="warn">
+      <strong>PERINGATAN</strong>
+      Admin tidak pernah meminta PIN melalui chat, telepon, atau email. Jangan bagikan PIN kepada siapa pun.
     </div>
   </section>
 
@@ -158,195 +83,8 @@
   <p>Dibuat oleh <a href="https://www.tiktok.com/@raymond.builds" target="_blank" rel="noopener noreferrer">@raymond.builds</a></p>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-(() => {
-  "use strict";
-
-  const CONFIG = {
-    supabaseUrl: "https://rbxkasjljehbejkehslr.supabase.co",
-    supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieGthc2psamVoYmVqa2Voc2xyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NDQxMDMsImV4cCI6MjEwNzEyMDEwM30.HlAFJArWgzbvFjorcPgMVCrSBjXJdijsfUOMHHkfyRQ",
-    adminWA: "6289504749648",
-  };
-
-  const LINK_TOKO = /^https:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps|www\.google\.com\/maps|maps\.google\.com)/i;
-  const LINK_ULASAN = /^https:\/\/(g\.page|www\.google\.com|search\.google\.com|maps\.app\.goo\.gl|goo\.gl)\//i;
-  const ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-  const PESAN = {
-    DIAKTIFKAN: ["Kartu berhasil diaktifkan. Simpan tautan kelola kartu di bawah ini.", "ok"],
-    DIUBAH: ["Data kartu berhasil diperbarui.", "ok"],
-    PIN_FORMAT_SALAH: ["PIN harus tepat 4 digit angka.", "err"],
-    PIN_TERLALU_MUDAH: ["PIN terlalu mudah ditebak. Gunakan angka lain.", "err"],
-    PIN_SALAH: ["PIN yang Anda masukkan salah.", "err"],
-    TERKUNCI: ["Kartu sementara dikunci karena beberapa kali PIN salah. Coba lagi setelah waktu kunci berakhir.", "err"],
-    HUBUNGI_ADMIN: ["Kartu perlu diverifikasi admin. Silakan hubungi admin.", "err"],
-    BELUM_DIBAYAR: ["Kartu dapat diaktifkan setelah pembayaran pesanan diverifikasi.", "err"],
-    NAMA_USAHA_WAJIB: ["Nama usaha wajib diisi.", "err"],
-    LINK_TOKO_TIDAK_VALID: ["Link toko harus berasal dari Google Maps.", "err"],
-    LINK_ULASAN_TIDAK_VALID: ["Link ulasan harus berasal dari Google, diawali https://g.page/ atau https://search.google.com/.", "err"],
-    BATAS_UBAH_TERCAPAI: ["Batas perubahan kartu sudah tercapai. Silakan hubungi admin.", "err"],
-    KARTU_TIDAK_DITEMUKAN: ["Kartu tidak ditemukan. Ulangi verifikasi pesanan.", "err"],
-  };
-
-  const sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-
-  const $ = (id) => document.getElementById(id);
-  const tulis = (id, teks, tipe = "") => { $(id).textContent = teks; $(id).className = "msg " + tipe; };
-
-  let kartuId = null;
-  let adaPin = false;
-
-  const tautanKelola = () => new URL("kelola-kartu.html?id=" + kartuId, location.href).href;
-
-  function bersihPin() {
-    $("pin").value = "";
-    $("pinUlang").value = "";
-  }
-
-  async function muatKartu() {
-    if (!kartuId) return;
-    const info = $("infoKartu");
-    const { data, error } = await sb.rpc("kartu_publik", { p_id: kartuId });
-    const k = data && data[0];
-
-    if (error || !k || !k.ada) {
-      kartuId = null;
-      info.className = "notice warn";
-      info.textContent = "Kartu tidak ditemukan. Silakan ulangi verifikasi pesanan.";
-      $("langkahAtur").classList.add("hidden");
-      $("langkahVerifikasi").classList.remove("hidden");
-      return;
-    }
-
-    adaPin = k.ada_pin;
-    $("labelPin").textContent = adaPin ? "PIN Anda saat ini *" : "Buat PIN 4 digit *";
-    $("blokPinUlang").classList.toggle("hidden", adaPin);
-    $("langkahAtur").classList.remove("hidden");
-
-    if (k.aktif) {
-      info.className = "notice ok";
-      info.textContent = "Kartu ini sudah aktif" + (k.nama_usaha ? " untuk " + k.nama_usaha : "") + ". Untuk mengubah data atau PIN, gunakan halaman Kelola Kartu.";
-      $("formAktif").classList.add("hidden");
-      $("blokTautan").classList.remove("hidden");
-      $("tautanTeks").textContent = tautanKelola();
-      return;
-    }
-
-    if (k.terkunci || k.butuh_admin) {
-      info.className = "notice warn";
-      info.textContent = k.butuh_admin
-        ? "Kartu ini memerlukan verifikasi admin sebelum dapat diaktifkan. Silakan hubungi admin."
-        : "Kartu sementara dikunci. Coba lagi setelah waktu kunci berakhir.";
-      $("formAktif").classList.add("hidden");
-      return;
-    }
-
-    info.className = "notice";
-    info.textContent = "Kartu siap diaktifkan. Isi data usaha dan buat PIN Anda.";
-    $("formAktif").classList.remove("hidden");
-  }
-
-  async function mulaiDenganId(id) {
-    kartuId = id;
-    $("langkahVerifikasi").classList.add("hidden");
-    await muatKartu();
-  }
-
-  $("formCari").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const nomor = $("nomor").value.trim().toUpperCase();
-    const wa = $("wa").value.trim();
-
-    if (!/^RV-[A-Z0-9]{8}$/.test(nomor)) return tulis("msgCari", "Format nomor pesanan tidak valid, contoh RV-1A2B3C4D.", "err");
-    if (!/^62\d{8,13}$/.test(wa)) return tulis("msgCari", "Nomor WhatsApp harus diawali 62 dan berisi 10 sampai 15 angka.", "err");
-
-    const btn = $("btnCari");
-    btn.disabled = true;
-    tulis("msgCari", "Memeriksa data...", "");
-    const { data, error } = await sb.rpc("cari_kartu_pesanan", { p_kode: nomor, p_no_wa: wa });
-    btn.disabled = false;
-
-    if (error) return tulis("msgCari", "Terjadi kendala. Periksa koneksi lalu coba lagi.", "err");
-    if (!data) {
-      return tulis("msgCari", "Data tidak ditemukan, atau pembayaran belum diverifikasi. Pastikan nomor pesanan dan WhatsApp sudah sesuai.", "err");
-    }
-
-    tulis("msgCari", "Data ditemukan. Lanjutkan ke langkah 2.", "ok");
-    await mulaiDenganId(data);
-    $("langkahAtur").scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-
-  $("formAktif").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const pin = $("pin").value;
-    const ulang = $("pinUlang").value;
-    const nama = $("nama").value.trim();
-    const linkToko = $("linkToko").value.trim();
-    const linkUlasan = $("linkUlasan").value.trim();
-    bersihPin();
-
-    if (!/^[0-9]{4}$/.test(pin)) return tulis("msgAktif", PESAN.PIN_FORMAT_SALAH[0], "err");
-    if (!adaPin && pin !== ulang) return tulis("msgAktif", "Konfirmasi PIN tidak sama. Silakan ulangi.", "err");
-    if (nama.length < 2) return tulis("msgAktif", PESAN.NAMA_USAHA_WAJIB[0], "err");
-    if (!LINK_TOKO.test(linkToko)) return tulis("msgAktif", PESAN.LINK_TOKO_TIDAK_VALID[0], "err");
-    if (!LINK_ULASAN.test(linkUlasan)) return tulis("msgAktif", PESAN.LINK_ULASAN_TIDAK_VALID[0], "err");
-
-    const btn = $("btnAktif");
-    btn.disabled = true;
-    tulis("msgAktif", "Menyimpan...", "");
-
-    const { data, error } = await sb.rpc("simpan_kartu", {
-      p_id: kartuId,
-      p_pin: pin,
-      p_nama: nama,
-      p_link_toko: linkToko,
-      p_link_google: linkUlasan,
-    });
-    btn.disabled = false;
-
-    if (error) return tulis("msgAktif", "Terjadi kendala. Periksa koneksi lalu coba lagi.", "err");
-
-    const hasil = PESAN[data] || ["Terjadi kendala. Silakan coba lagi.", "err"];
-    tulis("msgAktif", hasil[0], hasil[1]);
-
-    if (data === "DIAKTIFKAN" || data === "DIUBAH") {
-      $("formAktif").reset();
-      await muatKartu();
-    }
-  });
-
-  $("tampilPin").addEventListener("change", (e) => {
-    const tipe = e.target.checked ? "text" : "password";
-    $("pin").type = tipe;
-    $("pinUlang").type = tipe;
-  });
-
-  ["pin", "pinUlang"].forEach((id) => {
-    $(id).addEventListener("input", (e) => {
-      e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4);
-    });
-  });
-
-  $("btnSalinTautan").addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText($("tautanTeks").textContent);
-      tulis("msgSalin", "Tautan disalin.", "ok");
-    } catch (_) {
-      tulis("msgSalin", "Gagal menyalin. Tahan teks tautan lalu pilih Salin.", "err");
-    }
-  });
-
-  $("btnAdmin").href =
-    "https://wa.me/" + CONFIG.adminWA + "?text=" +
-    encodeURIComponent("Halo Admin, saya butuh bantuan aktivasi kartu Google Review.");
-  $("tahun").textContent = new Date().getFullYear();
-
-  const idUrl = new URLSearchParams(location.search).get("id");
-  if (idUrl && ID_RE.test(idUrl)) mulaiDenganId(idUrl);
-})();
+  document.getElementById("tahun").textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
