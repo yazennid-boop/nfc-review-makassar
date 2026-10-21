@@ -11,16 +11,11 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-syst
 #scene{position:absolute;inset:0;touch-action:none}
 #scene canvas{display:block;width:100%;height:100%}
 #judul{position:absolute;top:12px;left:0;right:0;margin:0;text-align:center;font-size:1rem;font-weight:600;letter-spacing:.06em;color:#eafcff;pointer-events:none}
-#judul.hidden{display:none}
+#aksiDetail{position:absolute;left:0;right:0;bottom:62px;display:flex;justify-content:center;gap:8px;padding:0 10px}
 #kontrol{position:absolute;left:0;right:0;bottom:16px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:0 10px}
 .btn{font:inherit;font-size:.8rem;font-weight:600;color:#bff6ff;background:rgba(10,18,34,.75);border:1px solid rgba(0,229,255,.5);border-radius:999px;padding:9px 14px;cursor:pointer;text-decoration:none;white-space:nowrap}
 .btn.utama{background:rgba(0,229,255,.2);color:#fff}
 .btn:focus-visible{outline:2px solid #7ff7ff;outline-offset:2px}
-#overlay{position:absolute;left:50%;top:14px;transform:translateX(-50%);width:min(88%,360px);background:rgba(8,14,28,.82);border:1px solid rgba(0,229,255,.5);border-radius:18px;padding:14px 16px;text-align:center;box-shadow:0 0 30px rgba(0,229,255,.22);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .35s}
-#overlay.tampil{opacity:1;pointer-events:auto}
-#overlay h2{margin:0;font-size:1.05rem;font-weight:700;letter-spacing:.06em;color:#fff}
-#overlay p{margin:6px 0 10px;font-size:.78rem;color:#a9dcf0}
-.aksi{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .hidden{display:none!important}
 #statis{position:absolute;inset:0;display:grid;place-items:center}
 .kartu-statis{position:relative;width:min(70vw,360px);aspect-ratio:1/1;border-radius:18px;overflow:hidden;box-shadow:0 0 40px rgba(0,229,255,.2)}
@@ -28,7 +23,6 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-syst
 .k1{left:0;top:0;background:#0f6bff}.k2{right:0;top:0;background:#ee2a24}.k3{right:0;bottom:0;background:#ffd500}.k4{left:0;bottom:0;background:#0aa04f}
 .panel-statis{position:absolute;left:11%;right:11%;top:24%;bottom:24%;background:#fff;border-radius:18px;display:grid;place-content:center;text-align:center;color:#1f2330}
 .panel-statis b{font-size:clamp(1.3rem,5vw,2rem)}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
 </style>
 </head>
 <body>
@@ -44,13 +38,9 @@ html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-syst
   </div>
 </div>
 
-<div id="overlay" role="dialog" aria-live="polite">
-  <h2 id="judulKartu"></h2>
-  <p>Geser untuk memutar 360°. Cubit untuk zoom.</p>
-  <div class="aksi">
-    <a class="btn utama" href="index.html#pesan" target="_top">Pesan kartu ini</a>
-    <button id="btnTutup" class="btn" type="button">Tutup</button>
-  </div>
+<div id="aksiDetail" class="hidden">
+  <a class="btn utama" href="index.html#pesan" target="_top">Pesan kartu ini</a>
+  <button id="btnTutup" class="btn" type="button">Tutup</button>
 </div>
 
 <div id="kontrol">
@@ -64,12 +54,12 @@ function tampilStatis() {
   document.getElementById('statis').classList.remove('hidden');
   document.getElementById('scene').classList.add('hidden');
   document.getElementById('kontrol').classList.add('hidden');
-  document.getElementById('overlay').classList.add('hidden');
+  document.getElementById('aksiDetail').classList.add('hidden');
   document.getElementById('judul').classList.add('hidden');
 }
 window.tampilStatis = tampilStatis;
 window.__studioSiap = false;
-setTimeout(function () { if (!window.__studioSiap) tampilStatis(); }, 10000);
+setTimeout(function () { if (!window.__studioSiap) tampilStatis(); }, 12000);
 </script>
 
 <script type="importmap">
@@ -81,14 +71,15 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
-/* ===== Pengaturan utama ===== */
-const JUDUL_KARTU = "Google Review Card";
+const $ = (id) => document.getElementById(id);
+
+/* ===== Pengaturan ===== */
 const LOW = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 3;
 const RW = LOW ? 512 : 1024;
 const DESAIN = 1254;
 const S = RW / DESAIN;
-const KURANGI_GERAK = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const SKALA_WAKTU = KURANGI_GERAK ? 0.55 : 1;
+const KURANGI = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const SKALA_WAKTU = KURANGI ? 0.55 : 1;
 
 /* Ukuran kartu 12 x 12 cm (persegi) */
 const KW = 1.2, KH = 1.2, KR = 0.12, KT = 0.04;
@@ -113,11 +104,11 @@ const FASE = [
   { n: "kotak", d: 0.5 },
 ];
 
-const $ = (id) => document.getElementById(id);
 const smooth = (t) => t * t * (3 - 2 * t);
 const lerp = (a, b, t) => a + (b - a) * t;
 const stackY = (i) => BOX_FLOOR + KT / 2 + i * (KT + 0.006);
 
+/* ===== Helper ===== */
 function cekWebGL() {
   try {
     const c = document.createElement("canvas");
@@ -187,8 +178,8 @@ function gambarQR(g, x, y, s) {
   }
 }
 
-/* Desain bawaan (dipakai jika assets/desain-kartu.png belum ada) */
-function gambarDesainBawaan(g) {
+/* Desain bawaan, dipakai jika assets/desain-kartu.png belum ada */
+function gambarBawaan(g) {
   g.setTransform(S, 0, 0, S, 0, 0);
   g.fillStyle = "#ffffff";
   g.fillRect(0, 0, DESAIN, DESAIN);
@@ -238,6 +229,7 @@ function gambarDesainBawaan(g) {
   g.font = "bold 30px Arial, sans-serif";
   g.fillText("TEMPELKAN HP KAMU", 388, 1020);
   g.fillText("SCAN QR", 878, 1020);
+  g.setTransform(1, 0, 0, 1, 0, 0);
 }
 
 /* Kartu kosong sebelum dipindai */
@@ -247,9 +239,36 @@ function gambarKosong(g) {
   g.fillRect(0, 0, DESAIN, DESAIN);
   g.strokeStyle = "#c5cfdd"; g.lineWidth = 12;
   g.strokeRect(20, 20, DESAIN - 40, DESAIN - 40);
+  g.setTransform(1, 0, 0, 1, 0, 0);
 }
 
+/* ===== Studio ===== */
 function jalankanStudio() {
+  const kartuList = [];
+
+  /* Sumber desain: gambar dari assets, atau bawaan */
+  const sumber = document.createElement("canvas");
+  sumber.width = RW; sumber.height = RW;
+  const sumberCtx = sumber.getContext("2d");
+  gambarBawaan(sumberCtx);
+  const sumberTex = new THREE.CanvasTexture(sumber);
+  sumberTex.colorSpace = THREE.SRGBColorSpace;
+  sumberTex.anisotropy = LOW ? 1 : 4;
+
+  const img = new Image();
+  img.onload = () => {
+    sumberCtx.setTransform(1, 0, 0, 1, 0, 0);
+    sumberCtx.clearRect(0, 0, RW, RW);
+    sumberCtx.drawImage(img, 0, 0, RW, RW);
+    sumberTex.needsUpdate = true;
+    for (const k of kartuList) k.h = -1;
+  };
+  img.src = "assets/desain-kartu.png";
+
+  const kosong = document.createElement("canvas");
+  kosong.width = RW; kosong.height = RW;
+  gambarKosong(kosong.getContext("2d"));
+
   /* ----- Renderer, lingkungan, kamera ----- */
   const renderer = new THREE.WebGLRenderer({ antialias: !LOW, alpha: true, powerPreference: "high-performance" });
   let skalaPiksel = Math.min(window.devicePixelRatio || 1, LOW ? 1.25 : 2);
@@ -274,11 +293,10 @@ function jalankanStudio() {
   kontrol.zoomSpeed = 0.8;
   kontrol.autoRotateSpeed = 0.35;
 
-  let jarak = 9, jarakDetail = 3.5, batasMin = 4, batasMax = 14;
+  let jarak = 9, jarakDetail = 3, batasMin = 4, batasMax = 14;
   const posisiHome = new THREE.Vector3();
   const posisiIntro = new THREE.Vector3();
   const tmpV = new THREE.Vector3();
-  const tmpV2 = new THREE.Vector3();
 
   let intro = true, introT = 0, resetAktif = false, sudahSentuh = false;
   let fokusDetail = false, transisi = false;
@@ -302,7 +320,8 @@ function jalankanStudio() {
   }
 
   function ukur() {
-    const w = Math.max(1, $("scene").clientWidth), h = Math.max(1, $("scene").clientHeight);
+    const el = $("scene");
+    const w = Math.max(1, el.clientWidth), h = Math.max(1, el.clientHeight);
     renderer.setSize(w, h, false);
     const a = w / h;
     camera.aspect = a;
@@ -310,7 +329,7 @@ function jalankanStudio() {
     camera.updateProjectionMatrix();
     const tv = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     jarak = Math.max(4.6 / (tv * a), 1.6 / tv) * 1.22;
-    jarakDetail = Math.max(1.5 / (2 * tv), 1.4 / (2 * tv * a));
+    jarakDetail = Math.max(0.9 / tv, 0.8 / (tv * a));
     batasMin = jarak * 0.45;
     batasMax = jarak * 1.6;
     posisiHome.copy(TARGET).addScaledVector(ARAH, jarak);
@@ -318,6 +337,7 @@ function jalankanStudio() {
     if (!fokusDetail) pasangBatasNormal();
     if (!intro && !sudahSentuh) camera.position.copy(posisiHome);
   }
+  window.addEventListener("resize", ukur);
 
   kontrol.addEventListener("start", () => {
     intro = false;
@@ -510,37 +530,16 @@ function jalankanStudio() {
   sisiKanan.position.x = BOX_X + 0.925;
   kardus.add(lantaiK, sisiDepan, sisiBelakang, sisiKiri, sisiKanan);
 
-  /* ----- Bahan kartu ----- */
+  /* ----- Bahan kartu: sisi akrilik putih ----- */
   const bentuk = bentukRounded(KW, KH, KR);
   const geoBadan = new THREE.ExtrudeGeometry(bentuk, { depth: KT, bevelEnabled: false, curveSegments: 8 });
   geoBadan.translate(0, 0, -KT / 2);
-  const matBadan = bahanLogam(0x1b2231, 0.3, 0.45);
   const geoPelat = buatGeoPelat(bentuk);
-  const matBelakang = new THREE.MeshStandardMaterial({ color: 0xf1f4f9, roughness: 0.6 });
-
-  /* Kanvas desain: dipakai untuk kartu di mesin dan kartu yang diperbesar */
-  const kanvasDesain = document.createElement("canvas");
-  kanvasDesain.width = RW; kanvasDesain.height = RW;
-  gambarDesainBawaan(kanvasDesain.getContext("2d"));
-
-  const imgDesain = new Image();
-  imgDesain.onload = () => {
-    const g = kanvasDesain.getContext("2d");
-    g.setTransform(1, 0, 0, 1, 0, 0);
-    g.clearRect(0, 0, RW, RW);
-    g.drawImage(imgDesain, 0, 0, RW, RW);
-    texDesainDetail.needsUpdate = true;
-    for (const k of kartuList) k.h = -1;
-  };
-  imgDesain.src = "assets/desain-kartu.png";
-
-  const texDesainDetail = new THREE.CanvasTexture(kanvasDesain);
-  texDesainDetail.colorSpace = THREE.SRGBColorSpace;
-  texDesainDetail.anisotropy = LOW ? 1 : 4;
+  const matSisi = new THREE.MeshStandardMaterial({ color: 0xf4f7fb, roughness: 0.3, metalness: 0.05 });
+  const matBelakang = new THREE.MeshStandardMaterial({ color: 0xf4f7fb, roughness: 0.4, metalness: 0.02 });
 
   /* ----- Pool kartu di mesin ----- */
   const POOL = BOX_CAP + 2;
-  const kartuList = [];
   for (let i = 0; i < POOL; i++) {
     const cv = document.createElement("canvas");
     cv.width = RW; cv.height = RW;
@@ -554,7 +553,7 @@ function jalankanStudio() {
     });
     const grup = new THREE.Group();
     grup.rotation.x = -Math.PI / 2;
-    const badan = new THREE.Mesh(geoBadan, matBadan);
+    const badan = new THREE.Mesh(geoBadan, matSisi);
     const depan = new THREE.Mesh(geoPelat, matDepan);
     depan.position.z = KT / 2 + 0.002;
     const belakang = new THREE.Mesh(geoPelat, matBelakang);
@@ -568,11 +567,6 @@ function jalankanStudio() {
     kartuList.push(k);
   }
 
-  // Gambar kartu bertahap dari atas ke bawah (p = 0..1)
-  const kanvasKosong = document.createElement("canvas");
-  kanvasKosong.width = RW; kanvasKosong.height = RW;
-  gambarKosong(kanvasKosong.getContext("2d"));
-
   function gambarKartu(k, p) {
     const h = Math.round(RW * p);
     if (h === k.h) return;
@@ -580,8 +574,8 @@ function jalankanStudio() {
     const g = k.ctx;
     g.setTransform(1, 0, 0, 1, 0, 0);
     g.clearRect(0, 0, RW, RW);
-    g.drawImage(kanvasKosong, 0, 0);
-    if (h > 0) g.drawImage(kanvasDesain, 0, 0, RW, h, 0, 0, RW, h);
+    g.drawImage(kosong, 0, 0);
+    if (h > 0) g.drawImage(sumber, 0, 0, RW, h, 0, 0, RW, h);
     if (p > 0 && p < 1) {
       g.fillStyle = "rgba(0,229,255,0.14)";
       g.fillRect(0, Math.max(0, h - 26 * S), RW, 26 * S);
@@ -591,33 +585,36 @@ function jalankanStudio() {
     k.tex.needsUpdate = true;
   }
 
-  /* ----- Kartu diperbesar (saat diketuk): depan desain, belakang putih + double tape ----- */
+  /* ----- Kartu diperbesar saat diketuk ----- */
   const vitrin = new THREE.Group();
   vitrin.position.copy(VITRIN_POS);
   vitrin.visible = false;
   scene.add(vitrin);
-  const vBadan = new THREE.Mesh(geoBadan, matBadan);
-  vitrin.add(vBadan);
-  const vDepan = new THREE.Mesh(geoPelat, new THREE.MeshStandardMaterial({ map: texDesainDetail, roughness: 0.3, metalness: 0.05 }));
+  vitrin.add(new THREE.Mesh(geoBadan, matSisi));
+  const vDepan = new THREE.Mesh(
+    geoPelat,
+    new THREE.MeshStandardMaterial({ map: sumberTex, roughness: 0.3, metalness: 0.05 })
+  );
   vDepan.position.z = KT / 2 + 0.002;
   vitrin.add(vDepan);
   const vBelakang = new THREE.Mesh(geoPelat, matBelakang);
   vBelakang.rotation.y = Math.PI;
   vBelakang.position.z = -KT / 2 - 0.002;
   vitrin.add(vBelakang);
-  const vTape = new THREE.Mesh(
-    new THREE.BoxGeometry(KW / 3, KH * 0.26, 0.012),
-    new THREE.MeshStandardMaterial({ color: 0xf6f8fc, roughness: 0.35, metalness: 0 })
+
+  /* Double tape di tengah belakang kartu */
+  const tapeLapis = new THREE.Mesh(
+    new THREE.BoxGeometry(KW / 3 + 0.02, KH * 0.3 + 0.02, 0.004),
+    new THREE.MeshStandardMaterial({ color: 0xd5dce8, roughness: 0.6 })
   );
-  vTape.position.set(0, 0, -KT / 2 - 0.002 - 0.006);
-  vitrin.add(vTape);
-  const vTapeLapis = new THREE.Mesh(
-    new THREE.BoxGeometry(KW / 3 + 0.02, KH * 0.26 + 0.02, 0.006),
-    new THREE.MeshStandardMaterial({ color: 0xc9d2e0, roughness: 0.5, metalness: 0 })
+  tapeLapis.position.set(0, 0, -KT / 2 - 0.002 - 0.012);
+  vitrin.add(tapeLapis);
+  const tape = new THREE.Mesh(
+    new THREE.BoxGeometry(KW / 3, KH * 0.3, 0.008),
+    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.35 })
   );
-  vTapeLapis.position.set(0, 0, -KT / 2 - 0.002 - 0.003);
-  vitrin.add(vTapeLapis);
-  vitrin.userData.kartu = null;
+  tape.position.set(0, 0, -KT / 2 - 0.002 - 0.006);
+  vitrin.add(tape);
 
   /* ----- Pose kartu dan kepala per fase ----- */
   function atur(k, nama, p) {
@@ -755,12 +752,9 @@ function jalankanStudio() {
     intro = false;
     sudahSentuh = true;
     pasangBatasDetail();
-    kontrol.autoRotate = true;
-    kontrol.autoRotateSpeed = 1.2;
+    kontrol.autoRotate = false;
     vitrin.visible = true;
-    $("judul").classList.add("hidden");
-    $("judulKartu").textContent = JUDUL_KARTU;
-    $("overlay").classList.add("tampil");
+    $("aksiDetail").classList.remove("hidden");
   }
 
   function tutupDetail() {
@@ -768,8 +762,7 @@ function jalankanStudio() {
     fokusDetail = false;
     transisi = false;
     vitrin.visible = false;
-    $("overlay").classList.remove("tampil");
-    $("judul").classList.remove("hidden");
+    $("aksiDetail").classList.add("hidden");
     kontrol.autoRotate = false;
     pasangBatasNormal();
     resetAktif = true;
@@ -807,8 +800,8 @@ function jalankanStudio() {
     raycaster.setFromCamera(pointer, camera);
 
     if (fokusDetail) {
-      const hitVitrin = raycaster.intersectObject(vitrin, true).length > 0;
-      if (!hitVitrin) tutupDetail();
+      const kenaKartu = raycaster.intersectObject(vitrin, true).length > 0;
+      if (!kenaKartu) tutupDetail();
       return;
     }
 
@@ -861,7 +854,7 @@ function jalankanStudio() {
     lastT = now;
     const dt = dtNyata * SKALA_WAKTU;
 
-    // Turunkan resolusi otomatis jika frame rate terlalu rendah
+    /* Turunkan resolusi otomatis jika frame rate rendah */
     frameKe++;
     if (frameKe > 60) {
       sampel.push(dtNyata);
@@ -878,7 +871,9 @@ function jalankanStudio() {
 
     perbaruiLogika(dt);
     perbaruiSabuk(dt);
-    if (fokusDetail) vitrin.position.y = VITRIN_POS.y + Math.sin(now / 900) * 0.03;
+    if (fokusDetail) {
+      vitrin.position.set(VITRIN_POS.x, VITRIN_POS.y + Math.sin(now / 900) * 0.03, VITRIN_POS.z);
+    }
 
     if (intro) {
       introT += dt;
@@ -888,14 +883,14 @@ function jalankanStudio() {
       camera.lookAt(TARGET);
       if (t >= 1) {
         intro = false;
-        kontrol.autoRotate = !KURANGI_GERAK;
+        kontrol.autoRotate = !KURANGI;
       }
     } else if (fokusDetail) {
       if (transisi) {
         kontrol.target.lerp(VITRIN_POS, 0.1);
-        tmpV2.copy(VITRIN_POS).addScaledVector(ARAH_DETAIL, jarakDetail);
-        camera.position.lerp(tmpV2, 0.08);
-        if (camera.position.distanceTo(tmpV2) < 0.03 && kontrol.target.distanceTo(VITRIN_POS) < 0.03) {
+        tmpV.copy(VITRIN_POS).addScaledVector(ARAH_DETAIL, jarakDetail);
+        camera.position.lerp(tmpV, 0.08);
+        if (camera.position.distanceTo(tmpV) < 0.03 && kontrol.target.distanceTo(VITRIN_POS) < 0.03) {
           transisi = false;
         }
       }
@@ -922,8 +917,8 @@ function jalankanStudio() {
   pasangBatasNormal();
   camera.position.copy(posisiIntro);
   kontrol.target.copy(TARGET);
-  rafId = requestAnimationFrame(frame);
   window.__studioSiap = true;
+  rafId = requestAnimationFrame(frame);
 }
 
 if (!cekWebGL()) {
@@ -932,6 +927,7 @@ if (!cekWebGL()) {
   try {
     jalankanStudio();
   } catch (e) {
+    console.error(e);
     window.tampilStatis();
   }
 }
