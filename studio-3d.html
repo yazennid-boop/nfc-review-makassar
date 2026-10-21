@@ -514,7 +514,7 @@ function jalankanStudio() {
   const bentuk = bentukRounded(KW, KH, KR);
   const geoBadan = new THREE.ExtrudeGeometry(bentuk, { depth: KT, bevelEnabled: false, curveSegments: 8 });
   geoBadan.translate(0, 0, -KT / 2);
-  const matBadan = new THREE.MeshPhysicalMaterial({ color: const matBadan = new THREE.MeshPhysicalMaterial({ color: 0xf4f7fb, roughness: 0.25, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2 });
+  const matBadan = bahanLogam(0x1b2231, 0.3, 0.45);
   const geoPelat = buatGeoPelat(bentuk);
   const matBelakang = new THREE.MeshStandardMaterial({ color: 0xf1f4f9, roughness: 0.6 });
 
