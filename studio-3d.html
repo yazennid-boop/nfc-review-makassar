@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>Studio Kartu 3D | ReviewCard Makassar</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#1f2330;background:linear-gradient(180deg,#ffffff,#eef2fb)}
+#scene{position:absolute;inset:0;touch-action:none}
+#scene canvas{display:block;width:100%;height:100%}
+#judul{position:absolute;top:12px;left:0;right:0;text-align:center;font-weight:600;font-size:.95rem;pointer-events:none;padding:0 12px}
+#info{position:absolute;top:40px;left:0;right:0;text-align:center;font-size:.82rem;color:#6b7280;pointer-events:none;padding:0 12px;min-height:1.2em}
+#kontrol{position:absolute;left:0;right:0;bottom:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0 10px}
+#kontrol button{font:inherit;font-weight:600;font-size:.82rem;border:1.5px solid #4285f4;background:#fff;color:#4285f4;border-radius:999px;padding:9px 16px;cursor:pointer}
+#kontrol button.utama{background:#4285f4;color:#fff}
+#kontrol button:disabled{opacity:.5;cursor:not-allowed}
+</style>
+</head>
+<body>
+
+<div id="judul">Studio Kartu Google Review</div>
+<div id="info">Ketuk mesin untuk melihat proses. Geser untuk memutar, cubit untuk zoom.</div>
+<div id="scene"></div>
+<div id="kontrol">
+  <button id="btnMulai" class="utama" type="button">Mulai proses</button>
+  <button id="btnLoop" type="button">Putar terus: Off</button>
+  <button id="btnReset" type="button">Reset kamera</button>
+</div>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const $ = (id) => document.getElementById(id);
+const wadah = $("scene");
+const info = $("info");
+const btnMulai = $("btnMulai");
+const btnLoop = $("btnLoop");
+const btnReset = $("btnReset");
+const INFO_AWAL = "Ketuk mesin untuk melihat proses. Geser untuk memutar, cubit untuk zoom.";
+
+function cekWebGL() {
+  try {
+    const c = document.createElement("canvas");
+    return !!(c.getContext("webgl2") || c.getContext("webgl"));
+  } catch (e) { return false; }
+}
+
+function jalankanStudio() {
+  // ===== Renderer, kamera, kontrol =====
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  wadah.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  const TARGET_AWAL = new THREE.Vector3(0, 1.0, 1.2);
+  const ARAH_HOME = new THREE.Vector3(0, 0.3, 1).normalize();
+  let jarakHome = 10;
+  let sudahGeser = false;
+
+  const kontrol = new OrbitControls(camera, renderer.domElement);
+  kontrol.target.copy(TARGET_AWAL);
+  kontrol.enableDamping = true;
+  kontrol.dampingFactor = 0.08;
+  kontrol.enablePan = false;
+  kontrol.minDistance = 4;
+  kontrol.maxDistance = 24;
+  kontrol.minPolarAngle = 0.2;
+  kontrol.maxPolarAngle = Math.PI * 0.55;
+  kontrol.addEventListener("start", () => { sudahGeser = true; });
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xdfe6f5, 1.2));
+  const lampu = new THREE.DirectionalLight(0xffffff, 1.3);
+  lampu.position.set(4, 8, 6);
+  scene.add(lampu);
+
+  const tanah = new THREE.Mesh(
+    new THREE.CircleGeometry(7, 64),
+    new THREE.MeshStandardMaterial({ color: 0xe4eaf7, roughness: 1 })
+  );
+  tanah.rotation.x = -Math.PI / 2;
+  scene.add(tanah);
+
+  // ===== Konstanta kartu =====
+  const KARTU_W = 3.2, KARTU_H = 2.0, KARTU_R = 0.22, KARTU_T = 0.1, SKALA_KARTU = 0.75;
+  const Z_KARTU = 2.1, Y_KARTU = 1.0, X_DIAM = -3.2, X_TENGAH = 0, X_KELUAR = 3.4;
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const bahan = (warna, metal = 0.4, rough = 0.45) =>
+    new THREE.MeshStandardMaterial({ color: warna, metalness: metal, roughness: rough });
+
+  function rrect(g, x, y, w, h, r) {
+    g.beginPath();
+    g.moveTo(x + r, y);
+    g.arcTo(x + w, y, x + w, y + h, r);
+    g.arcTo(x + w, y + h, x, y + h, r);
+    g.arcTo(x, y + h, x, y, r);
+    g.arcTo(x, y, x + w, y, r);
+    g.closePath();
+  }
+
+  function gambarQRHias(g, x, y, s) {
+    const n = 25, m = s / n;
+    let seed = 7;
+    const acak = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    g.fillStyle = "#111";
+    for (let i = 0; i < n; i++)
+      for (let j = 0; j < n; j++)
+        if (acak() > 0.5) g.fillRect(x + i * m, y + j * m, m, m);
+    for (const [fx, fy] of [[0, 0], [n - 7, 0], [0, n - 7]]) {
+      g.fillStyle = "#fff"; g.fillRect(x + (fx - 1) * m, y + (fy - 1) * m, 9 * m, 9 * m);
+      g.fillStyle = "#111"; g.fillRect(x + fx * m, y + fy * m, 7 * m, 7 * m);
+      g.fillStyle = "#fff"; g.fillRect(x + (fx + 1) * m, y + (fy + 1) * m, 5 * m, 5 * m);
+      g.fillStyle = "#111"; g.fillRect(x + (fx + 2) * m, y + (fy + 2) * m, 3 * m, 3 * m);
+    }
+  }
+
+  // ===== Tekstur depan kartu (ilustrasi buatan sendiri) =====
+  function buatTeksturKartu() {
+    const c = document.createElement("canvas");
+    c.width = 1024; c.height = 640;
+    const g = c.getContext("2d");
+
+    g.fillStyle = "#1a73e8"; g.fillRect(0, 0, 512, 320);
+    g.fillStyle = "#ea4335"; g.fillRect(512, 0, 512, 320);
+    g.fillStyle = "#fbbc05"; g.fillRect(512, 320, 512, 320);
+    g.fillStyle = "#34a853"; g.fillRect(0, 320, 512, 320);
+
+    g.fillStyle = "#ffffff";
+    rrect(g, 50, 190, 924, 400, 40); g.fill();
+
+    g.fillStyle = "#ffffff";
+    g.beginPath(); g.arc(512, 150, 112, 0, Math.PI * 2); g.fill();
+    g.lineWidth = 34;
+    const busur = (a1, a2, warna) => {
+      g.strokeStyle = warna; g.beginPath(); g.arc(512, 150, 80, a1, a2); g.stroke();
+    };
+    busur(-2.9, -0.5, "#ea4335");
+    busur(-0.5, 0.7, "#4285f4");
+    busur(0.7, 2.2, "#34a853");
+    busur(2.2, 2.9, "#fbbc05");
+    g.fillStyle = "#4285f4"; g.fillRect(512, 135, 82, 30);
+
+    g.textAlign = "center"; g.textBaseline = "middle";
+    g.fillStyle = "#1f2330";
+    g.font = "500 44px Arial, sans-serif";
+    g.fillText("Bantu Kami Dengan", 512, 290);
+    g.font = "bold 100px Arial, sans-serif";
+    g.fillText("Google Review", 512, 380);
+    g.fillStyle = "#fbbc05";
+    g.font = "40px Arial, sans-serif";
+    g.fillText("★ ★ ★ ★ ★", 512, 440);
+
+    g.strokeStyle = "#1f2330"; g.lineWidth = 8;
+    g.beginPath(); g.ellipse(300, 470, 115, 60, 0, 0, Math.PI * 2); g.stroke();
+    g.fillStyle = "#1f2330";
+    g.font = "bold 44px Arial, sans-serif";
+    g.fillText("NFC", 300, 470);
+
+    g.lineWidth = 4; g.strokeStyle = "#1f2330";
+    g.beginPath(); g.moveTo(512, 395); g.lineTo(512, 455); g.stroke();
+    g.beginPath(); g.moveTo(512, 485); g.lineTo(512, 545); g.stroke();
+    g.font = "bold 26px Arial, sans-serif";
+    g.fillText("ATAU", 512, 470);
+
+    gambarQRHias(g, 615, 372, 180);
+
+    g.fillStyle = "#1f2330";
+    g.font = "26px Arial, sans-serif";
+    g.fillText("TEMPELKAN HP KAMU", 300, 575);
+    g.fillText("SCAN QR", 705, 575);
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  }
+
+  function bentukRounded(w, h, r) {
+    const s = new THREE.Shape();
+    const x = -w / 2, y = -h / 2;
+    s.moveTo(x + r, y);
+    s.lineTo(x + w - r, y);
+    s.quadraticCurveTo(x + w, y, x + w, y + r);
+    s.lineTo(x + w, y + h - r);
+    s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    s.lineTo(x + r, y + h);
+    s.quadraticCurveTo(x, y + h, x, y + h - r);
+    s.lineTo(x, y + r);
+    s.quadraticCurveTo(x, y, x + r, y);
+    return s;
+  }
+
+  function buatPelat(bentuk, bahanPelat) {
+    const geo = new THREE.ShapeGeometry(bentuk, 12);
+    const pos = geo.attributes.position, uv = geo.attributes.uv;
+    for (let i = 0; i < pos.count; i++) {
+      uv.setXY(i, (pos.getX(i) + KARTU_W / 2) / KARTU_W, (pos.getY(i) + KARTU_H / 2) / KARTU_H);
+    }
+    return new THREE.Mesh(geo, bahanPelat);
+  }
+
+  // ===== Kartu =====
+  const kartu = new THREE.Group();
+  scene.add(kartu);
+
+  const bentuk = bentukRounded(KARTU_W, KARTU_H, KARTU_R);
+  const tubuh = new THREE.Mesh(
+    new THREE.ExtrudeGeometry(bentuk, { depth: KARTU_T, bevelEnabled: false, curveSegments: 10 }),
+    bahan(0x1f2330, 0.2, 0.5)
+  );
+  tubuh.geometry.translate(0, 0, -KARTU_T / 2);
+  kartu.add(tubuh);
+
+  const depan = buatPelat(bentuk, new THREE.MeshStandardMaterial({ map: buatTeksturKartu(), roughness: 0.35 }));
+  depan.position.z = KARTU_T / 2 + 0.002;
+  kartu.add(depan);
+
+  const belakang = buatPelat(bentuk, new THREE.MeshStandardMaterial({ color: 0xf4f6fb, roughness: 0.6 }));
+  belakang.rotation.y = Math.PI;
+  belakang.position.z = -KARTU_T / 2 - 0.002;
+  kartu.add(belakang);
+
+  const chip = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.15, 0.02), bahan(0xd4a72c, 0.8, 0.25));
+  chip.position.set(-1.2, -0.47, KARTU_T / 2 + 0.02);
+  kartu.add(chip);
+
+  const laser = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.5, 0.03),
+    new THREE.MeshBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.9 })
+  );
+  laser.position.set(0.56, -0.16, KARTU_T / 2 + 0.03);
+  laser.visible = false;
+  kartu.add(laser);
+
+  // ===== Mesin =====
+  const mesin = new THREE.Group();
+  scene.add(mesin);
+
+  const badan = new THREE.Mesh(new THREE.BoxGeometry(3.4, 1.9, 2.2), bahan(0x2b3142));
+  badan.position.set(0, 1.0, 0);
+  mesin.add(badan);
+
+  const panel = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.5, 0.05), bahan(0x1a73e8, 0.1, 0.3));
+  panel.position.set(0, 1.6, 1.13);
+  mesin.add(panel);
+
+  const slot = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.12, 0.06), bahan(0x0b0e14));
+  slot.position.set(1.0, 0.5, 1.13);
+  mesin.add(slot);
+
+  const led = new THREE.Mesh(
+    new THREE.SphereGeometry(0.09, 16, 16),
+    new THREE.MeshStandardMaterial({ color: 0x34a853, emissive: 0x34a853, emissiveIntensity: 0.2 })
+  );
+  led.position.set(-1.3, 1.6, 1.18);
+  mesin.add(led);
+
+  // Gantry dan kepala cetak
+  const gantry = new THREE.Group();
+  scene.add(gantry);
+  const tiangKiri = new THREE.Mesh(new THREE.BoxGeometry(0.12, 2.3, 0.12), bahan(0xc9d1e0, 0.6, 0.3));
+  tiangKiri.position.set(-1.7, 1.15, 1.8);
+  const tiangKanan = tiangKiri.clone();
+  tiangKanan.position.x = 1.7;
+  const rel = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.1, 0.14), bahan(0xc9d1e0, 0.6, 0.3));
+  rel.position.set(0, 2.3, 1.8);
+  gantry.add(tiangKiri, tiangKanan, rel);
+
+  const kepala = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.3, 0.3), bahan(0x1a73e8, 0.2, 0.4));
+  kepala.position.set(0, 2.5, 1.9);
+  kepala.visible = false;
+  scene.add(kepala);
+
+  // ===== Fase proses =====
+  const FASE = [
+    { nama: "Kartu masuk ke mesin", durasi: 1200 },
+    { nama: "Memasang chip NFC", durasi: 1400 },
+    { nama: "Memindai dan mencetak QR", durasi: 1600 },
+    { nama: "Memotong dan mengeluarkan kartu", durasi: 1400 },
+    { nama: "Mengemas kartu", durasi: 1000 },
+  ];
+
+  function terapkanPose(p) {
+    kartu.position.set(p.x, Y_KARTU, Z_KARTU);
+    kartu.rotation.y = p.rotY;
+    kartu.scale.setScalar(SKALA_KARTU * p.skala);
+    chip.scale.setScalar(Math.max(p.chip, 0.001));
+  }
+
+  function terapkanIdle() {
+    kepala.visible = false;
+    laser.visible = false;
+    terapkanPose({ x: X_DIAM, rotY: 0, skala: 1, chip: 1 });
+  }
+
+  function terapkanFase(i, p) {
+    const e = easeInOut(p);
+    const pose = { x: X_DIAM, rotY: 0, skala: 1, chip: 1 };
+    kepala.visible = false;
+    laser.visible = false;
+
+    if (i === 0) {
+      pose.x = lerp(X_DIAM, X_TENGAH, e);
+      pose.chip = 0;
+    } else if (i === 1) {
+      pose.x = X_TENGAH;
+      pose.chip = e;
+      kepala.visible = true;
+      kepala.position.x = lerp(-1.1, 1.1, e);
+    } else if (i === 2) {
+      pose.x = X_TENGAH;
+      kepala.visible = true;
+      kepala.position.x = lerp(1.1, -1.1, e);
+      laser.visible = true;
+      laser.position.y = lerp(-0.16, -0.725, e);
+    } else if (i === 3) {
+      pose.x = lerp(X_TENGAH, X_KELUAR, e);
+    } else {
+      pose.x = X_KELUAR;
+      pose.rotY = lerp(0, Math.PI * 2, e);
+      pose.skala = lerp(1, 0.001, e);
+    }
+    terapkanPose(pose);
+  }
+
+  // ===== Status dan kontrol proses =====
+  let jalan = false, loopOtomatis = false, waktu = 0;
+  let resetKamera = false;
+  const tujuanPos = new THREE.Vector3();
+
+  function mulai() {
+    if (jalan) return;
+    jalan = true;
+    waktu = 0;
+    btnMulai.textContent = "Hentikan";
+  }
+
+  function berhenti() {
+    jalan = false;
+    btnMulai.textContent = "Mulai proses";
+    terapkanIdle();
+    info.textContent = INFO_AWAL;
+  }
+
+  function mulaiResetKamera() {
+    tujuanPos.copy(TARGET_AWAL).addScaledVector(ARAH_HOME, jarakHome);
+    resetKamera = true;
+  }
+
+  function update(dt) {
+    if (jalan) {
+      waktu += dt;
+      let acc = 0, aktif = -1, p = 0;
+      for (let i = 0; i < FASE.length; i++) {
+        if (waktu < acc + FASE[i].durasi) {
+          aktif = i;
+          p = (waktu - acc) / FASE[i].durasi;
+          break;
+        }
+        acc += FASE[i].durasi;
+      }
+      if (aktif === -1) {
+        if (loopOtomatis) { waktu = 0; aktif = 0; p = 0; }
+        else { berhenti(); return; }
+      }
+      terapkanFase(aktif, p);
+      info.textContent = FASE[aktif].nama + "...";
+    }
+
+    led.material.emissiveIntensity = jalan ? 0.5 + 0.5 * Math.sin(performance.now() / 110) : 0.2;
+
+    if (resetKamera) {
+      kontrol.target.lerp(TARGET_AWAL, 0.12);
+      camera.position.lerp(tujuanPos, 0.12);
+      if (camera.position.distanceTo(tujuanPos) < 0.02) resetKamera = false;
+    }
+  }
+
+  // ===== Klik: mesin memulai proses, kartu menampilkan keterangan =====
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  let tekanX = 0, tekanY = 0;
+
+  function termasuk(obj, grup) {
+    let o = obj;
+    while (o) { if (o === grup) return true; o = o.parent; }
+    return false;
+  }
+
+  renderer.domElement.addEventListener("pointerdown", (e) => { tekanX = e.clientX; tekanY = e.clientY; });
+  renderer.domElement.addEventListener("pointerup", (e) => {
+    if (Math.hypot(e.clientX - tekanX, e.clientY - tekanY) > 8) return;
+    const r = renderer.domElement.getBoundingClientRect();
+    pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+    pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObjects([mesin, kartu], true);
+    if (!hits.length) return;
+    const obj = hits[0].object;
+    if (termasuk(obj, kartu)) {
+      if (!jalan) info.textContent = "Kartu NFC dan QR Google Review. Tempel HP atau pindai QR untuk memberi ulasan.";
+    } else if (termasuk(obj, mesin)) {
+      mulai();
+    }
+  });
+
+  // ===== Tombol =====
+  btnMulai.addEventListener("click", () => { if (jalan) berhenti(); else mulai(); });
+  btnLoop.addEventListener("click", () => {
+    loopOtomatis = !loopOtomatis;
+    btnLoop.textContent = "Putar terus: " + (loopOtomatis ? "On" : "Off");
+    if (loopOtomatis) mulai();
+  });
+  btnReset.addEventListener("click", mulaiResetKamera);
+
+  // ===== Ukuran layar =====
+  function resize() {
+    const w = wadah.clientWidth, h = wadah.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.fov = camera.aspect < 0.8 ? 55 : 40;
+    camera.updateProjectionMatrix();
+    const tanv = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    jarakHome = Math.max(9.5, 4.8 / (camera.aspect * tanv));
+    if (!sudahGeser) {
+      kontrol.target.copy(TARGET_AWAL);
+      camera.position.copy(TARGET_AWAL).addScaledVector(ARAH_HOME, jarakHome);
+    }
+  }
+  window.addEventListener("resize", resize);
+
+  // ===== Loop render =====
+  const jam = new THREE.Clock();
+  function frame() {
+    const dt = Math.min(jam.getDelta() * 1000, 50);
+    update(dt);
+    kontrol.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+
+  terapkanIdle();
+  resize();
+  info.textContent = INFO_AWAL;
+  frame();
+}
+
+if (!cekWebGL()) {
+  wadah.innerHTML = '<p style="text-align:center;padding:40px;color:#6b7280">Perangkat ini tidak mendukung tampilan 3D.</p>';
+  info.textContent = "";
+  btnMulai.disabled = true;
+  btnLoop.disabled = true;
+  btnReset.disabled = true;
+} else {
+  jalankanStudio();
+}
+</script>
+</body>
+</html>
